@@ -85,7 +85,7 @@ class Body():
 
     @staticmethod
     def from_bmi(user):
-        return BodyComposition(user.sex, user.age, user.height, user.weight)
+        return Body(user.sex, user.age, user.height, user.weight)
 
     def __init__(self, sex, age, height, weight, fat_percentage=None, method=None):
         self.sex = sex
