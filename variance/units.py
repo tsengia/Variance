@@ -16,7 +16,10 @@ class MassUnit(Unit, Enum):
         return self.value[1]
 
     def __int__(self):
-        return self.value[0]
+        return int(self.value[0])
+
+    def __float__(self):
+        return float(self.value[0])
 
     @staticmethod
     def get_unit_from_abbreviation(abbrv):
@@ -51,7 +54,10 @@ class LengthUnit(Unit, Enum):
         return self.value[1]
 
     def __int__(self):
-        return self.value[0]
+        return int(self.value[0])
+
+    def __float__(self):
+        return float(self.value[0])
 
     @staticmethod
     def get_unit_from_abbreviation(abbrv):
@@ -84,7 +90,10 @@ class EnergyUnit(Unit, Enum):
         return self.value[1]
 
     def __int__(self):
-        return self.value[0]
+        return int(self.value[0])
+
+    def __float__(self):
+        return float(self.value[0])
 
     @staticmethod
     def get_unit_from_abbreviation(abbrv):
@@ -100,7 +109,7 @@ class EnergyUnit(Unit, Enum):
     __repr__ = __str__
 
 class VolumeUnit(Unit, Enum):
-    MILLILETER = (1,"ml","v")
+    MILLILITER = (1,"ml","v")
     LITER = (1000, "L","v") 
     CUP = (240, "cup", "v")
     QUART = (960, "qt", "V")
@@ -115,12 +124,15 @@ class VolumeUnit(Unit, Enum):
         return self.value[1]
 
     def __int__(self):
-        return self.value[0]
+        return int(self.value[0])
+
+    def __float__(self):
+        return float(self.value[0])
 
     @staticmethod
     def get_unit_from_abbreviation(abbrv):
         if abbrv == "ml":
-            return EnergyUnit.MILLILETER
+            return EnergyUnit.MILLILITER
         elif abbrv == "L":
             return VolumeUnit.LITER
         elif abbrv == "cup":
@@ -147,14 +159,14 @@ class VolumeUnit(Unit, Enum):
     __repr__ = __str__
 
 class Measure():
-    def __init__(self, value, unit):
+    def __init__(self, value, unit, accuracy=6):
         if not isinstance(unit, Unit):
             raise TypeError("unit passed to Measure must be of type Unit!")
         self.unit = unit
         if isinstance(value, Measure): # TODO: Check that units are of the same dimensions
             if not value.unit.value[2] == self.unit.value[2]:
                 raise TypeError("Measurement passed is not of the same unit type!")
-            self.value = float(round(value.value * value.unit.value[0] / self.unit.value[0], 1))
+            self.value = float(round(value.value * value.unit.value[0] / self.unit.value[0], accuracy))
         elif isinstance(value, (int, float)):
             self.value = float(value)
         else:
@@ -171,9 +183,9 @@ class Measure():
 
     def __eq__(self, rhs):
         if isinstance(rhs, (int, float)):
-            return False
+            return self.value == float(rhs)
         elif isinstance(rhs, Measure):
-            c = Measure(rhs, self.unit)
+            c = Measure(rhs, self.unit, 3)
             return self.value == c.value
     
     def __gt__(self, rhs):
@@ -181,7 +193,7 @@ class Measure():
             c = float(rhs)
             return self.value > c
         elif isinstance(rhs, Measure):
-            c = Measure(rhs, self.unit)
+            c = Measure(rhs, self.unit, 3)
             return self.value > c.value
 
     def __lt__(self, rhs):
@@ -189,7 +201,7 @@ class Measure():
             c = float(rhs)
             return self.value < rhs
         elif isinstance(rhs, Measure):
-            c = Measure(rhs, self.unit)
+            c = Measure(rhs, self.unit, 3)
             return self.value < c.value
 
     def __mul__(self, rhs):
@@ -248,14 +260,13 @@ class Measure():
                 unit = MassUnit.get_unit_from_abbreviation(unit_string)
             elif unit_string in LengthUnit.get_abbreviation_list():
                 unit = LengthUnit.get_unit_from_abbreviation(unit_string)
+            elif unit_string in EnergyUnit.get_abbreviation_list():
+                unit = EnergyUnit.get_unit_from_abbreviation(unit_string)
+            elif unit_string in VolumeUnit.get_abbreviation_list():
+                unit = VolumeUnit.get_unit_from_abbreviation(unit_string)
 
             try:
-                if isinstance(string, str):
-                    value = float(string)
-                elif isinstance(string, int):
-                    value = float(string)
-                elif isinstance(string, float):
-                    value = string
+                value = float(string)
 
             except ValueError:
                 raise ValueError("String passed to parse_measure is not a number!")
@@ -263,6 +274,10 @@ class Measure():
                 return MassMeasure(value, unit)
             elif isinstance(unit, LengthUnit):
                 return LengthMeasure(value, unit)
+            elif isinstance(unit, EnergyUnit):
+                return EnergyMeasure(value, unit)
+            elif isinstance(unit, VolumeUnit):
+                return VolumeMeasure(value, unit)
 
     __repr__ = __str__
 
@@ -339,7 +354,7 @@ class Jewels(EnergyMeasure):
 
 class Milliliters(VolumeMeasure):
     def __init__(self, measure):
-        super().__init__(measure, VolumentUnit.MILLILITER)
+        super().__init__(measure, VolumeUnit.MILLILITER)
 
 class Liters(VolumeMeasure):
     def __init__(self, measure):
@@ -347,7 +362,7 @@ class Liters(VolumeMeasure):
 
 class Cups(VolumeMeasure):
     def __init__(self, measure):
-        super().__init__(measure, VolumentUnit.CUP)
+        super().__init__(measure, VolumeUnit.CUP)
 
 class Pints(VolumeMeasure):
     def __init__(self, measure):
@@ -355,7 +370,7 @@ class Pints(VolumeMeasure):
 
 class Quarts(VolumeMeasure):
     def __init__(self, measure):
-        super().__init__(measure, VolumentUnit.QUART)
+        super().__init__(measure, VolumeUnit.QUART)
 
 class Gallons(VolumeMeasure):
     def __init__(self, measure):
@@ -363,7 +378,7 @@ class Gallons(VolumeMeasure):
 
 class Tablespoons(VolumeMeasure):
     def __init__(self, measure):
-        super().__init__(measure, VolumentUnit.TABLESPOON)
+        super().__init__(measure, VolumeUnit.TABLESPOON)
 
 class Teaspoons(VolumeMeasure):
     def __init__(self, measure):
