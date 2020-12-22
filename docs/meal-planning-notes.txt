@@ -1,0 +1,35 @@
+
+Current meal plan algorithm:
+ - 3 meals a day, 2 snacks
+ - veggies at each meal
+ - lean/low/no fat meals
+ - complex carbs
+ - currently not estimating carbs, but should be in the future
+ - No same meal repeated in a week, no same dish repeated within the day
+ - no/low dairy (I don't like stomach aches)
+ - no peanuts (acne sucks)
+ - no pork (just doesnt feel right)
+ - attempts to track macronutrients
+
+Each meal:
+ - 1 protein
+ - 1 veggie
+
+Breakfast
+ - Protein
+ - Veggie
+ - Simple carb
+
+Lunches
+ - Proteins
+ - Veggies
+ - Fruits
+ - Complex carbs
+
+Dinner
+ - Proteins
+ - Veggies
+ - Fruits
+ - Complex carbs
+
+Snacks/shakes

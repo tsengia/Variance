@@ -1,0 +1,10 @@
+Weight Tracking Feature
+File format for weight tracking data:
+
+CSV, fields are:
+year, month, day, unit, weight
+
+year - full numerical year
+month - numberical month, no zero padding (1,2,3,..9,10,11,12)
+day - numerical day, no zero padding (1,2,3,...9,10,...22...30)
+unit - unit of weight, kg or lb

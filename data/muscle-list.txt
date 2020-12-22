@@ -1,0 +1,187 @@
+Quadriceps
+    Vastus Lateralis
+    Vastus Medialis
+    Vastus Intermedius
+    Rectus Femoris
+
+    Low Bar Squat
+    High Bar Squat
+    Safety Bar Squat
+    Bulgarian Squat
+    Zercher Squat
+    Lunges
+    Goblet Squat
+
+    Terminal Knee Extension (TKE)
+    Leg Extension
+
+Hamstrings
+    Gluteus Maximus
+    Semitendinosus
+    Biceps Femoris
+    Semimembranosus
+
+    Stiff Leg Deadlift
+    Romanian Deadlift
+    Low Bar Squat
+    Lunges
+    Barbell Deadlift
+    Pull Thru
+    Good Mornings
+    Glute/Ham Raise
+
+    Cable Kickbacks
+    Kettlebell Swing
+    Leg Curls
+    Reverse Hyperextension
+
+
+Calves
+    Gatrocnemius
+    Soleus
+    Tibialis Anterior
+
+    Leg Press Calf Raises
+    Standing Calf Raises
+    Squat Raises
+    Seated Calf Raises
+    Reverse Calf Raises
+
+
+Chest
+    Pectoralis Major
+    Pectoralis Minor
+
+    Push Ups
+    Dips
+    Bench Press
+    Pullovers
+
+    Chest Flyes
+    Cable Crossovers
+    Butterfly Machine
+
+Back
+    Latissimus Dorsi
+    Erector Spinae
+    Rhomboid
+    Teres Major
+
+    Deadlifts
+    Rows
+    Chin Ups
+    Pull Ups
+
+    Back Extension
+    Straight Arm Pulldown
+    Face Pulls
+    Bent Arm Pullover
+    Lat Pulldown
+
+Shoulders
+    Anterior Deltoids
+    Medial Deltoids
+    Posterior Deltoids
+
+    Handstand Push Ups
+    Overhead Press
+    Single Arm Overhead Press (my favorite)
+    High Incline Bench Press
+    Push Press
+
+    Front Raises
+    Side Lateral Raises
+    Rear Lateral Raises
+    Upright Rows
+    Face Pulls
+
+Triceps
+    Triceps Brachii Lateral
+    Triceps Brachii Medial
+    Triceps Brachii Long
+
+    Dips
+    Bench Press
+    Overhead Press
+    Push Ups
+
+    Triceps Extensions (Skull Crushers)
+    Pushdowns
+    Bench Dips
+    Close Grip Bench Press
+    Reverse Grip Bench Press
+
+Biceps
+    Biceps Brachii Long
+    Biceps Brachii Short
+
+    Chin Ups
+    Pull Ups
+    Rows
+
+    Barbell Curls
+    Hammer Curls
+    Concentration Curls
+    Incline Curls
+    Preacher Curls
+
+
+Forarms
+    Brachioradialis
+    Extensor Carpi Radialis Longus
+    Flexor Carpi Radialis
+    Abductor Pollicis Longus
+
+    Deadlifts
+    Rows
+    Chin Ups
+    Holding Heavy Weight
+    Farmer's Walk
+
+    Wrist Curls
+    Reverse Wrist Curls
+    Bicep Curls
+    Pinwheel Curls
+    Hammer Curls
+    Zottman Curls (twisting weight as you lift)
+
+Trapezius
+
+    Deadlifts
+    Cleans
+    Snatches
+    Power Shrug
+    Overhead Press
+    Overhead Squat
+    Farmer's Walk
+    Rows
+    Rack Pulls
+    Dips
+    Chin Ups
+
+    Shrugs (all variations)
+    Side Dumbbell Raises
+    Face Pulls
+    Side Lateral Raise
+    Upright Rows
+
+Abs
+    Rectus Abdominis
+    External Obliques
+    Internal Obliques
+    Transversus Abdominis
+
+    Squats
+    Deadlifts
+    Chin Ups
+    Rows
+    Overhead Press
+    Dips
+    Push Ups
+
+    Ab Wheel (this is a great ab exercise)
+    Weighted Cable Crunches
+    Sit Ups
+    Leg Raises
+    Knee Raises
+    Weighted Planks (start of push up position)

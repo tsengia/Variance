@@ -1,0 +1,43 @@
+
+
+
+Proteins
+============
+chicken
+turkey
+fish
+eggs
+lean beef
+
+Complex Carbs
+============
+whole grains
+oatmeal
+brown rice
+sweet potatoes
+
+Simple Carbs
+============
+fruit juice
+bannanas
+apples
+pears
+oranges
+
+Veggies
+============
+broccoli
+asparagus
+green beans
+spinach
+lettuce
+brussel sprouts
+celery
+peas
+bean sprouts
+cucumber
+
+Fruits
+===========
+
+

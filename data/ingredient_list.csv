@@ -1,0 +1,58 @@
+#id, name, serving size, serving unit, calories, protein (g), carbs (g), fiber (g), total fat(g), type
+#Types: protein (p), veg (v), fruit (f), good fat (F), complex carb (c), simple carb (s), empty/not-important (e)
+0,Egg,1,large egg,77,6,0.6,0,3.6,p
+1,Chicken Breast,1,breast,198,37,0,0,3.6,p
+2,Chicken Thigh,1,thigh,184,27,0,0,8.5,p
+3,Turkey breast,3,oz,125,26,0,0,1.8,p
+4,Tilapia Fish,6,oz,218,44,0,0,4.5,p
+5,Light Tuna,165,grams,142,32,0,0,1.6,p
+6,Green peas,0.5,cups,52,4.1,11,3.6,0.2,v
+7,Green beans,1,cup,44,2.4,9.9,4,0.3,v
+8,Broccoli,37,grams,13,0.9,2.7,1.2,0.1,v
+9,Quinoa,0.5,cups,111,4.1,20,2.5,1.8,c
+10,Baked Potatoe,173,grams,161,4.3,37,3.8,0.2,c
+11,Sweet Potatoe,114,grams,103,2.3,24,2.8,0.2,c
+12,Corn,103,grams,99,3.5,22,2.5,1.5,c
+13,White Rice,1,cups,205,4.3,45,0.5,0.4,c
+14,Brown Rice,1,cups,196,4.6,46,3.6,1.6,c
+15,Oatmeal,1,cups,166,5.9,28,4,3.6,c
+16,Spaghetti Noodle,1,cups,210,7.4,42,1.8,0.9,s
+17,Orange Juice,1,cups,112,1.7,26,0.5,0.5,s+f
+18,Grape Juice,1,cups,152,0.9,37,0.5,0.3,s+f
+19,Apple Juice,1,cups,114,0.3,28,0.5,0.3,s+f
+20,Almonds,12,almonds,92.4,3.2,3.2,1.7,8.2,F
+21,Walnuts,12,walnuts,156,3.7,3.4,1.7,15.6,F
+22,Cashews,12,cashews,108,2.9,6.1,0.6,8.8,F
+23,Sunflower Seeds,0.5,cups,349.5,12.5,10,6,32,F
+24,Raw Carrot,1,carrot,16,0.3,3.8,1.4,0.1,v
+25,Raw Cauliflower,575,grams,132,11,24,13,2.6,v
+26,Celery,1,stalk,6.4,0.3,1.2,0.6,0.1,v
+27,Cucumber,1,cucumber,30,1.3,7.3,1,0.2,v
+28,Green Pepper,1,pepper,32,1,7.6,1.4,0.2,v
+29,Bannanna Pepper,1,cup,33,2.1,6.6,4.2,0.6,v
+30,Jalapeno Pepper,1,pepper,4.1,0.1,0.9,0.4,0.1,v
+31,Black Olives,12,olives,52.8,0.4,2.9,1.4,4.9,F
+32,Green Olives,12,olives,46.8,0.4,1.2,1.1,4.9,F
+33,Spinach,1,cups,41,5.3,6.8,4.3,0.5,v
+34,Iceburg Lettuce,1,cups,8,0.5,1.7,0.7,0.1,v
+35,Cabbage,1,cups,34,1.9,8.2,2.8,0.1,v
+36,Beefsteak Tomato,1,tomato,33,1.5,7.1,2.2,0.4,v
+37,Bean Sprouts,1,cups,26,2.5,5.2,1,0.1,v
+38,Asparagus,5,spears,17,1.8,3.1,1.5,0.2,v
+39,Apple,182,grams,95,0.5,25,4.4,0.3,f+s
+40,Banana,1,banana,105,1.3,27,3.1,0.4,f+s
+41,Orange,1,orange,69,1.3,18,3.1,0.2,f+s
+42,Pear,1,pear,101,0.6,27,5.5,0.3,f+s
+43,Red Grapes,12,grapes,40.8,0.4,10.7,0.5,0.1,s+f
+44,Plum,1,plum,30,0.5,7.5,0.9,0.2,s+f
+45,Strawberries,12,strawberries,69.6,1.4,16.6,4.3,0.6,s+f
+46,Blue Berries,12,berries,9.4,0.1,2.4,0.4,0,s+f
+47,Cherries,12,cherries,62.4,1.1,15.6,2,0.2,s+f
+48,Watermelon,286,grams,86,1.7,22,1.1,0.4,s+f
+49,Lemon,1,lemon,25,0.9,7.8,2.4,0.3,s+f
+50,Lime,1,lime,20,0.5,7.1,1.9,0.1,s+f
+51,Pineapple,0.5,cups,41,0.5,11,1.2,0.1,s+f
+52,Black Beans,212,grams,194,13,35,14.5,0.6,p+c
+53,Olive Oil,1,tablespoon,119,0,0,0,14,F
+54,Vegetable Oil,1,tablespoon,120,0,0,0,14,F
+55,Butter,1,tablespoon,102,0.1,0,0,12,e

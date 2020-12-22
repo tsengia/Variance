@@ -1,0 +1,21 @@
+Features:
+
+- weight tracker
+	> current or past date entry
+	> show graph
+
+- meal planner/generator (and tracks calories)
+	> generates grocery list
+	> recipie database
+	> adjustable target calories and macros
+
+- workout generator 
+	> 4 day workout plan
+	> hits each muscle group
+	> includes variations after 4 weeks
+	> includes fun recovery day activity
+
+- measurement tracker 
+	> bicep, thigh, waist, neck, calves, forearm, chest
+	> graphs
+	> fat % calculation from neck and waist

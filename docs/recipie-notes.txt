@@ -1,0 +1,25 @@
+Recipie Format:
+
+{
+	"name":"Paprika Chicken",
+	"id":0,
+	"types":["p"],
+	"ingredients": {
+		"consumed": [
+			{"id":1, "unit":"breast", "quantity":1 },
+			{"id":2, "unit":"tablespoon", "quantity":0.25 }
+		],
+		"additions": [ "Paprika" ]
+	},
+	"time": 0.25,
+	"nutrition": {
+		"calories": 228,
+		"protein": 37.1,
+		"carb": 0,
+		"fiber": 0,
+		"fats": 7.1
+	},
+	"instructions": "Heat pan on stove, pour small amount of olive oil on pan. Add chicken to pan. Let cook for 4 minutes. Add paprika spice to chicken, flip chicken."
+}
+
+Each recipie will be stored in its own JSON file (for now)
