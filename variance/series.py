@@ -21,11 +21,12 @@ class DataSeries():
         self.add_entry(rhs)
         return self
 
-    def get_entry_range(self, count):
+    def get_values(self, count):
         i = len(self.entries) - 1
         r = []
         while i >= 0 and len(r) < count:
-            r.append(self.entries[i][1].value)
+            r.append(self.entries[i][1])
+            i -= 1
         return r
 
     def add_entry(self, measurement, date=datetime.now()):

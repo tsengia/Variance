@@ -214,15 +214,19 @@ class Measure():
 
     def __iadd__(self, rhs):
         self.value += Measure(rhs, self.unit).value
+        return self
 
     def __isub__(self, rhs):
         self.value -= Measure(rhs, self.unit).value
+        return self
 
     def __imul__(self, rhs):
         self.value *= Measure(rhs, self.unit).value
+        return self
 
     def __itruediv__(self, rhs):
         self.value /= Measure(rhs, self.unit).value
+        return self
 
     ### TODO: Figure out what to do if LHS isn't an int or float...
     def __rmul__(self, lhs):
@@ -280,6 +284,10 @@ class VolumeMeasure(Measure):
 class Grams(MassMeasure):
     def __init__(self, measure):
         super().__init__(measure, MassUnit.GRAM)
+
+class Milligrams(MassMeasure):
+    def __init__(self, measure):
+        super().__init__(measure, MassUnit.MILLIGRAM)
 
 class Pounds(MassMeasure):
     def __init__(self, measure):
