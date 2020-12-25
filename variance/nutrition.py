@@ -21,8 +21,33 @@ class MacroNutrient(Nutrient, Enum):
 
         return Calories(macro_nutrient.value * Grams(mass_measure))
 
-class MicroNutrient(Nutrient, Enum):
+class MicroNutrient(Nutrient):
     pass
+
+class MacroList():
+    def fat(self, serving_size):
+        return self._fat * serving_size
+
+    def carbohydrate(self, serving_size):
+        return self._carb * serving_size
+    
+    def protein(self, serving_size):
+        return self._protein * service_size
+
+    def calories_from_macros(self, serving_size):
+        pass
+
+    def __init__(self, protein_mass_per_serving, fat_mass_per_serving, carb_mass_per_serving):
+        self._protein = Grams(protein_mass_per_serving)
+        self._fat = Grams(fat_mass_per_serving)
+        self._carb = Grams(carb_mass_per_serving)
+
+class MicoList():
+    def get_micro(self, micro_name, serving_size):
+        return self.micros[micro_name] * serving_size
+
+    def __init__(self):
+        self.micros = {}
 
 class NutrientTarget():
     def __init__(self):
