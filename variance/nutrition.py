@@ -26,7 +26,9 @@ class MicroNutrient(Nutrient):
         self.name = name
 
 class MacroList():
-
+    """
+    Keeps track of the amount of macronutrients in 1 serving of something.
+    """
     def calories_from_macros(self):
         total = MacroNutrient.calories_per_measurement(MacroNutrient.PROTEIN, self.protein)
         total += MacroNutrient.calories_per_measurement(MacroNutrient.CARBOHYDRATE, self.carbohydrate)
@@ -38,25 +40,6 @@ class MacroList():
         self.protein = Grams(protein_mass_per_serving)
         self.fat = Grams(fat_mass_per_serving)
         self.carbohydrate = Grams(carb_mass_per_serving)
-
-class MicroList():
-    """
-        Holds a dictionary of micronutrient names and measures of each. Represents the amount of micronutrients in 1 serving of something.
-    """
-    def get_micro(self, micro):
-        if isinstance(micro, MicroNutrient):
-            micro_name = micro.name
-        else:
-            micro_name = str(micro)
-        
-        if micro_name in self.micros:
-            return self.micros[micro_name]
-
-    def __len__(self):
-        return len(self.micros)
-
-    def __init__(self):
-        self.micros = {}
 
 class NutrientTarget():
     def __init__(self):

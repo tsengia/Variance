@@ -1,5 +1,5 @@
 from .units import *
-from .nutrition import MacroList, MicroList
+from .nutrition import MacroList
 
 class Consumable():
     def calories(self, serving_size):
@@ -8,4 +8,4 @@ class Consumable():
     def __init__(name):
         self.name = name
         self.macros = MacroList(0, 0, 0)
-        self.micros = MicroList()
+        self.micros = {}
