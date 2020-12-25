@@ -21,7 +21,7 @@ class MacroNutrientTest(TestCase):
         self.assertEqual(m.protein(0.5), Grams(0.5))
         self.assertEqual(m.carbohydrate(0.5), Grams(1.0))
         self.assertEqual(m.fat(0.5), Grams(1.5))
-        self.assertEqual(m.calories(1.0), Calories(4+8+27))
+        self.assertEqual(m.calories_from_macros(1.0), Calories(4+8+27))
 
     def test_nutrient_target_init(self):
         n = NutrientTarget()
