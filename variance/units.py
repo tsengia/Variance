@@ -1,4 +1,5 @@
 from enum import Enum
+from copy import copy
 
 class Unit:
     pass
@@ -209,23 +210,33 @@ class Measure():
 
     def __mul__(self, rhs):
         com = Measure(rhs, self.unit)
-        return Measure(com.value * self.value, self.unit)
+        res = copy(self)
+        res.value *= com.value
+        return res
 
     def __truediv__(self, rhs):
         com = Measure(rhs, self.unit)
-        return Measure(self.value / com.value, self.unit)
+        res = copy(self)
+        res.value /= com.value
+        return res       
 
     def __floordiv__(self, rhs):
         com = Measure(rhs, self.unit)
-        return Measure(self.value // com.value, self.unit)
+        res = copy(self)
+        res.value = res.value // com.value
+        return res
 
     def __sub__(self, rhs):
         com = Measure(rhs, self.unit)
-        return Measure(self.value - com.value, self.unit)
+        res = copy(self)
+        res.value -= com.value
+        return res
 
     def __add__(self, rhs):
         com = Measure(rhs, self.unit)
-        return Measure(self.value + com.value, self.unit)
+        res = copy(self)
+        res.value += com.value
+        return res        
 
     def __iadd__(self, rhs):
         self.value += Measure(rhs, self.unit).value
