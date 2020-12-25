@@ -22,7 +22,8 @@ class TestComparisons(TestCase):
     def test_equal(self):
         self.assertEqual(Pounds(40) == Kilograms(Pounds(40)), True)
         self.assertEqual(Grams(1000) == Kilograms(1), True)
-        self.assertEqual(Grams(10.2) == 10.2, True)
+        self.assertEqual(Grams(10.2) == 10.2, False)
+        self.assertEqual(float(Grams(10.2)), 10.2)
 
     def test_less_than(self):
         self.assertEqual(Pounds(1) < Kilograms(1), True)

@@ -182,12 +182,15 @@ class Measure():
         return float(self.value)
 
     def __eq__(self, rhs):
-        if isinstance(rhs, (int, float)):
-            return self.value == float(rhs)
-        elif isinstance(rhs, Measure):
+        if isinstance(rhs, Measure):
+            # Check to make sure they measure the same thing (both are length, or mass or volume, etc.)
+            if not rhs.unit.value[2] == self.unit.value[2]:
+                return False
             c = Measure(rhs, self.unit, 3)
             return self.value == c.value
-    
+        else:
+            return False
+
     def __gt__(self, rhs):
         if isinstance(rhs, (int, float)):
             c = float(rhs)
