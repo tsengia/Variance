@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import time
 import csv
-from .units import Measure
+from .units import Measure, MeasurementParser
 
 class DataSeries():
     def __init__(self, name, unit):
@@ -62,7 +62,7 @@ class DataSeries():
         reader = csv.reader(file_handle)
         for row in reader:
             d = datetime.fromtimestamp(float(row[0]))
-            m = Measure.parse_measure(row[1], row[2])
+            m = MeasurementParser.parse(row[1] + " " + row[2])
             s.add_entry(m, date=d)
         return s
 
