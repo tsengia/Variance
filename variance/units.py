@@ -1,5 +1,6 @@
 from enum import Enum
 from copy import copy
+import re
 
 class Unit:
     pass
@@ -7,155 +8,79 @@ class Unit:
 class MassUnit(Unit, Enum):
     # The value of the enum is: value * measurement = measurement_in_grams
     # So the value of the enum is the coefficient used to convert from the enum unit to grams
-    GRAM = (1,"g","m")
-    POUND = (453.5924,"lb","m")
-    OUNCE = (28.34952,"oz","m")
-    KILOGRAM = (1000,"kg","m")
-    MILLIGRAM = (0.001, "mg","m")
+    GRAM = (1,("g", "gram", "grams"), "m")
+    POUND = (453.5924,("lb", "lbs", "pound", "pounds"),"m")
+    OUNCE = (28.34952,("oz", "ounce", "ounces"),"m")
+    KILOGRAM = (1000,("kg", "kilogram", "kilograms"),"m")
+    MILLIGRAM = (0.001, ("mg", "milligram", "milligrams"),"m")
 
     def __str__(self):
-        return self.value[1]
+        return self.value[1][-1]
 
     def __int__(self):
         return int(self.value[0])
 
     def __float__(self):
         return float(self.value[0])
-
-    @staticmethod
-    def get_unit_from_abbreviation(abbrv):
-        if abbrv == "g":
-            return MassUnit.GRAM
-        if abbrv == "lb":
-            return MassUnit.POUND
-        if abbrv == "kg":
-            return MassUnit.KILOGRAM
-        if abbrv == "oz":
-            return MassUnit.OUNCE
-        if abbrv == "mg":
-            return MassUnit.MILLIGRAM
-
-    @staticmethod
-    def get_abbreviation_list():
-        return ["g","lb","oz","kg","mg"]
 
     __repr__ = __str__
 
         
 class LengthUnit(Unit, Enum):
-    METER = (1,"m","l")
-    CENTIMETER = (0.01,"cm","l")
-    FOOT = (0.3048,"ft","l")
-    INCH = (0.0254,"in","l")
-    YARD = (0.9144,"yd","l")
-    KILOMETER = (1000,"km","l")
-    MILE = (1609.344,"mi","l")
+    METER = (1,("m", "meter", "meters"),"l")
+    CENTIMETER = (0.01,("cm", "centimeter", "centimeters"),"l")
+    FOOT = (0.3048,("ft", "foot", "feet"),"l")
+    INCH = (0.0254,("in", "inch", "inches"),"l")
+    YARD = (0.9144,("yd", "yard", "yards"),"l")
+    KILOMETER = (1000,("km", "kilometer", "kilometers"),"l")
+    MILE = (1609.344,("mi", "mile", "miles"),"l")
 
     def __str__(self):
-        return self.value[1]
+        return self.value[1][-1]
 
     def __int__(self):
         return int(self.value[0])
 
     def __float__(self):
         return float(self.value[0])
-
-    @staticmethod
-    def get_unit_from_abbreviation(abbrv):
-        if abbrv == "m":
-            return LengthUnit.METER
-        elif abbrv == "cm":
-            return LengthUnit.CENTIMETER
-        if abbrv == "ft":
-            return LengthUnit.FOOT
-        if abbrv == "in":
-            return LengthUnit.INCH
-        if abbrv == "yd":
-            return LengthUnit.YARD
-        if abbrv == "km":
-            return LengthUnit.KILOMETER
-        if abbrv == "mi":
-            return LengthUnit.MILE
-
-    @staticmethod
-    def get_abbreviation_list():
-        return ["m","cm","ft","in","yd","km","mi"]
 
     __repr__ = __str__
 
 class EnergyUnit(Unit, Enum):
-    CALORIE = (1,"Cal","e") # NOTE: This is Food Calories. So 1 Cal == 1000calories
-    JEWEL = (4184,"J","e") 
+    CALORIE = (1,("Cal", "kcal", "kilocalorie","kilocalories","Calorie","Calories"), "e") # NOTE: This is Food Calories. So 1 Cal == 1000calories
+    JEWEL = (0.00023900573614,("J", "jewel", "jewels"),"e") 
 
     def __str__(self):
-        return self.value[1]
+        return self.value[1][-1]
 
     def __int__(self):
         return int(self.value[0])
 
     def __float__(self):
         return float(self.value[0])
-
-    @staticmethod
-    def get_unit_from_abbreviation(abbrv):
-        if abbrv == "Cal":
-            return EnergyUnit.CALORIE
-        elif abbrv == "J":
-            return EnergyUnit.JEWEL
-
-    @staticmethod
-    def get_abbreviation_list():
-        return ["J","Cal"]
 
     __repr__ = __str__
 
 class VolumeUnit(Unit, Enum):
-    MILLILITER = (1,"ml","v")
-    LITER = (1000, "L","v") 
-    CUP = (240, "cup", "v")
-    QUART = (960, "qt", "V")
-    GALLON = (3840, "gal", "v")
-    PINT = (480, "pt", "v") # 2 cups
-    GILL = (120, "gill", "v") # I swear if I ever have to use this unit... tally of times unit is used: 0
-    FLUID_OUNCE = (30, "fl oz", "v") # 1/8 of a cup
-    TABLESPOON = (15, "tbsp", "v")  # 1/16 of a cup
-    TEASPOON = (5, "tsp", "v") # 1/48 of a cup
+    MILLILITER = (1,("mL", "ml", "milli-liter", "milli-liters", "milliliter", "milliliters"),"v")
+    LITER = (1000, ("L", "liter", "liters"),"v") 
+    CUP = (240, ("cup", "cups"), "v")
+    QUART = (960, ("qt", "quart", "quarts"), "V")
+    GALLON = (3840, ("gal", "Gal", "gallon", "gallons"), "v")
+    PINT = (480, ("pt", "pint", "pints"), "v") # 2 cups
+    GILL = (120, ("gill", "gills"), "v") # I swear if I ever have to use this unit... tally of times unit is used: 0
+    FLUID_OUNCE = (30, ("fl oz", "fl. oz.", "fl-oz", "fl. oz", "fluid ounce", "fluid ounces"), "v") # 1/8 of a cup
+    TABLESPOON = (15, ("tbsp", "tablespoon", "tablespoons"), "v")  # 1/16 of a cup
+    TEASPOON = (5, ("tsp", "teaspoon", "teaspoons"), "v") # 1/48 of a cup
 
     def __str__(self):
-        return self.value[1]
+        return self.value[1][-1]
 
     def __int__(self):
         return int(self.value[0])
 
     def __float__(self):
         return float(self.value[0])
-
-    @staticmethod
-    def get_unit_from_abbreviation(abbrv):
-        if abbrv == "ml":
-            return EnergyUnit.MILLILITER
-        elif abbrv == "L":
-            return VolumeUnit.LITER
-        elif abbrv == "cup":
-            return VolumeUnit.CUP
-        elif abbrv == "qt":
-            return VolumeUnit.QUART
-        elif abbrv == "gal":
-            return VolumeUnit.GALLON
-        elif abbrv == "pt":
-            return VolumeUnit.PINT
-        elif abbrv == "gill":
-            return VolumeUnit.GILL
-        elif abbrv == "fl oz" or abbrv == "fl. oz." or abbrv == "fl. oz":
-            return VolumeUnit.FLUID_OUNCE
-        elif abbrv == "tbsp" or abbrv == "Tbsp":
-            return VolumeUnit.TABLESPOON
-        elif abbrv == "tsp":
-            return VolumeUnit.TEASPOON
-
-    @staticmethod
-    def get_abbreviation_list():
-        return ["ml", "L", "cup", "qt", "gal", "pt", "gill", "fl oz", "tbsp", "tsp"]
 
     __repr__ = __str__
 
@@ -188,7 +113,7 @@ class Measure():
             if not rhs.unit.value[2] == self.unit.value[2]:
                 return False
             c = Measure(rhs, self.unit, 3)
-            return self.value == c.value
+            return round(self.value, 3) == c.value
         else:
             return False
 
@@ -266,32 +191,6 @@ class Measure():
     def __rsub__(self, lhs):
         if isinstance(lhs, (int, float)):
             return lhs - self.value
-
-    @staticmethod
-    def parse_measure(string, unit_string=None): # TODO: This needs finished, currently only works if you supply the unit_string
-        if unit_string:
-            if unit_string in MassUnit.get_abbreviation_list():
-                unit = MassUnit.get_unit_from_abbreviation(unit_string)
-            elif unit_string in LengthUnit.get_abbreviation_list():
-                unit = LengthUnit.get_unit_from_abbreviation(unit_string)
-            elif unit_string in EnergyUnit.get_abbreviation_list():
-                unit = EnergyUnit.get_unit_from_abbreviation(unit_string)
-            elif unit_string in VolumeUnit.get_abbreviation_list():
-                unit = VolumeUnit.get_unit_from_abbreviation(unit_string)
-
-            try:
-                value = float(string)
-
-            except ValueError:
-                raise ValueError("String passed to parse_measure is not a number!")
-            if isinstance(unit, MassUnit):
-                return MassMeasure(value, unit)
-            elif isinstance(unit, LengthUnit):
-                return LengthMeasure(value, unit)
-            elif isinstance(unit, EnergyUnit):
-                return EnergyMeasure(value, unit)
-            elif isinstance(unit, VolumeUnit):
-                return VolumeMeasure(value, unit)
 
     __repr__ = __str__
 
@@ -381,6 +280,10 @@ class Cups(VolumeMeasure):
 class Pints(VolumeMeasure):
     def __init__(self, measure):
         super().__init__(measure, VolumeUnit.PINT)
+        
+class Gills(VolumeMeasure):
+    def __init__(self, measure):
+        super().__init__(measure, VolumeUnit.GILL)
 
 class Quarts(VolumeMeasure):
     def __init__(self, measure):
@@ -401,3 +304,52 @@ class Teaspoons(VolumeMeasure):
 class FluidOunces(VolumeMeasure):
     def __init__(self, measure):
         super().__init__(measure, VolumeUnit.FLUID_OUNCE)
+        
+class UnitParser():
+    @staticmethod
+    def parse(text):
+        text = text.strip().lower().replace(".", "")
+
+        for m in MassUnit:
+            if text in m.value[1]:
+                return m
+
+        for v in VolumeUnit:
+            if text in v.value[1]:
+                return v
+
+        for e in EnergyUnit:
+            if text in e.value[1]:
+                return e
+
+        for l in LengthUnit:
+            if text in l.value[1]:
+                return l
+
+class MeasurementParser():
+    _measure_split_regex = re.compile("(?<=[0-9])[\s](?=([a-zA-Z.]+(\s[a-zA-Z]+[.]*)?))")
+    _measure_space_regex = re.compile("([0-9])([a-zA-Z])")
+
+    @staticmethod
+    def parse(text):
+        spaced_text = re.sub(MeasurementParser._measure_space_regex, r"\1 \2", text) # Put a space between the value and units if there wasn't one already
+        s = MeasurementParser._measure_split_regex.split(spaced_text) # split at the space between the value and the unit
+        if len(s) < 2:
+            return None # Failed to parse a measurement from this, return None
+        if len(s) > 2:
+            s = s[0:2]
+
+        try:
+            if "/" in s[0]: # value is a fraction....
+                numerator, denominator = s[0].split("/")
+                value = round(float(numerator) / float(denominator), 3)
+            else:
+                value = float(s[0])
+        except ValueError:
+            return None
+
+        unit = UnitParser.parse(s[1])
+        if not unit:
+            return None
+        
+        return Measure(value, unit)
