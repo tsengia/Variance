@@ -19,6 +19,9 @@ def create_app(test_config=None):
         print("Instance directory could not be created! Exiting.")
         exit()
 
+    from . import db
+    db.init_app(app)
+
     @app.route("/apiversion")
     def api_verison():
         return { "api_version": "0.1" }
