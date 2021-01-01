@@ -1,5 +1,5 @@
 from pathlib import Path
-from .units import *
+from variance.units import *
 
 # API Key used to look up nutritional information, register
 USDA_API_KEY="zTrrytuPIfz2OFw26C3rSlHJ4aHBZaGFPynPajUi"
