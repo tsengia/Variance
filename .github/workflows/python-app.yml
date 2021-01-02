@@ -33,4 +33,4 @@ jobs:
 #        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with python unittest module
       run: |
-        python -m unittest discover -s test/
+        python -m unittest test/test_units.py test/test_body.py test/test_dataseries.py test/test_recipies.py test_nutrient.py
