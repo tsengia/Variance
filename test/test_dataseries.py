@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import pathlib
 from unittest import TestCase
 
 from context import variance
@@ -75,7 +76,7 @@ class TestDataSeries(TestCase):
             d.write_to_file(f)
         with open("test-write-tmp-fileasdfghjkl12345.csv", "r") as f:
             k = DataSeries.read_from_file("test4", f, MassUnit.MILLIGRAM)
-
+        pathlib.Path("test-write-tmp-fileasdfghjkl12345.csv").unlink()
         self.assertEqual(d.get_most_recent_entry(), k.get_most_recent_entry())
         self.assertEqual(len(d), len(k))
         self.assertEqual(d.get_values(10), k.get_values(10))
