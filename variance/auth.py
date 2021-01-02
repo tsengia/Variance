@@ -10,9 +10,9 @@ from variance.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route("/register", methods=("POST"))
+@bp.route("/register", methods=["POST"])
 def register():
-    if request_method == "POST":
+    if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         birthday = request.form["birthday"]
@@ -29,9 +29,9 @@ def register():
         except ValueError:
             return {"error":"Birthday is not in a valid YYYY-MM-DD format!"}
             
-        elif db.execute("SELECT id FROM UserIndex WHERE username = ?", (username,)).fetchone() is not None:
+        if db.execute("SELECT id FROM UserIndex WHERE username = ?", (username,)).fetchone() is not None:
             return {"error":"That username is already taken!"}
-        db.execute("INSERT (username, password, birthdate) INTO UserIndex(?, ?, ?)", (username, generate_password_hash(password), birthday))
+        db.execute("INSERT INTO UserIndex (username, password, birthdate) VALUES (?, ?, ?)", (username, generate_password_hash(password), birthday))
         db.commit()
 
         user = db.execute("SELECT * FROM UserIndex WHERE username = ?", (username,)).fetchone()
