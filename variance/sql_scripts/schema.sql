@@ -24,8 +24,7 @@ DROP TABLE IF EXISTS WorkoutExercises;
 CREATE TABLE UserIndex(
 	id INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,
 	username VARCHAR(20) UNIQUE NOT NULL, -- public username
-	password TEXT NOT NULL, -- user password hash
-	salt VARCHAR(5) NOT NULL, -- random salt used to hash user password
+	password TEXT NOT NULL, -- user password hash, includes method and salt
 	email VARCHAR(50), -- private email address
 	birthdate DATE NOT NULL, -- birthdate, used to calculate age
 	created DATETIME NOT NULL DEFAULT (NOW()), -- datetime that this account was created
