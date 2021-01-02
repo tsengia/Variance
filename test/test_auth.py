@@ -10,6 +10,8 @@ import debug_config
 class RegistrationTest(TestCase):
     def setUp(self):
         self.app = variance.create_app(debug_config.config)
+        with self.app.app_context():
+            db.init_db()
 
     def tearDown(self):
         pass
@@ -17,4 +19,5 @@ class RegistrationTest(TestCase):
     def test_registration(self):
         with self.app.test_client() as c:
             r = c.post("/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
-            self.assertEqual(r.data, '{"uid":"0"}')
+            json_data = r.get_json()
+            self.assertEqual(1, int(json_data["uid"]))
