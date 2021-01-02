@@ -9,7 +9,7 @@ from variance.units import *
 
 bp = Blueprint("units", __name__, url_prefix="/api/units")
 
-@bp.route("/new", methods=["POST"])
+@bp.route("/", methods=["POST"])
 @login_required
 def new_unit():
     name = request.values.get("n", None)
@@ -57,7 +57,7 @@ def show_unit(unit_id):
         db.commit()
         return {"status":"Unit updated."}
 
-@bp.route("/list", methods=["GET"])
+@bp.route("/", methods=["GET"])
 def list_units():
     count = request.values.get("c", None)
     dimension = request.values.get("d", None)
