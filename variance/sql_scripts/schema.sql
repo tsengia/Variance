@@ -27,7 +27,7 @@ CREATE TABLE UserIndex(
 	password TEXT NOT NULL, -- user password hash, includes method and salt
 	email VARCHAR(50), -- private email address
 	birthdate DATE NOT NULL, -- birthdate, used to calculate age
-	created DATETIME NOT NULL DEFAULT (NOW), -- datetime that this account was created
+	created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- datetime that this account was created
 	role INTEGER NOT NULL DEFAULT (0) -- 0=user, 1=trainer, 2=admin
 );
 
@@ -86,7 +86,7 @@ CREATE TABLE ExerciseLogs (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	userID INTEGER NOT NULL, -- What user entered this log?
 	exerciseID INTEGER NOT NULL, -- What exercise did the user complete?
-	time DATETIME NOT NULL DEFAULT (NOW), -- What time did the user enter this log?
+	time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- What time did the user enter this log?
 	-- Below are the measures for the exercise log. Logs may have any combination of duration, weight and repetitions
 	duration_value DECIMAL(5, 3),
 	duration_unit INTEGER,
@@ -106,7 +106,7 @@ CREATE TABLE ExerciseLogs (
 CREATE TABLE TrackerLogs (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	userID INTEGER NOT NULL, -- What user does this log belong to?
-	time DATETIME NOT NULL DEFAULT (NOW), -- What time was this log measured?
+	time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- What time was this log measured?
 	value DECIMAL(7, 4) NOT NULL, -- What is the value of this measure?
 	unit INTEGER NOT NULL, -- What unit was this measurement in?
 	FOREIGN KEY(userID) REFERENCES UserIndex(id),
