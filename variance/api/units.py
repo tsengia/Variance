@@ -9,7 +9,7 @@ from variance.units import *
 
 bp = Blueprint("units", __name__, url_prefix="/api/units")
 
-@bp.route("/new", methods=["GET", "POST"])
+@bp.route("/new", methods=["POST"])
 @login_required
 def new_unit():
     name = request.values.get("n", None)
@@ -40,6 +40,9 @@ def show_unit(unit_id):
     if request.method == "GET":
         return { "id":unit["id"], "name":unit["name"], "abbreviation":unit["abbreviation"], "dimension":unit["dimension"] }
     elif request.method == "POST":
+        if g.user is None:
+            return {"error":"You must be logged in to modify this endpoint!"}, 401
+
         new_abbreviation = request.form.get("a", unit["abbreviation"])
         new_dimension = request.form.get("d", unit["dimension"])
         new_name = request.form.get("n", None)
@@ -54,7 +57,7 @@ def show_unit(unit_id):
         db.commit()
         return {"status":"Unit updated."}
 
-@bp.route("/list", methods=["GET", "POST"])
+@bp.route("/list", methods=["GET"])
 def list_units():
     count = request.values.get("c", None)
     dimension = request.values.get("d", None)
