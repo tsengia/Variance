@@ -53,7 +53,7 @@ def register():
 
     return { "uid":str(user["id"]) }
 
-@bp.route("/logout")
+@bp.route("/logout", methods=["POST", "GET"])
 def logout():
     session.clear()
     return { "message":"Logged out." }

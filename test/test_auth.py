@@ -6,6 +6,7 @@ from context import variance
 from variance import create_app, db
 
 import debug_config
+import flask
 
 class LifeCycleTest(TestCase):
     def setUp(self):
@@ -30,6 +31,10 @@ class LifeCycleTest(TestCase):
             json_data = r.get_json()
             self.assertEqual(1, json_data["uid"])
 
+            r = c.post("/auth/logout")
+            json_data = r.get_json()
+            self.assertEqual("Logged out.", json_data["message"])
+
         with self.app.test_client() as c2:
             r = c.post("/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
             json_data = r.get_json()
@@ -46,3 +51,9 @@ class LifeCycleTest(TestCase):
             r = c2.post("/auth/register", data={"username":"test1", "password":"passw0rd"})
             json_data = r.get_json()
             self.assertEqual("You must specify a birthday!", json_data["error"])
+
+        with self.app.test_client() as c3:
+            r = c3.post("/auth/login", data={"username":"test1", "password":"This is not the password"})
+            json_data = r.get_json()
+            self.assertEqual("Incorrect username or password!", json_data["error"])
+            self.assertEqual(False, "user_id" in flask.session)
