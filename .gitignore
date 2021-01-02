@@ -1,3 +1,4 @@
+*.pyc
 *~
 *.tar.gz
 usda_api.txt
@@ -5,3 +6,6 @@ __pycache__/*
 __pycache__*
 user/*
 test/htmlcov/*
+variance/__pycache__
+variance/venv
+variance/instance
