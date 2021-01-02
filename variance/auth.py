@@ -10,6 +10,22 @@ from variance.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+@bp.route("/login", methods=["POST"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+    db = get_db()
+
+    user = db.execute("SELECT * FROM UserIndex WHERE username=?", (username,)).fetchone()
+    if user is None:
+        return { "error":"Incorrect username or password!" }
+    elif not check_password_hash(user["password"], password):
+        return { "error":"Incorrect username or password!" }
+
+    session.clear()
+    session["user_id"] = user["id"]
+    return { "uid":user["id"], "message":"Logged in." }
+
 @bp.route("/register", methods=["POST"])
 def register():
     if request.method == "POST":

@@ -7,7 +7,7 @@ from variance import create_app, db
 
 import debug_config
 
-class RegistrationTest(TestCase):
+class LifeCycleTest(TestCase):
     def setUp(self):
         self.app = variance.create_app(debug_config.config)
         with self.app.app_context():
@@ -16,8 +16,16 @@ class RegistrationTest(TestCase):
     def tearDown(self):
         pass
 
-    def test_registration(self):
+    def test_registration_and_login(self):
         with self.app.test_client() as c:
             r = c.post("/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
             json_data = r.get_json()
             self.assertEqual(1, int(json_data["uid"]))
+
+            r = c.post("/auth/register", data={"username":"test2", "password":"passw0rd2", "birthday":"2001-08-19"})
+            json_data = r.get_json()
+            self.assertEqual(2, int(json_data["uid"]))
+
+            r = c.post("/auth/login", data={"username":"test1", "password":"passw0rd"})
+            json_data = r.get_json()
+            self.assertEqual(1, json_data["uid"])
