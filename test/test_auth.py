@@ -19,41 +19,41 @@ class LifeCycleTest(TestCase):
 
     def test_registration_and_login(self):
         with self.app.test_client() as c:
-            r = c.post("/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
+            r = c.post("/api/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
             json_data = r.get_json()
             self.assertEqual(1, int(json_data["uid"]))
             
-            r = c.post("/auth/register", data={"username":"test2", "password":"passw0rd2", "birthday":"2001-08-19"})
+            r = c.post("/api/auth/register", data={"username":"test2", "password":"passw0rd2", "birthday":"2001-08-19"})
             json_data = r.get_json()
             self.assertEqual(2, int(json_data["uid"]))
 
-            r = c.post("/auth/login", data={"username":"test1", "password":"passw0rd"})
+            r = c.post("/api/auth/login", data={"username":"test1", "password":"passw0rd"})
             json_data = r.get_json()
             self.assertEqual(1, json_data["uid"])
 
-            r = c.post("/auth/logout")
+            r = c.post("/api/auth/logout")
             json_data = r.get_json()
             self.assertEqual("Logged out.", json_data["message"])
 
         with self.app.test_client() as c2:
-            r = c.post("/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
+            r = c.post("/api/auth/register", data={"username":"test1", "password":"passw0rd", "birthday":"2002-07-18"})
             json_data = r.get_json()
             self.assertEqual("That username is already taken!", json_data["error"])
             
-            r = c2.post("/auth/register", data={"u":"2", "password":"passw0rd", "birthday":"2002-07-18"})
+            r = c2.post("/api/auth/register", data={"u":"2", "password":"passw0rd", "birthday":"2002-07-18"})
             json_data = r.get_json()
             self.assertEqual("You must specify a username!", json_data["error"])
 
-            r = c2.post("/auth/register", data={"username":"test1", "birthday":"2002-07-18"})
+            r = c2.post("/api/auth/register", data={"username":"test1", "birthday":"2002-07-18"})
             json_data = r.get_json()
             self.assertEqual("You must specify a password!", json_data["error"])
             
-            r = c2.post("/auth/register", data={"username":"test1", "password":"passw0rd"})
+            r = c2.post("/api/auth/register", data={"username":"test1", "password":"passw0rd"})
             json_data = r.get_json()
             self.assertEqual("You must specify a birthday!", json_data["error"])
 
         with self.app.test_client() as c3:
-            r = c3.post("/auth/login", data={"username":"test1", "password":"This is not the password"})
+            r = c3.post("/api/auth/login", data={"username":"test1", "password":"This is not the password"})
             json_data = r.get_json()
             self.assertEqual("Incorrect username or password!", json_data["error"])
             self.assertEqual(False, "user_id" in flask.session)
