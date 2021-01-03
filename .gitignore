@@ -1,5 +1,6 @@
 *.pyc
 *~
+*.swp
 *.tar.gz
 usda_api.txt
 __pycache__/*
@@ -9,3 +10,6 @@ test/htmlcov/*
 variance/__pycache__
 variance/venv
 variance/instance
+instance
+.env
+
