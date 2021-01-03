@@ -1,8 +1,9 @@
 import functools
 import datetime
+import jwt
 
 from flask import (
-    Blueprint, flash, g, redirect, request, session, url_for
+    current_app, Blueprint, flash, g, redirect, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -24,7 +25,9 @@ def login():
 
     session.clear()
     session["user_id"] = user["id"]
-    return { "uid":user["id"], "message":"Logged in." }
+    token = jwt.encode({"user_id":user["id"], "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, current_app.config["SECRET_KEY"])
+    return {"token":token}
+    #return { "uid":user["id"], "message":"Logged in." }
 
 @bp.route("/register", methods=["POST"])
 def register():
