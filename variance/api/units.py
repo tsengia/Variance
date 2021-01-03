@@ -1,88 +1,98 @@
 import functools
 from flask import (
-        current_app, Blueprint, g, session, request, jsonify
+        current_app, g, session, request
 )
-
+from flask_restful import Resource
+from flask_restful.reqparse import RequestParser
 from variance.db import get_db
 from variance.api.auth import login_required
-from variance.units import *
 
-bp = Blueprint("units", __name__, url_prefix="/api/units")
 
-@bp.route("/", methods=["POST"])
-@login_required
-def new_unit():
-    name = request.values.get("n", None)
-    if not name:
-        return {"error":"Parameter name (n) is missing!"}, 400
-    abbreviation = request.values.get("a", None)
-    if not abbreviation:
-        return {"error":"Parameter abbreviation (a) is missing!" }, 400
-    dimension = request.values.get("d", None)
-    if not dimension:
-        return {"error":"Parameter dimension (d) is missing!" }, 400
-    
-    db = get_db()
-    if db.execute("SELECT id FROM UnitIndex WHERE name=?", (name,)).fetchone() is not None:
-        return {"error":"A unit with that name already exists!" }, 409
+class UnitList(Resource):
+    @login_required
+    def post(self): # Create a new unit
+        args = self.get_parser.parse_args()
+        db = get_db()
 
-    db.execute("INSERT INTO UnitIndex (name, abbreviation, dimension) VALUES (?, ?, ?)", (name, abbreviation, dimension))
-    db.commit()
-    return {"status":"Unit created."}, 201
+        if db.execute("SELECT id FROM UnitIndex WHERE name=?", (args["name"],)).fetchone() is not None:
+            return {"error":"A unit with that name already exists!" }, 409
 
-@bp.route("/<int:unit_id>", methods=["GET", "POST"])
-def show_unit(unit_id):
-    db = get_db()
-    unit = db.execute("SELECT * FROM UnitIndex WHERE id=?", (unit_id,)).fetchone()
-    if unit is None:
-        return {"error":"No unit found with that ID!"}, 404
+        db.execute("INSERT INTO UnitIndex (name, abbreviation, dimension) VALUES (?, ?, ?)", (args["name"], args["abbreviation"], args["dimension"]))
+        db.commit()
+        return {"status":"Unit created."}, 201
 
-    if request.method == "GET":
-        return { "id":unit["id"], "name":unit["name"], "abbreviation":unit["abbreviation"], "dimension":unit["dimension"] }
-    elif request.method == "POST":
-        if g.user is None:
-            return {"error":"You must be logged in to modify this endpoint!"}, 401
 
-        new_abbreviation = request.form.get("a", unit["abbreviation"])
-        new_dimension = request.form.get("d", unit["dimension"])
-        new_name = request.form.get("n", None)
+    def get(self): # List all units
+        args = self.get_parser.parse_args()
+        db = get_db()
+        units = []
+        if args["count"] is not None:
+            if args["dimension"] is not None:
+                rows = db.execute("SELECT * FROM UnitIndex WHERE dimension=? LIMIT ? OFFSET ?", (args["dimension"], args["count"], args["offset"])).fetchall()
+            else:
+                rows = db.execute("SELECT * FROM UnitIndex LIMIT ? OFFSET ?", (args["count"], args["offset"])).fetchall()
+        elif args["dimension"] is not None:
+            rows = db.execute("SELECT * FROM UnitIndex WHERE dimension=?", (args["dimension"],)).fetchall()
+        else:
+            rows = db.execute("SELECT * FROM UnitIndex").fetchall()
 
-        if new_name:
-            if db.execute("SELECT id FROM UnitIndex WHERE name=?", (new_name,)).getone() is not None:
+        for u in rows:
+            units.append({"id":u["id"], "name":u["name"],"abbreviation":u["abbreviation"],"dimension":u["dimension"]})
+
+        return { "units":units }, 200
+
+
+    def __init__(self):
+        self.get_parser = RequestParser()
+        self.get_parser.add_argument("count", type=int)
+        self.get_parser.add_argument("offset", type=int, default=0)
+        self.get_parser.add_argument("dimension", type=str)
+
+        self.post_parser = RequestParser()
+        self.post_parser.add_argument("name", type=str, required=True)
+        self.post_parser.add_argument("abbreviation", type=str, required=True)
+        self.post_parser.add_argument("dimension", type=str, required=True)
+
+
+class Unit(Resource):
+
+    @login_required
+    def post(self, unit_id): # Update a unit
+        args = self.post_parser.parse_args()
+        db = get_db()
+        unit = db.execute("SELECT * FROM UnitIndex WHERE id=?", (unit_id,)).fetchone()
+        if unit is None:
+            return {"error":"No unit found with that ID!"}, 404
+
+        if "name" in args:
+            if db.execute("SELECT id FROM UnitIndex WHERE name=?", (args["name"])).getone() is not None:
                 return {"error":"A unit with that name already exists!"}, 409
         else:
             new_name = unit["name"]
+
+        if "dimension" in args:
+            new_dimension = args["dimension"]
+        else:
+            new_dimension = unit["dimension"]
+
+        if "abbreviation" in args:
+            new_abbreviation = args["abbreviation"]
+        else:
+            new_abbreviation = unit["abbreviation"]
 
         db.execute("UPDATE UnitIndex SET name=?,abbreviation=?,dimension=? WHERE id=?", (new_name, new_abbreviation, new_dimension, unit["id"]))
         db.commit()
         return {"status":"Unit updated."}
 
-@bp.route("/", methods=["GET"])
-def list_units():
-    count = request.values.get("c", None)
-    dimension = request.values.get("d", None)
-    offset = request.values.get("o", 0)
-    db = get_db()
+    def get(self, unit_id): # Display a unit
+        unit = db.execute("SELECT * FROM UnitIndex WHERE id=?", (unit_id,)).fetchone()
+        if unit is None:
+            return {"error":"No unit found with that ID!"}, 404
+        return { "id":unit["id"], "name":unit["name"], "abbreviation":unit["abbreviation"], "dimension":unit["dimension"] }
 
-    units = []
-    if count:
-        try:
-            count = int(count)
-        except ValueError:
-            return {"error":"Parameter count is invalid!"}
+    def __init__(self):
+        self.post_parser = RequestParser()
+        self.get_parser.add_argument("name", type=str)
+        self.get_parser.add_argument("dimension", type=str)
+        self.get_parser.add_argument("abbreviation", type=str)
 
-        if dimension: # dimension + count
-            rows = db.execute("SELECT * FROM UnitIndex WHERE dimension=? LIMIT ? OFFSET ?", (dimension, count, offset)).fetchall()
-        else: # count only
-            rows = db.execute("SELECT * FROM UnitIndex LIMIT ? OFFSET ?", (count,offset)).fetchall()
-    elif dimension is not None: # dimension only
-        rows = db.execute("SELECT * FROM UnitIndex WHERE dimension=?", (dimension,)).fetchall()
-    else: # no filters
-        rows = db.execute("SELECT * FROM UnitIndex").fetchall()
-    
-    if len(rows) == 0:
-        return "{}"
-
-    for u in rows:
-        units.append({"id":u["id"], "name":u["name"],"abbreviation":u["abbreviation"],"dimension":u["dimension"]})
-    return {"units":units}

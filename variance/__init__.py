@@ -1,5 +1,6 @@
 import pathlib 
 from flask import Flask
+from flask_restful import Api, Resource
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=False)
@@ -22,10 +23,15 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    api = Api(app)
+
     from .api import auth, units, equipment
     app.register_blueprint(auth.bp)
-    app.register_blueprint(units.bp)
-    app.register_blueprint(equipment.bp)
+    api.add_resource(units.UnitList,    "/api/units/")
+    api.add_resource(units.Unit,     "/api/units/<int:unit_id>")
+    #api.add_resource(equipment.EquipmentList,      "/api/equipment/")
+    #api.add_resource(equipment.Equipment,      "/api/equipment/<int:equipment_id>")
+
 
     @app.route("/api/apiversion")
     def api_verison():
