@@ -8,7 +8,7 @@ def create_app(test_config=None):
     if test_config is None:
         app.config.from_object("config.DevConfig")
     else:
-        app.config.from_mapping(test_config)
+        app.config.from_object(test_config)
 
     pathlib.Path(app.instance_path).mkdir(exist_ok=True)
     if not pathlib.Path(app.instance_path).is_dir():
