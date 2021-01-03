@@ -36,6 +36,7 @@ def create_app(test_config=None):
     rest_api.add_resource(api.muscles.Muscle,               "/api/muscles/<int:equipment_id>")
 
     from . import cli
+    app.cli.add_command(cli.db.db_cli)
     app.cli.add_command(cli.fixtures.fixtures_cli)
     app.cli.add_command(cli.units.units_cli)
     app.cli.add_command(cli.auth.auth_cli)

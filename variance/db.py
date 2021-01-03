@@ -20,41 +20,5 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-
-def init_db():
-    db = get_db()
-
-    with current_app.open_resource("sql_scripts/schema.sql") as f:
-        db.executescript(f.read().decode("utf-8"))
-
-def drop_all():
-    db = get_db()
-    with current_app.open_resource("sql_scripts/drop_all.sql") as f:
-        db.executescript(f.read().decode("utf-8"))
-
-@click.command("init-db")
-@with_appcontext
-def init_db_command():
-    init_db()
-    click.echo("Initialized the database.")
-
-@click.command("drop-all")
-@with_appcontext
-def drop_all_command():
-    drop_all()
-    click.echo("Dropped all tables from database.")
-
-@click.command("add-default-units")
-@with_appcontext
-def default_units_command():
-    db = get_db()
-    with current_app.open_resource("sql_scripts/defaults/add_default_units.sql") as f:
-        db.executescript(f.read().decode("utf-8"))
-        click.echo("Default units added.")
-
 def init_app(app):
     app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-    app.cli.add_command(default_units_command)
-
-

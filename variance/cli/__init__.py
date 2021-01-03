@@ -1,3 +1,4 @@
+from . import db
 from . import fixtures
 from . import units
 from . import auth
