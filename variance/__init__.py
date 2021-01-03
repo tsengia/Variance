@@ -22,9 +22,11 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    from . import auth
+    from .api import auth, units, equipment
     app.register_blueprint(auth.bp)
-    
+    app.register_blueprint(units.bp)
+    app.register_blueprint(equipment.bp)
+
     @app.route("/api/apiversion")
     def api_verison():
         return { "apiversion": "0.1" }
