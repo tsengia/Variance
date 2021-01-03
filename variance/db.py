@@ -44,8 +44,17 @@ def drop_all_command():
     drop_all()
     click.echo("Dropped all tables from database.")
 
+@click.command("add-default-units")
+@with_appcontext
+def default_units_command():
+    db = get_db()
+    with current_app.open_resource("sql_scripts/defaults/add_default_units.sql") as f:
+        db.executescript(f.read().decode("utf-8"))
+        click.echo("Default units added.")
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(default_units_command)
 
 
