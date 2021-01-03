@@ -1,9 +1,8 @@
 from pathlib import Path
 from unittest import TestCase
 
-from context import variance
-
-import unittest_config
+import variance
+import config
 import flask
 
 class UnitAPITest(TestCase):
