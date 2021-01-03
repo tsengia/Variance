@@ -1,3 +1,3 @@
 python-usda
 flask
-coverage
+pyjwt
