@@ -18,18 +18,20 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    api = Api(app)
+    rest_api = Api(app)
 
-    from .api import auth, units, equipment
-    app.register_blueprint(auth.bp)
-    api.add_resource(units.UnitList,    "/api/units/")
-    api.add_resource(units.Unit,     "/api/units/<int:unit_id>")
-    api.add_resource(equipment.EquipmentList,      "/api/equipment/")
-    api.add_resource(equipment.Equipment,      "/api/equipment/<int:equipment_id>")
+    from . import api
+    app.register_blueprint(api.auth.bp)
+    rest_api.add_resource(api.units.UnitList,    "/api/units/")
+    rest_api.add_resource(api.units.Unit,     "/api/units/<int:unit_id>")
+    rest_api.add_resource(api.equipment.EquipmentList,      "/api/equipment/")
+    rest_api.add_resource(api.equipment.Equipment,      "/api/equipment/<int:equipment_id>")
 
-
-    app.cli.add_command(equipment.equipment_cli)
-    app.cli.add_command(units.units_cli)
+    from . import cli
+    app.cli.add_command(cli.units.units_cli)
+    app.cli.add_command(cli.auth.auth_cli)
+    app.cli.add_command(cli.equipment.equipment_cli)
+    
 
     @app.route("/api/apiversion")
     def api_verison():

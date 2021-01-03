@@ -1,4 +1,4 @@
-from units import *
+from variance.core.units import *
 
 print("Generating add_default_units.sql....")
 sql = open("add_default_units.sql", "w")
