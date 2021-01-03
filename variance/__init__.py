@@ -6,7 +6,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=False)
     
     if test_config is None:
-        app.config.from_object("config.DevConfig", silent=False)
+        app.config.from_object("config.DevConfig")
     else:
         app.config.from_mapping(test_config)
 
@@ -24,9 +24,12 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     api.add_resource(units.UnitList,    "/api/units/")
     api.add_resource(units.Unit,     "/api/units/<int:unit_id>")
-    #api.add_resource(equipment.EquipmentList,      "/api/equipment/")
-    #api.add_resource(equipment.Equipment,      "/api/equipment/<int:equipment_id>")
+    api.add_resource(equipment.EquipmentList,      "/api/equipment/")
+    api.add_resource(equipment.Equipment,      "/api/equipment/<int:equipment_id>")
 
+
+    app.cli.add_command(equipment.equipment_cli)
+    app.cli.add_command(units.units_cli)
 
     @app.route("/api/apiversion")
     def api_verison():

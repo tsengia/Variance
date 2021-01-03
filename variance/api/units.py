@@ -1,12 +1,43 @@
 import functools
 from flask import (
-        current_app, g, session, request
+        current_app, g, request
 )
+import click
+from flask.cli import AppGroup
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from variance.db import get_db
 from variance.api.auth import login_required
 
+units_cli = AppGroup("units")
+
+@units_cli.command("add")
+@click.argument("name")
+@click.argument("abbreviation")
+@click.argument("dimension")
+def cli_add_unit(name, abbreviation, dimension):
+    db = get_db()
+
+    if db.execute("SELECT id FROM UnitIndex WHERE name=?", (name,)).fetchone() is not None:
+        click.echo("A unit with that name already exists!")
+        return -1
+
+    db.execute("INSERT INTO UnitIndex (name, abbreviation, dimension) VALUES (?, ?, ?)", (name, abbreviation, dimension))
+    db.commit()
+    click.echo("Unit added.")
+
+@units_cli.command("del")
+@click.argument("name")
+def cli_del_unit(name):
+    db = get_db()
+
+    unit = db.execute("SELECT id FROM UnitIndex WHERE name=?", (name,)).fetchone()
+    if unit is None:
+        click.echo("No unit with that name was found!")
+        return -1
+    db.execute("DELETE FROM UnitIndex WHERE name=?", (name,))
+    db.commit()
+    click.echo("Unit deleted.")
 
 class UnitList(Resource):
     @login_required
@@ -64,18 +95,18 @@ class Unit(Resource):
         if unit is None:
             return {"error":"No unit found with that ID!"}, 404
 
-        if "name" in args:
+        if args["name"] is not None:
             if db.execute("SELECT id FROM UnitIndex WHERE name=?", (args["name"])).getone() is not None:
                 return {"error":"A unit with that name already exists!"}, 409
         else:
             new_name = unit["name"]
 
-        if "dimension" in args:
+        if args["dimension"] is not None:
             new_dimension = args["dimension"]
         else:
             new_dimension = unit["dimension"]
 
-        if "abbreviation" in args:
+        if args["abbreviation"] is not None:
             new_abbreviation = args["abbreviation"]
         else:
             new_abbreviation = unit["abbreviation"]

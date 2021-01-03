@@ -1,42 +1,89 @@
 import functools
 from flask import (
-    current_app, Blueprint, g, session, request
+    current_app, g, request
 )
-
+import click
+from flask.cli import AppGroup
+from flask_restful import Resource
+from flask_restful.reqparse import RequestParser
 from variance.db import get_db
 from variance.api.auth import login_required
 
-bp = Blueprint("equipment", __name__, url_prefix="/api/equipment")
+equipment_cli = AppGroup("equipment")
 
-@bp.route("/", methods=["POST"])
-@login_required
-def new_equipment():
-    name = request.form.get("n", None)
-    description = request.form.get("d", "")
-
-    if not name:
-        return {"error":"Missing name (n) parameter!"}, 400
+@equipment_cli.command("add")
+@click.argument("name")
+@click.option("-d", "--description", "description", default="", type=str)
+def cli_add_equipment(name, description):
     db = get_db()
-
     if db.execute("SELECT id FROM EquipmentIndex WHERE name=?", (name,)).fetchone() is not None:
-        return {"error":"An equipment with that name already exists!"}, 409
-
+        click.echo("An equipment with that name already exists!")
+        return -1
     db.execute("INSERT INTO EquipmentIndex (name, description) VALUES (?, ?)", (name, description))
     db.commit()
-    return {"status":"Equipment added."}, 201
+    click.echo("Equipment created!")
 
-@bp.route("/", methods=["GET"])
-def list_equipment():
-    count = request.form.get("c", None)
-    offset = request.form.get("o", 0)
-    db = get_db()
-    
-    if count:
-        equipment = db.execute("SELECT * FROM EquipmentIndex LIMIT ? OFFSET ?", (count, offset)).fetchall()
-    else:
-        equipment = db.execute("SELECT * FROM EquipmentIndex").fetchall()
+class EquipmentList(Resource):
+    @login_required
+    def post(self):
+        pass
 
-    a = []
-    for e in equipment:
-        a.append({"id":e["id"],"name":e["name"],"description":e["description"]})
-    return { "equipment":a }
+    def get(self):
+        parser = RequestParser()
+        parser.add_argument("name", type=str)
+        parser.add_argument("count", type=int)
+        parser.add_argument("offset", type=int, default=0)
+        args = parser.parse_args()
+        db = get_db()
+
+        if args["name"] is not None:
+            if args["count"] is not None:
+                rows = db.execute("SELECT * FROM ExerciseIndex WHERE name LIKE %?% LIMIT ? OFFSET ?", (args["name"], args["count"], args["offset"])).fetchall()
+            else:
+                rows = db.execute("SELECT * FROM ExerciseIndex WHERE name LIKE %?%", (args["name"],)).fetchall()
+        elif args["count"] is not None:
+            rows = db.execute("SELECT * FROM ExerciseIndex LIMIT ? OFFSET ?", (args["count"], args["offset"])).fetchall()
+        else:
+            rows = db.execute("SELECT * FROM ExerciseIndex").fetchall()
+
+        equipment_list = []
+        for r in rows:
+            equipment_list.append({"id":r["id"],"name":r["name"],"description":r["description"]})
+
+        return { "equipment":equipment_list }, 200
+
+class Equipment(Resource):
+    def get(self, equipment_id):
+        db = get_db()
+        equipment = db.execute("SELECT * FROM EquipmentIndex WHERE id=?", (equipment_id,)).fetchone()
+        if equipment is None:
+            return {"error":"No equipment with that ID found!"}, 404
+        return { "id":equipment_id, "name":equipment["name"], "description":equipment["description"] }, 200
+
+    @login_required
+    def put(self, equipment_id):
+        parser = RequestParser()
+        parser.add_argument("name", type=str)
+        parser.add_argument("descriptio", type=str)
+        args = parser.parse_args()
+        db = get_db()
+
+        equipment = db.execute("SELECT * FROM EquipmentIndex WHERE id=?", (equipment_id,)).fetchone()
+        if equipment is None:
+            return {"error":"No equipment found with what ID!"}, 404
+
+        if args["name"] is not None:
+            if db.execute("SELECT id FROM EquipmentIndex WHERE name=?", (args["name"],)).fetchone() is not None:
+                return {"error":"An equipment with that name already exists!"}, 409
+            new_name = args["name"]
+        else:
+            new_name = equipment["name"]
+
+        if args["description"] is not None:
+            new_description = args["description"]
+        else:
+            new_description = equipment["description"]
+
+        db.execute("UPDATE EquipmentIndex (name, description) VALUES (?, ?) WHERE id=?", (new_name, new_description, equipment_id))
+        db.commit()
+        return {"status":"Equipment updated."}, 200
