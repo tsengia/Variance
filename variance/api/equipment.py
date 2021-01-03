@@ -28,7 +28,7 @@ def new_equipment():
 @bp.route("/", methods=["GET"])
 def list_equipment():
     count = request.form.get("c", None)
-    offset = request.gorm.get("o", 0)
+    offset = request.form.get("o", 0)
     db = get_db()
     
     if count:

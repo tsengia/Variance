@@ -27,7 +27,6 @@ def login():
     session["user_id"] = user["id"]
     token = jwt.encode({"user_id":user["id"], "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, current_app.config["SECRET_KEY"])
     return {"token":token}
-    #return { "uid":user["id"], "message":"Logged in." }
 
 @bp.route("/register", methods=["POST"])
 def register():
@@ -58,6 +57,7 @@ def register():
 
 @bp.route("/logout", methods=["POST", "GET"])
 def logout():
+    
     session.clear()
     return { "message":"Logged out." }
 
@@ -67,8 +67,17 @@ def load_logged_in_user():
 
     if user_id is None:
         g.user = None
-    else:
+        token = request.values.get("token", None)
+        if token is not None:
+            try:
+                decoded_token = jwt.decode(token, current_app.config["SECRET_KEY"])
+                user_id = decoded_token["user_id"]
+            except:
+                current_app.logger.warn("User attempted to use an invalid token!")
+    if user_id is not None:
         g.user = get_db().execute("SELECT * FROM UserIndex WHERE id=?", (user_id,))
+
+
 
 def login_required(view):
     @functools.wraps(view)
