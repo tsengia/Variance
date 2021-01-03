@@ -7,7 +7,7 @@ from flask.cli import with_appcontext
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
-            current_app.config["DATABASE"],
+            current_app.config["DATABASE_URI"],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
         g.db.row_factory  = sqlite3.Row
@@ -27,11 +27,22 @@ def init_db():
     with current_app.open_resource("sql_scripts/schema.sql") as f:
         db.executescript(f.read().decode("utf-8"))
 
+def drop_all():
+    db = get_db()
+    with current_app.open_resource("sql_scripts/drop_all.sql") as f:
+        db.executescript(f.read().decode("utf-8"))
+
 @click.command("init-db")
 @with_appcontext
 def init_db_command():
     init_db()
     click.echo("Initialized the database.")
+
+@click.command("drop-all")
+@with_appcontext
+def drop_all_command():
+    drop_all()
+    click.echo("Dropped all tables from database.")
 
 def init_app(app):
     app.teardown_appcontext(close_db)
