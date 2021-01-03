@@ -1,30 +1,27 @@
-from pathlib import Path
-from variance.units import *
+from os import path
+from os import environ as e
+from dotenv import load_dotenv
 
-# API Key used to look up nutritional information, register
-USDA_API_KEY="zTrrytuPIfz2OFw26C3rSlHJ4aHBZaGFPynPajUi"
+basedir = path.abspath(path.dirname(__file__))
+load_dotenv(path.join(basedir, '.env'))
 
-#path to where user data will be stored
-USER_PATH=Path("/home/rectangle/Documents/Programming/Projects/Variance/user")
+class Config():
+    SECRET_KEY = e.load("SECRET_KEY")
+    SESSION_COOKIES_NAME = e.load("SESSION_COOKIE_NAME")
+    STATIC_FOLDER = "static"
+    TEMPLATES_FOLDER = "templates"
 
-# Preffered Units for features
+class ProdConfig(Config):
+    FLASK_ENV="production"
+    DEBUG=False
+    TESTING=False
+    DATABASE_URI=e.get("PROD_DATABASE_URI")
 
-# When generating food plans & instructions, what unit do you want?
+class DevConfig(Config):
+    FLASK_ENV="development"
+    DEBUG=True
+    TESTING=True
+    DATABASE_URI=e.get("DEV_DATABASE_URI")
 
-FOOD_MASS_UNITS=MassUnit.OUNCE
-#FOOD_MASS_UNITS=MassUnit.GRAM
-
-# When generating workout plans, what unit do you want?
-LIFTING_UNITS=MassUnit.POUND
-#LIFTING_"UNITS=MassUnit.KILOGRAM
-
-# When tracking & displaying bodyweight, what unit do you want?
-WEIGHT_TRACK_UNITS=MassUnit.POUND
-#WEIGHT_TRACK_UNITS=MassUnit.KILOGRAM
-
-HEIGHT_TRACK_UNITS=LengthUnit.INCH
-#HEIGHT_TRACK_UNITS=LengthUnit.CENTIMETER
-
-# When tracking & displaying body sizes (height, neck width, waist, etc):
-SIZE_TRACK_UNITS=LengthUnit.INCH
-#SIZE_TRACK_UNITS=LengthUnit.CENTIMETER
+class UnitTestConfig(DevConfig):
+    DATABASE_URI=e.get("UNIT_TEST_DATABASE_URI")
