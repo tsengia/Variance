@@ -38,13 +38,14 @@ class EquipmentList(Resource):
 
         if args["name"] is not None:
             if args["count"] is not None:
-                rows = db.execute("SELECT * FROM ExerciseIndex WHERE name LIKE %?% LIMIT ? OFFSET ?", (args["name"], args["count"], args["offset"])).fetchall()
+                rows = db.execute("SELECT * FROM EquipmentIndex WHERE name LIKE ? LIMIT ? OFFSET ?", ("%" + args["name"] + "%", args["count"], args["offset"])).fetchall()
             else:
-                rows = db.execute("SELECT * FROM ExerciseIndex WHERE name LIKE %?%", (args["name"],)).fetchall()
+                rows = db.execute("SELECT * FROM EquipmentIndex WHERE name LIKE ?", ("%" + args["name"] + "%",)).fetchall()
         elif args["count"] is not None:
-            rows = db.execute("SELECT * FROM ExerciseIndex LIMIT ? OFFSET ?", (args["count"], args["offset"])).fetchall()
+            rows = db.execute("SELECT * FROM EquipmentIndex LIMIT ? OFFSET ?", (args["count"], args["offset"])).fetchall()
         else:
-            rows = db.execute("SELECT * FROM ExerciseIndex").fetchall()
+            rows = db.execute("SELECT * FROM EquipmentIndex").fetchall()
+            current_app.logger.info(str(len(rows)))
 
         equipment_list = []
         for r in rows:
