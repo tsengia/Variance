@@ -1,5 +1,8 @@
 python-usda
 flask
 flask-restful
+flask-marshmallow
+flask-sqlalchemy
+marshmallow-sqlalchemy
 pyjwt
 python-dotenv

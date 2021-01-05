@@ -1,8 +1,5 @@
-python-usda
-flask
-flask-restful
+-r requirements.txt
+
 coverage
-pyjwt
-python-dotenv
 pytest
 pytest-flask
