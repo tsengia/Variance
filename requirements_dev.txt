@@ -4,3 +4,5 @@ flask-restful
 coverage
 pyjwt
 python-dotenv
+pytest
+pytest-flask
