@@ -15,14 +15,15 @@ class ProdConfig(Config):
     FLASK_ENV="production"
     DEBUG=False
     TESTING=False
-    DATABASE_URI=e.get("PROD_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI=e.get("PROD_DATABASE_URI")
 
 class DevConfig(Config):
     SECRET_KEY = "DEVELOPMENT KEY"
     FLASK_ENV="development"
     DEBUG=True
     TESTING=True
-    DATABASE_URI=e.get("DEV_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI=e.get("DEV_DATABASE_URI")
+    SQLALCHEMY_ECHO=True
 
 class UnitTestConfig(DevConfig):
-    DATABASE_URI=e.get("UNIT_TEST_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI=e.get("UNIT_TEST_DATABASE_URI")

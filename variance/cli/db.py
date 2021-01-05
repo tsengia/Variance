@@ -1,16 +1,19 @@
 from pathlib import Path
 import click
 from flask.cli import AppGroup
-from variance.db import get_db
 from flask import current_app
+from variance import db
 
 db_cli = AppGroup("db")
+
+@db_cli.command("drop-all")
+def cli_db_drop_all():
+    click.echo("Dropping all tables from database...")
+    db.drop_all()
+    click.echo("All tables dropped.")
 
 @db_cli.command("init")
 def cli_db_init():
     click.echo("Initializing database...")
-    db = get_db()
-    with current_app.open_resource("schema.sql") as s:
-        db.executescript(s.read().decode("utf-8"))
-    db.commit()
+    db.create_all()
     click.echo("Database initialized.")
