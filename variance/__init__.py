@@ -9,7 +9,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=False)
 
     if test_config is None:
-        app.config.from_object("config.DevConfig")
+        app.config.from_object("variance.config.DevConfig")
     else:
         app.config.from_object(test_config)
 
@@ -19,27 +19,22 @@ def create_app(test_config=None):
         print("Instance directory could not be created! Exiting.")
         exit()
 
-    (pathlib.Path(app.instance_path) / pathlib.Path("fixtures/generated/scripts/")).mkdir(exist_ok=True, parents=True)
-    if not (pathlib.Path(app.instance_path) / pathlib.Path("fixtures/generated/scripts/")).is_dir():
-        print("Instance fixtures directory could not be created! Exiting.")
-        exit()
-
     rest_api = Api(app)
 
-    db.init_app(app)
+    from variance.models import user
 
-    from .models import user
-
-    from . import cli
+    from variance import cli
     app.cli.add_command(cli.db.db_cli)
+    app.cli.add_command(cli.user.user_cli)
     """
     app.cli.add_command(cli.fixtures.fixtures_cli)
     app.cli.add_command(cli.units.units_cli)
-    app.cli.add_command(cli.auth.auth_cli)
+    
     app.cli.add_command(cli.equipment.equipment_cli)
     app.cli.add_command(cli.muscles.muscles_cli)
     """
-
+    
+    db.init_app(app)
     @app.route("/api/apiversion")
     def api_verison():
         return { "apiversion": "0.1" }
