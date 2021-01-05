@@ -9,6 +9,7 @@ class Config():
     SESSION_COOKIES_NAME = e.get("SESSION_COOKIE_NAME")
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProdConfig(Config):
     SECRET_KEY = e.get("SECRET_KEY")
