@@ -2,3 +2,4 @@ python-usda
 flask
 flask-restful
 pyjwt
+python-dotenv
