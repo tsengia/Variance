@@ -1,7 +1,7 @@
 from unittest import TestCase
-from context import variance
-from variance.units import *
-from variance.recipie import *
+import variance
+from variance.core.units import *
+from variance.core.recipie import *
 
 class TestRecipies(TestCase):
 

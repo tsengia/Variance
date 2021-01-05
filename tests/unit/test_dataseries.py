@@ -2,9 +2,9 @@ from datetime import datetime, timedelta
 import pathlib
 from unittest import TestCase
 
-from context import variance
-from variance.units import *
-from variance.series import DataSeries
+import variance
+from variance.core.units import *
+from variance.core.series import DataSeries
 
 class TestDataSeries(TestCase):
     def test_init(self):

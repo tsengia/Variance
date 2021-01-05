@@ -1,6 +1,6 @@
 from unittest import TestCase
-from context import variance
-from variance.body import *
+import variance
+from variance.core.body import *
 
 class TestSex(TestCase):
     def test_str(self):

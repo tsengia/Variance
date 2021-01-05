@@ -1,7 +1,7 @@
 from unittest import TestCase
-from context import variance
-from variance.units import *
-from variance.nutrition import *
+import variance
+from variance.core.units import *
+from variance.core.nutrition import *
 
 class MacroNutrientTest(TestCase):
     def test_macro_enum(self):

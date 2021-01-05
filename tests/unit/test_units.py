@@ -1,5 +1,5 @@
-from context import variance
-from variance.units import *
+import variance
+from variance.core.units import *
 from unittest import TestCase
 
 class TestConstructor(TestCase):

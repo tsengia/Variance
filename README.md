@@ -18,10 +18,9 @@ To initialize the database:
 To add in the default units:
 `flask add-default-units`
 
-# Unit Testing
-There are two "sections" of Variance, an API, and a small Python library for a future GUI (I call this the "core" library, it's stored in `variance/core/`).
-To test the RESTful API, run:  
-`python3.7 -m unittest discover -s test/api/`  
+# Testing
+Because Variance is a flask web API, it uses both unit testing and functional testing to verify that it works.  
+To run the test suite, `cd` into the toplevel directory and run:  
+`python -m pytest`  
 
-To test the core library, run:  
-`python3.7 -m unitttest discover -s test/core/`
+All tests are stored in the `tests/` directory. Unit tests are in `tests/unit/` and functional tests are in `tests/functional/`.
