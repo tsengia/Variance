@@ -1,55 +1,59 @@
-api/version			Lists the Variance version
-api/apiversion			Lists the api version
+[x] api/version			Lists the Variance version
+[x] api/apiversion		Lists the api version
 
-api/units			List/search units
-api/unit/<id>			Lists info about that unit (update + delete)
-api/unit/new			Endpoint to create new unit
+[x] api/units/			List/search units
+	Need to test: post
+[/] api/units/<id>		Lists info about that unit (update + new) [dont know if i want to allow deletion...]
+	Need to test: put, delete
+	Need to add: delete
 
-api/equipment			List/search equipment
-api/equipment/<id>		Lists info about that equipment (update + delete)
-api/equipment/new		Endpoint to add new equipment
+[x] api/equipment/		List/search equipment
+	Need to test: post
+[/] api/equipment/<id>		Lists info about that equipment (update + delete + new)
+	Need to test: put, delete
+	Need to add: delete
 
-api/muscles			List/search all registered muscles
-api/muscles/diagram		Generated image highlighting the requested muscle(s)
+[] api/muscles			List/search all registered muscles
+[] api/muscles/diagram		Generated image highlighting the requested muscle(s)
 
-api/micronutrients		List/search micronutrients
-api/micronutrient/<id>		Lists info for that micronutrient (update + delete)
-api/micronutrient/new		Endpoint to create a new micronutrient
+[] api/micronutrients		List/search micronutrients
+[] api/micronutrient/<id>	Lists info for that micronutrient (update + delete)
+[] api/micronutrient/new	Endpoint to create a new micronutrient
 
-api/ingredients			List/search ingredents
-api/ingregient/<id>		Lists information about that ingredient (update + delete)
-api/ingredient/new		Endpoint to get new recipie
+[] api/ingredients		List/search ingredents
+[] api/ingregient/<id>		Lists information about that ingredient (update + delete)
+[] api/ingredient/new		Endpoint to get new recipie
 
-api/recipies			List/search recipies
-api/recipie/<id>		Lists info about that recipie (update + delete)
-api/recipie/<id>/recalculate	Endpoint to trigger the recipie to recalculate its nutritional info from ingredients
-api/recipie/new			Endpoint to create new recipie
+[] api/recipies			List/search recipies
+[] api/recipie/<id>		Lists info about that recipie (update + delete)
+[] api/recipie/<id>/recalculate	Endpoint to trigger the recipie to recalculate its nutritional info from ingredients
+[] api/recipie/new		Endpoint to create new recipie
 
-api/consumables			List/search consumables
-api/consumable/<id>		Lists info about that consumable (update + delete)
-api/consumable/new		Endpoint to create new consumable
+[] api/consumables		List/search consumables
+[] api/consumable/<id>		Lists info about that consumable (update + delete)
+[] api/consumable/new		Endpoint to create new consumable
 
-api/trackers			List/search trackers
-api/tracker/<id>		Lists info about that tracker (update + delete)
-api/tracker/new			Endpoint to add new tracker
+[] api/trackers			List/search trackers
+[] api/tracker/<id>		Lists info about that tracker (update + delete)
+[] api/tracker/new		Endpoint to add new tracker
 
-api/tracker/<tid>/logs		Lists/searches logs for that tracker for the current user
-api/tracker/<tid>/log/<log id>  Lists info about specified tracker log (update + delete) (only available to specified user)
-api/tracker/<tid>/log/new	Endpoint to enter new log entry for current user
+[] api/tracker/<tid>/logs	Lists/searches logs for that tracker for the current user
+[] api/tracker/<tid>/log/<log id>  Lists info about specified tracker log (update + delete) (only available to specified user)
+[] api/tracker/<tid>/log/new	Endpoint to enter new log entry for current user
 
-api/exercises			Lists/searches available exercises
-api/exercise/<id>		Lists info for that exercise (update + delete)
-api/exercise/new		Endpoint to create a new exercise
+[] api/exercises		Lists/searches available exercises
+[] api/exercise/<id>		Lists info for that exercise (update + delete)
+[] api/exercise/new		Endpoint to create a new exercise
 
-api/exercise/logs		List/search exercise logs for current user
-api/exercise/log/add		Endpoint to enter a new exercise log
-api/exercise/log/<logid>	Lists information about that log entry (update + delete)
+[] api/exercise/logs		List/search exercise logs for current user
+[] api/exercise/log/add		Endpoint to enter a new exercise log
+[] api/exercise/log/<logid>	Lists information about that log entry (update + delete)
 
-api/users			List/search registered users
-api/user/<id>			Lists public information about that user
-api/user/settings/<id>		Lists currently logged in user settings & preferences
+[] api/users			List/search registered users
+[] api/user/<id>		Lists public information about that user
+[] api/user/settings/<id>	Lists currently logged in user settings & preferences
 
-api/auth/login			User login
-api/auth/logout			User logout
-api/auth/register		Register new user
-api/auth/delete			Delete logged in user
+[x] api/auth/login		User login
+[x] api/auth/logout		User logout
+[x] api/auth/register		Register new user
+[?] api/auth/delete		Delete logged in user
