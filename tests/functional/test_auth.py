@@ -1,11 +1,14 @@
+import pytest
 
+@pytest.mark.usefixtures("database")
 def test_registration_and_login(client): 
     r = client.post("/api/auth/register", 
             data={
                 "username":"test2",
                 "password":"passw0rd",
-                "birthday":"2002-07-18"
+                "birthdate":"2002-07-18"
             })
+    print("LOOK HERE DUDE:")
     print(r.data)
     """
     self.assertEqual("uid" in r.get_json(), True)
