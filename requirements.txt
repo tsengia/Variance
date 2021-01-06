@@ -1,6 +1,5 @@
 python-usda
 flask
-flask-restful
 flask-marshmallow
 flask-sqlalchemy
 flask-smorest

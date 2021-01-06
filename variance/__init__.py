@@ -1,7 +1,7 @@
 import pathlib
 from flask import Flask
-from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
+from flask_smorest import Api
 
 db = SQLAlchemy()
 
@@ -21,7 +21,10 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
-    from variance.models import user
+    from variance.models import user, unit, equipment
+    
+    from variance import api
+    app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
 
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
@@ -35,6 +38,7 @@ def create_app(test_config=None):
     """
     
     db.init_app(app)
+
     @app.route("/api/apiversion")
     def api_verison():
         return { "apiversion": "0.1" }

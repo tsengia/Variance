@@ -2,59 +2,55 @@ import functools
 import datetime
 import jwt
 import click
-from flask import (
-    current_app, Blueprint, g, request, session
-)
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import g, session, request, current_app
+from flask_smorest import Blueprint, abort
 
-from variance.db import get_db
+from variance import db
+from variance.models.user import UserModel
+from variance.schemas.user import UserSchema
 
-bp = Blueprint('auth', __name__, url_prefix='/api/auth')
+bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route("/login", methods=["POST"])
-def login():
-    username = request.form.get("username", None)
-    password = request.form.get("password", None)
-    db = get_db()
-
-    user = db.execute("SELECT * FROM UserIndex WHERE username=?", (username,)).fetchone()
-    if user is None:
-        return { "error":"Incorrect username or password!" }
-    elif not check_password_hash(user["password"], password):
-        return { "error":"Incorrect username or password!" }
-
-    session.clear()
-    session["user_id"] = user["id"]
-    token = jwt.encode({"user_id":user["id"], "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, current_app.config["SECRET_KEY"])
-    return {"token":token}
-
+# Create new user
 @bp.route("/register", methods=["POST"])
-def register():
-    username = request.form.get("username", None)
-    password = request.form.get("password", None)
-    birthday = request.form.get("birthday", None)
-    db = get_db()
+@bp.arguments(UserSchema(only=("username", "password", "birthdate")), location="form")
+@bp.response(UserSchema(only=("id",)), code=201)
+def register(new_user):
+    print(new_user.username)
+    if UserModel.query.filter_by(username=new_user.username).first() is not None:
+        abort(409, message="A user with that username already exists!")
+    u = UserModel(username=new_user.username, birthdate=new_user.birthdate)
+    u.set_password(new_user.password)
+    db.session.add(u)
+    db.session.commit()
+    return u
 
-    if not username:
-        return {"error":"You must specify a username!"}
-    elif not password:
-        return {"error":"You must specify a password!"}
-    elif not birthday:
-        return {"error":"You must specify a birthday!"}
-    try:
-        birthday = datetime.date.fromisoformat(birthday)
-    except ValueError:
-        return {"error":"Birthday is not in a valid YYYY-MM-DD format!"}
-        
-    if db.execute("SELECT id FROM UserIndex WHERE username = ?", (username,)).fetchone() is not None:
-        return {"error":"That username is already taken!"}
-    db.execute("INSERT INTO UserIndex (username, password, birthdate) VALUES (?, ?, ?)", (username, generate_password_hash(password), birthday))
-    db.commit()
+# User login via JWT
+@bp.route("/token", methods=["POST"])
+@bp.arguments(UserSchema(only=("username", "password")), location="form")
+def get_token(req_user):
+    u = UserModel.query.filter_by(username=req_user.username).first()
+    if u is None:
+        abort(403, message="Incorrect username or password!")
+    if not u.check_password(req_user.password):
+        abort(403, message="Incorrect username or password!")
+    token = jwt.encode({"user_id":u.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, current_app.config["SECRET_KEY"])
+    return {"token":token}, 200
+    
+# User login via session
+@bp.route("/login", methods=["POST"])
+@bp.arguments(UserSchema(only=("username", "password")), location="form")
+def login(req_user):
+    u = UserModel.query.filter_by(username=req_user.username).first()
+    if u is None:
+        abort(403, message="Incorrect username or password!")
+    if not u.check_password(req_user.password):
+        abort(403, message="Incorrect username or password!")
+    session.clear()
+    session["user_id"] = u.id
+    return {"status":"You have been logged in."}, 200
 
-    user = db.execute("SELECT * FROM UserIndex WHERE username = ?", (username,)).fetchone()
-
-    return { "uid":str(user["id"]) }
-
+# User logout via session
 @bp.route("/logout", methods=["POST", "GET"])
 def logout():
     session.clear()
@@ -70,17 +66,30 @@ def load_logged_in_user():
         if token is not None:
             try:
                 decoded_token = jwt.decode(token, current_app.config["SECRET_KEY"])
-                user_id = decoded_token["user_id"]
+                user_id = int(decoded_token["user_id"])
             except:
                 current_app.logger.warn("User attempted to use an invalid token!")
+    else:
+        user_id = int(user_id)
+
     if user_id is not None:
-        g.user = get_db().execute("SELECT * FROM UserIndex WHERE id=?", (user_id,))
+        g.user = UserModel.query.get(user_id)
 
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return {"error":"You must be logged in to access this endpoint!"}
+            return {"error":"You must be logged in to access this endpoint!"}, 401
+        return view(**kwargs)
+
+    return wrapped_view
+    
+@login_required
+def admin_required(view):
+    @functools.wrap(view)
+    def wrapped_view(**kwargs):
+        if not g.user.role == "admin":
+            return {"error":"You do not have permission to perform this action!"}, 401
         return view(**kwargs)
 
     return wrapped_view
