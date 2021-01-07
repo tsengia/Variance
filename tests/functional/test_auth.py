@@ -1,23 +1,23 @@
 import pytest
 
 @pytest.mark.usefixtures("database")
-def test_registration_and_login(client): 
+def test_good_registration(client): 
     r = client.post("/api/auth/register", 
             data={
                 "username":"test2",
-                "password":"passw0rd",
-                "birthdate":"2002-07-18"
+                "password":"asdfghjkl",
+                "birthdate":"2012-03-10"
             })
-    print("LOOK HERE DUDE:")
-    print(r.data)
-    """
-    self.assertEqual("uid" in r.get_json(), True)
-
-    r = test_client.post("/api/auth/login", 
+    assert r.status_code == 201
+    assert "id" in r.get_json()
+    
+@pytest.mark.usefixtures("database")
+def test_bad_birthdate_registration(client): 
+    r = client.post("/api/auth/register", 
             data={
                 "username":"test2",
-                "password":"passw0rd"
+                "password":"asdfghjkl",
+                "birthdate":"2012/234/2"
             })
-    token = r.get_json()
-    self.assertEqual(token is not None, True)
-    """
+    assert r.status_code == 422
+    assert "status" in r.get_json()

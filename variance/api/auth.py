@@ -16,11 +16,10 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.arguments(UserSchema(only=("username", "password", "birthdate")), location="form")
 @bp.response(UserSchema(only=("id",)), code=201)
 def register(new_user):
-    print(new_user.username)
-    if UserModel.query.filter_by(username=new_user.username).first() is not None:
+    if UserModel.query.filter_by(username=new_user["username"]).first() is not None:
         abort(409, message="A user with that username already exists!")
-    u = UserModel(username=new_user.username, birthdate=new_user.birthdate)
-    u.set_password(new_user.password)
+    u = UserModel(username=new_user["username"], birthdate=new_user["birthdate"])
+    u.set_password(new_user["password"])
     db.session.add(u)
     db.session.commit()
     return u
@@ -29,22 +28,22 @@ def register(new_user):
 @bp.route("/token", methods=["POST"])
 @bp.arguments(UserSchema(only=("username", "password")), location="form")
 def get_token(req_user):
-    u = UserModel.query.filter_by(username=req_user.username).first()
+    u = UserModel.query.filter_by(username=req_user["username"]).first()
     if u is None:
         abort(403, message="Incorrect username or password!")
-    if not u.check_password(req_user.password):
+    if not u.check_password(req_user["password"]):
         abort(403, message="Incorrect username or password!")
-    token = jwt.encode({"user_id":u.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, current_app.config["SECRET_KEY"])
+    token = jwt.encode({"user_id":u.id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, current_app.config["SECRET_KEY"], algorithm="HS256")
     return {"token":token}, 200
-    
+
 # User login via session
 @bp.route("/login", methods=["POST"])
 @bp.arguments(UserSchema(only=("username", "password")), location="form")
 def login(req_user):
-    u = UserModel.query.filter_by(username=req_user.username).first()
+    u = UserModel.query.filter_by(username=req_user["username"]).first()
     if u is None:
         abort(403, message="Incorrect username or password!")
-    if not u.check_password(req_user.password):
+    if not u.check_password(req_user["password"]):
         abort(403, message="Incorrect username or password!")
     session.clear()
     session["user_id"] = u.id
@@ -58,17 +57,17 @@ def logout():
 
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get("user_id")
+    user_id = session.get("user_id", None)
 
     if user_id is None:
         g.user = None
         token = request.values.get("token", None)
         if token is not None:
             try:
-                decoded_token = jwt.decode(token, current_app.config["SECRET_KEY"])
+                decoded_token = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms="HS256")
                 user_id = int(decoded_token["user_id"])
             except:
-                current_app.logger.warn("User attempted to use an invalid token!")
+                current_app.logger.warning("User attempted to use an invalid token!")
     else:
         user_id = int(user_id)
 
@@ -77,19 +76,19 @@ def load_logged_in_user():
 
 def login_required(view):
     @functools.wraps(view)
-    def wrapped_view(**kwargs):
+    def wrapped_view(*args, **kwargs):
         if g.user is None:
             return {"error":"You must be logged in to access this endpoint!"}, 401
-        return view(**kwargs)
+        return view(*args, **kwargs)
 
     return wrapped_view
-    
+
 @login_required
 def admin_required(view):
     @functools.wrap(view)
-    def wrapped_view(**kwargs):
-        if not g.user.role == "admin":
+    def wrapped_view(*args, **kwargs):
+        if (not g.user) or (not g.user.role == "admin"):
             return {"error":"You do not have permission to perform this action!"}, 401
-        return view(**kwargs)
+        return view(*args, **kwargs)
 
     return wrapped_view

@@ -25,6 +25,7 @@ def create_app(test_config=None):
     
     from variance import api
     app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
+    app.register_blueprint(api.units.bp, url_prefix="/api/units")
 
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
