@@ -55,3 +55,18 @@ def test_new_unit(client, user_token):
     assert len(r.get_json()) == 1
     for u in r.get_json():
         assert u["dimension"] == "test_dimension2"
+        
+    r = client.get("/api/units/1")
+    assert r.status_code == 200
+    assert r.get_json()["name"] == "Test unit."
+    assert r.get_json()["abbreviation"] == "tu"
+    assert r.get_json()["dimension"] == "test_dimension1"
+    
+    r = client.get("/api/units/3")
+    assert r.status_code == 200
+    assert r.get_json()["name"] == "Test unit 3."
+    assert r.get_json()["abbreviation"] == "tu3"
+    assert r.get_json()["dimension"] == "test_dimension2"
+    
+    r = client.get("/api/units/4")
+    assert r.status_code == 404

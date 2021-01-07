@@ -39,11 +39,26 @@ class UnitList(MethodView):
 class Unit(MethodView):
     @login_required
     def post(self, unit_id): # Update a unit
-        pass
+        u = UnitModel.query.get(unit_id)
+        if u is None:
+            abort(404, "A unit with that ID does not exist!")
+
+        return {"status":"Unit updated."}, 200
         
     @login_required
     def delete(self, unit_id): # Delete a unit
-        pass
+        u = UnitModel.query.get(unit_id)
+        if u is None:
+            abort(404, "A unit with that ID does not exist!")
+            
+        db.session.delete(u)
+        db.session.commit()
 
+        return {"status":"Unit deleted."}, 200
+
+    @bp.response(UnitSchema, code=200)
     def get(self, unit_id): # Display a unit
-        pass
+        u = UnitModel.query.get(unit_id)
+        if u is None:
+            abort(404, "A unit with that ID does not exist!")
+        return u
