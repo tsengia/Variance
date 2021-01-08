@@ -70,3 +70,39 @@ def test_new_unit(client, user_token):
     
     r = client.get("/api/units/4")
     assert r.status_code == 404
+    
+    # Attempt an upate without logging in
+    r = client.post("/api/units/2", data={"name":"Renamed unit"})
+    assert r.status_code == 401
+    
+    # Update while logged in
+    r = client.post("/api/units/2",
+        data={
+            "token":user_token,
+            "name":"Renamed unit"
+        })
+    assert r.status_code == 200
+    
+    # Assert that update succeeded
+    r = client.get("/api/units/2")
+    assert r.status_code == 200
+    assert r.get_json()["name"] == "Renamed unit"
+    assert r.get_json()["abbreviation"] == "tu2"
+    assert r.get_json()["multiplier"] == 1.0
+    
+    # Update while logged in, conflicting names
+    r = client.post("/api/units/1", data={"token":user_token, "name":"Renamed unit"})
+    assert r.status_code == 409
+    
+    # Attempt deletion without being logged in
+    r = client.delete("/api/units/2") 
+    assert r.status_code == 401
+    
+    # Delete while logged in
+    r = client.delete("/api/units/2", data={"token":user_token})
+    assert r.status_code == 200
+    # Make sure it was deleted
+    r = client.get("/api/units/2")
+    assert r.status_code == 404
+    
+    

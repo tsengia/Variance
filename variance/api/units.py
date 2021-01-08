@@ -37,20 +37,25 @@ class UnitList(MethodView):
 
 @bp.route("/<int:unit_id>")
 class Unit(MethodView):
+
+    @bp.arguments(UnitSchema(partial=("name", "dimension", "abbreviation", "multiplier"), exclude=("id",)), location="form", unknown=EXCLUDE)
     @login_required
-    def post(self, unit_id): # Update a unit
-        u = UnitModel.query.get(unit_id)
-        if u is None:
-            abort(404, "A unit with that ID does not exist!")
+    def post(self, update, unit_id): # Update a unit
+        u = UnitModel.query.get_or_404(unit_id)
+
+        if "name" in update and update["name"] != u.name:
+            if UnitModel.query.filter_by(name=update["name"]).count() is not 0:
+                abort(409, "A unit with that name already exists!")
+
+        i = UnitSchema().load(update, instance=UnitModel.query.get(unit_id), partial=True)
+        db.session.commit()
 
         return {"status":"Unit updated."}, 200
-        
+
     @login_required
     def delete(self, unit_id): # Delete a unit
-        u = UnitModel.query.get(unit_id)
-        if u is None:
-            abort(404, "A unit with that ID does not exist!")
-            
+        u = UnitModel.query.get_or_404(unit_id)
+
         db.session.delete(u)
         db.session.commit()
 
@@ -58,7 +63,5 @@ class Unit(MethodView):
 
     @bp.response(UnitSchema, code=200)
     def get(self, unit_id): # Display a unit
-        u = UnitModel.query.get(unit_id)
-        if u is None:
-            abort(404, "A unit with that ID does not exist!")
+        u = UnitModel.query.get_or_404(unit_id)
         return u
