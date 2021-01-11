@@ -25,12 +25,14 @@ class UserModel(db.Model):
     role = db.Column(db.String(10), nullable=False, default="user")
 
     # List of trackers this user has running
-    trackers = db.relationship("TrackerModel", back_populates="user")
+    trackers = db.relationship("TrackerModel", back_populates="user", cascade="all, delete")
 
     # List of nutritional items created by this user
-    consumables = db.relationship("ConsumableModel", back_populates="created_by")
-    recipies = db.relationship("RecipieModel", back_populates="created_by")
-    ingredients = db.relationship("IngredientModel", back_populates="created_by")
+    consumables = db.relationship("ConsumableModel", back_populates="created_by", cascade="all, delete")
+    recipies = db.relationship("RecipieModel", back_populates="created_by", cascade="all, delete")
+    ingredients = db.relationship("IngredientModel", back_populates="created_by", cascade="all, delete")
+    mealplans = db.relationship("MealPlanModel", back_populates="created_by", cascade="all, delete")
+
     
     # Returns the age (in years) of this user. Integer, not a fraction
     def age(self):

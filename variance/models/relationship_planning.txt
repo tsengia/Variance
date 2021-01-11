@@ -1,0 +1,87 @@
+
+ONE User:
+	MANY trackers (O->M)
+	MANY ingredients (O->M)
+	MANY recipies (O->M)
+	MANY consumables (O->M)
+	MANY mealplans (O->M) 
+	MANY fitnessprograms (O->M)
+	MANY nutritionlogs (O->M)
+	MANY exerciselogs (O->M)
+	
+ONE micronutrient:
+	no parents
+
+ONE tracker:
+	ONE parent author (M->O)
+	MANY tracker-entries (O->M)
+
+ONE tracker-entry:
+	ONE parent tracker (M->O)
+	ONE unit
+
+ONE ingredient:
+	ONE parent author (M->O)
+	MANY micronutries (with amounts)
+
+ONE recipie:
+	ONE parent author (M->O)
+	MANY micronutries (with amounts)
+
+ONE consumable:
+	ONE parent author (M->O)
+	MANY micronutries (with amounts)
+
+ONE mealplan:
+	ONE parent author (M->O)
+	MANY mealplandays (O->M)
+
+ONE mealplanday:
+	ONE parent mealplan (M->O)
+	MANY meals (O->M)
+
+ONE meal:
+	ONE parent mealplanday (M->O)
+	MANY recipies 	 (w/ amounts)
+	MANY consumables (w/ amounts)
+	MANY ingredients (w/ amounts)
+	
+ONE fitnessprogram:
+	ONE parent author (M->O)
+	MANY programdays
+	
+ONE programday:
+	ONE parent fitnessprogram (M->O)
+	MANY workouts (O->M)
+	
+ONE workout:
+	ONE parent programday (M->O)
+	MANY exercises (w/ measures)
+	
+ONE exerciselog:
+	ONE parent author (M->O)
+	ONE exercise
+	ONE workout
+	ONE programday
+	ONE fitnessprogram
+	
+ONE nutritionlog:
+	ONE parent author (M->O)
+	ONE meal
+	ONE mealplan
+	ONE of: ingredient, recipie, consumable, null
+	
+ONE exercise:
+	no parents
+	MANY primary muscles (M->M)
+	MANY secondary muscles (M->M)
+	
+ONE muscle:
+	no parents
+	MANY primary exercises (M->M)
+	MANY secondary exercises (M->M)
+	MANY muscle groups (M->M)
+	
+ONE muscle group:
+	no parents
+	MANY muscles (M->M)

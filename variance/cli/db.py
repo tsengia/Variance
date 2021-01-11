@@ -1,7 +1,5 @@
-from pathlib import Path
 import click
 from flask.cli import AppGroup
-from flask import current_app
 from variance import db
 
 db_cli = AppGroup("db")

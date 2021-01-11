@@ -1,10 +1,24 @@
 from variance import db
 
 # Association table. Associates MuscleGroups with their Muscles and vice-versa
-class MuscleGroupAssociationTable(db.Table):
+class MuscleGroupAssociationTable(db.Model):
     __tablename__ = "MuscleGroupAssociation"
-    group_id = db.Column(db.Integer, db.ForeignKey("MuscleGroupIndex.id"))
-    muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"))
+    group_id = db.Column(db.Integer, db.ForeignKey("MuscleGroupIndex.id"), primary_key=True)
+    muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)
+
+# Association table. Associates exercises with the PRIMARY muscles they work
+class PrimaryExerciseMuscleAssociationTable(db.Model):
+    __tablename__ = "PrimaryExerciseMuscleAssociation"
+
+    exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), primary_key=True)
+    muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)
+
+# Association table. Associates exercises with the SECONDARY muscles they work
+class SecondaryExerciseMuscleAssociationTable(db.Model):
+    __tablename__ = "SecondaryExerciseMuscleAssociation"
+
+    exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), primary_key=True)
+    muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)   
 
 class MuscleGroupModel(db.Model):
     __tablename__ = "MuscleGroupIndex"
@@ -36,7 +50,7 @@ class MuscleModel(db.Model):
     groups = db.relationship("MuscleGroupModel", secondary="MuscleGroupAssociation", back_populates="muscles")
     
     # List of exercises that this muscle is used in as a primary muscle
-    primary_exercises = db.relationship("MuscleGroupModel", secondary="PrimaryExerciseMuscleAssociation", back_populates="primary_muscles")
+    primary_exercises = db.relationship("ExerciseModel", secondary="PrimaryExerciseMuscleAssociation", back_populates="primary_muscles")
     
     # List of exercises that this muscle is used in as a secondary muscle
-    secondary_exercises = db.relationship("MuscleGroupModel", secondary="SecondaryExerciseMuscleAssociation", back_populates="secondary_muscles")
+    secondary_exercises = db.relationship("ExerciseModel", secondary="SecondaryExerciseMuscleAssociation", back_populates="secondary_muscles")

@@ -9,6 +9,20 @@ class MicronutrientModel(db.Model):
     # Name of the micronutrient
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=True)
+    
+class IngredientMicroNutrientsModel(db.Model):
+    __tablename__ = "IngredientMicroNutrientsIndex"
+    
+    ingredient_id = db.Column(db.Integer, db.ForeignKey("IngredientIndex.id"), nullable=False, primary_key=True)
+    micronutrient_id = db.Column(db.Integer, db.ForeignKey("MicronutrientIndex.id"), nullable=False, primary_key=True)
+    measure_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    measure_value = db.Column(db.Float, nullable=False)
+    
+    measure_unit = db.relationship("UnitModel", foreign_keys="IngredientMicroNutrientsModel.measure_unit_id")
+    micronutrient = db.relationship("MicronutrientModel", foreign_keys="IngredientMicroNutrientsModel.micronutrient_id")
+    ingredient = db.relationship("IngredientModel", foreign_keys="IngredientMicroNutrientsModel.ingredient_id")
+
+
 
 class IngredientModel(db.Model):
     __tablename__ = "IngredientIndex"
@@ -31,15 +45,19 @@ class IngredientModel(db.Model):
     # Amount of fats (grams) in 1 serving of this ingredient
     fat = db.Column(db.Float, nullable=False, default=0)
     
-    serving_size_value = db.Column(db.Float, nullable=False)
-    serving_size_unit_id = db.Column(db.Integer, ForeignKey(UnitModel.id), nullable=False)
+    # List of micronutrients and their amounts in 1 serving of this ingredient
+    micronutrients = db.relationship("IngredientMicroNutrientsModel")
     
-    serving_size_unit = db.relationship("UnitModel", foreign_keys="IngredientModel.serving_size_unit_id")
+    serving_size_value = db.Column(db.Float, nullable=False)
+    serving_size_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    
+    serving_size_unit = db.relationship("UnitModel")
     
     # If set to true, all users can see this ingredient
     public = db.Column(db.Boolean, nullable=False, default=False)
     
     # The user who added this ingredient to the database
+    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     created_by = db.relationship("UserModel", back_populates="ingredients")
     
     # Beyond here are other optional properties
@@ -87,6 +105,7 @@ class RecipieModel(db.Model):
     public = db.Column(db.Boolean, nullable=False, default=False)
     
     # The user who added this recipie to the database
+    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     created_by = db.relationship("UserModel", back_populates="recipies")
     
     #Optional things
@@ -122,6 +141,7 @@ class ConsumableModel(db.Model):
     public = db.Column(db.Boolean, nullable=False, default=False)
     
     # The user who added this consumable to the database
+    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     created_by = db.relationship("UserModel", back_populates="consumables")
     
     # Optional things
