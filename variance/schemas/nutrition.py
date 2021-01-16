@@ -1,22 +1,17 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from variance.models.nutrition import MicronutrientModel, IngredientModel, RecipieModel, ConsumableModel
+from variance.models.nutrition import MicronutrientModel, RecipeModel, ConsumableModel
 
 class MicronutrientSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = MicronutrientModel
         load_instance = False
 
-class IngredientSchema(SQLAlchemyAutoSchema):
+class RecipeSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = MicronutrientModel
-        load_instance = False
-
-class RecipieSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = MicronutrientModel
+        model = RecipeModel
         load_instance = False
 
 class ConsumableSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = MicronutrientModel
+        model = ConsumableModel
         load_instance = False
