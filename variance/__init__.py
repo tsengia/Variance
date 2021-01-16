@@ -30,6 +30,7 @@ def create_app(test_config=None):
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
     app.cli.add_command(cli.user.user_cli)
+    app.cli.add_command(cli.load_fixtures.lf_cli)
     """
     app.cli.add_command(cli.fixtures.fixtures_cli)
     app.cli.add_command(cli.units.units_cli)

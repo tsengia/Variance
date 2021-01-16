@@ -1,0 +1,26 @@
+
+DEFAULT_EQUIPMENT = [
+("Dumbbells","Generic dumbbells."),
+("Barbell","Generic barbell with plate weights."),
+("Squat Rack","Generic squat rack."),
+("Leg Curl Machine","Generic machine to do leg curls on."),
+("Leg Extension Machine","Generic machine to do leg extensions on."),
+("Pull up bar","Generic horizontal bar to perform pull ups, chin ups, and other modified grip exercises."),
+("Flat Bench","Generic horizontal bench that lies flat, can be adjustable."),
+("Incline Bench","Generic weight bench that lies inclined, can be adjustable."),
+("Upright Bench","Generic bench that sits at a 90 degree angle. Can be adjustable. Often used for seated military press."),
+("Adjustable Bench","Generic weight bench that can have an adjustable angle."),
+("Seated Cable Row Machine","Cabled machine for performing seated rows and other exercises."),
+("Overhead Cable Machine","Cabled machine with a pulley mounted overhead for performing pulldowns and other exercises, pulley location may be adjustable."),
+("Adjustable Cable Machine","Cabled machine with a pulley mounted at an ajustable location, used for many exercises."),
+("Cable Fly Machine","Cabled machine to perform chest flys with."),
+("Swiss Ball","Generic swiss ball."),
+("Medicine Ball","Generic medicine ball."),
+("Bosu Ball","Generic bosu ball."),
+("Resistance Band","Generic resistance band."),
+("Treadmill","Generic treadmill for running."),
+("Stepper","Generic stepper machine."),
+("Elliptical","Generic elliptical."),
+("Erg Machine","Generic erg rowing machine."),
+("Rope","Generic thick rope.")
+]

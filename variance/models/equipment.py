@@ -1,6 +1,6 @@
 from variance import db
 
-class Equipment(db.Model):
+class EquipmentModel(db.Model):
     __tablename__ = "EquipmentIndex"
 
     id = db.Column(db.Integer, primary_key=True)
