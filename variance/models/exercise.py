@@ -21,9 +21,15 @@ class ExerciseModel(db.Model):
     # Is this exercise measured in weight?
     use_weight = db.Column(db.Boolean, nullable=False, default=0)
     
+    # What piece of equipment does this exercise use?
+    equipment_id = db.Column(db.Integer, db.ForeignKey("EquipmentIndex.id"), nullable=True)
+    equipment = db.relationship("EquipmentModel")
+    
     # Is this exercise a variation of another exercise, if so, which exercise?
-    ###: TODO ADD IN VARIATION RELATIONSHIP
-
+    parent_exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)
+    parent_exercise = db.relationship("ExerciseModel", foreign_keys="ExerciseModel.parent_exercise_id", back_populates="variations")
+    variations = db.relationship("ExerciseModel")
+    
     # List of primary muscles worked by this exercise
     primary_muscles = db.relationship("MuscleModel", secondary="PrimaryExerciseMuscleAssociation", back_populates="primary_exercises")
 
