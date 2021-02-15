@@ -60,7 +60,7 @@ class UserModel(db.Model):
     no_fish = db.Column(db.Boolean, nullable=True)
     
     # Can this user not eat shellfish?
-    no_shellfish = db.Column(db.Column, nullable=True)
+    no_shellfish = db.Column(db.Boolean, nullable=True)
     
     # Can this user not eat gluten?
     no_gluten = db.Column(db.Boolean, nullable=True)

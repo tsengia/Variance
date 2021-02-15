@@ -143,7 +143,7 @@ class ConsumableModel(db.Model):
     has_fish = db.Column(db.Boolean, nullable=True)
     
     # Does this consumable contain shellfish?
-    has_shellfish = db.Column(db.Column, nullable=True)
+    has_shellfish = db.Column(db.Boolean, nullable=True)
     
     # Does this consumable contain gluten?
     has_gluten = db.Column(db.Boolean, nullable=True)
