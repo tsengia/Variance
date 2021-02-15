@@ -31,7 +31,7 @@ class ConsumableNutrientsModel(db.Model):
     measure_value = db.Column(db.Float, nullable=False)
     
     measure_unit = db.relationship("UnitModel", foreign_keys="ConsumableNutrientsModel.measure_unit_id")
-    Nutrient = db.relationship("NutrientModel", foreign_keys="ConsumableNutrientsModel.Nutrient_id")
+    nutrient = db.relationship("NutrientModel", foreign_keys="ConsumableNutrientsModel.nutrient_id")
     consumable = db.relationship("ConsumableModel", foreign_keys="ConsumableNutrientsModel.consumable_id")
 
 class RecipieIngredientList(db.Model):
@@ -64,8 +64,8 @@ class RecipeModel(db.Model):
     instructions = db.Column(db.Text, nullable=True)
     
     # The consumable created by this recipie
-    result_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False)
-    result = db.relationship("ConsumableModel", foreign_keys="RecipeIndex.result_id")
+    #result_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False)
+    #result = db.relationship("ConsumableModel", foreign_keys="RecipeIndex.result_id")
     
     # How many servings of the consumable are produced by one serving of the recipe?
     recipe_yield = db.Column(db.Float, nullable=True)
