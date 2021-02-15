@@ -5,6 +5,7 @@ class MealPlanModel(db.Model):
     __tablename__ = "MealPlanIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+    ### Management Info
     # Name of this meal plan
     name = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -15,7 +16,7 @@ class MealPlanModel(db.Model):
     # The user who added this mealplan to the database
     created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     created_by = db.relationship("UserModel", back_populates="mealplans")
-    
+
     days = db.relationship("MealPlanDayModel", back_populates="mealplan")
     
 class MealPlanDayModel(db.Model):

@@ -20,6 +20,9 @@ class ExerciseModel(db.Model):
 
     # Is this exercise measured in weight?
     use_weight = db.Column(db.Boolean, nullable=False, default=0)
+    
+    # Is this exercise a variation of another exercise, if so, which exercise?
+    ###: TODO ADD IN VARIATION RELATIONSHIP
 
     # List of primary muscles worked by this exercise
     primary_muscles = db.relationship("MuscleModel", secondary="PrimaryExerciseMuscleAssociation", back_populates="primary_exercises")
