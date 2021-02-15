@@ -53,23 +53,23 @@ class RecipeModel(db.Model):
 
     # Name of the recipe
     name = db.Column(db.String(100), unique=True, nullable=False)
-    
+
     # When was this recipe created?
     created_date = db.Column(db.Date, nullable=False, default=datetime.now)
-    
+
     # Description about what this recipe is
     description = db.Column(db.Text, nullable=True)
-    
+
     # Instructions on how to prepare this recipe
     instructions = db.Column(db.Text, nullable=True)
-    
+
     # The consumable created by this recipie
-    #result_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False)
-    #result = db.relationship("ConsumableModel", foreign_keys="RecipeIndex.result_id")
-    
+    consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False)
+    consumable = db.relationship("ConsumableModel")
+
     # How many servings of the consumable are produced by one serving of the recipe?
     recipe_yield = db.Column(db.Float, nullable=True)
-    
+
     # If set to true, all users can see this ingredient
     public = db.Column(db.Boolean, nullable=False, default=False)
     
