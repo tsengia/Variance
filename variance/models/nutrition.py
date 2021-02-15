@@ -17,10 +17,10 @@ class NutrientModel(db.Model):
 
     # External databases info
     # FoodData Central Nutrient ID
-    fdc_nid = db.Column(db.Integer(4), nullable=True)
+    fdc_nid = db.Column(db.Integer, nullable=True)
     
     # FNDDS Nutrient Code
-    fndds = db.Column(db.Integer(3), nullable=True)
+    fndds = db.Column(db.Integer, nullable=True)
 
 class ConsumableNutrientsModel(db.Model):
     __tablename__ = "ConsumableNutrientsIndex"
@@ -212,14 +212,14 @@ class ConsumableModel(db.Model):
     attribution = db.Column(db.Text, nullable=True)
 
     # Short display name of where this entry came from. Set to a value if ingested from another database
-    data_source = db.Column(db.VarChar(70), nullable=True)
+    data_source = db.Column(db.String(70), nullable=True)
 
     # External database IDs
-    fdc_id = db.Column(db.Integer(8), nullable=True)
-    fndds_id = db.Column(db.Integer(8), nullable=True)
-    wweia_category = db.Column(db.Integer(4), nullable=True)
-    upc = db.Column(db.VarChar(20), nullable=True)
-    upc_a = db.Column(db.Integer(12), nullable=True)
-    upc_e = db.Column(db.Integer(9), nullable=True)
-    ean_8 = db.Column(db.Integer(8), nullable=True)
-    ean_13 = db.Column(db.Integer(13), nullable=True)
+    fdc_id = db.Column(db.Integer, nullable=True)
+    fndds_id = db.Column(db.Integer, nullable=True)
+    wweia_category = db.Column(db.Integer, nullable=True)
+    upc = db.Column(db.String(20), nullable=True)
+    upc_a = db.Column(db.Integer, nullable=True)
+    upc_e = db.Column(db.Integer, nullable=True)
+    ean_8 = db.Column(db.Integer, nullable=True)
+    ean_13 = db.Column(db.Integer, nullable=True)
