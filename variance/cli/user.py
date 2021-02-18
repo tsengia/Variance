@@ -60,6 +60,20 @@ def cli_user_del(user_id):
     db.session.commit()
     click.echo("User %u (%s) deleted." % (user_id, name))
     
+@user_cli.command("view")
+@click.argument("user_id")
+def cli_user_del(user_id):
+    u = UserModel.query.get(user_id)
+    if u is None:
+        click.echo("No user with that ID found!")
+        return -1
+    click.echo("User %u (%s):" % (u.id, u.username))
+    click.echo("\tRole: %s" % (u.role))
+    click.echo("\tBirthday: %s" % (u.birthdate))
+    click.echo("\tCreated on: %s" % (u.created_on))
+    click.echo("\tEmail: %s" % (u.email))
+    click.echo("\tTags: %s" % (str(u.get_tags())))
+    
 @user_mod_cli.command("role")
 @click.argument("user_id")
 @click.argument("new_role")
@@ -70,4 +84,4 @@ def cli_user_mod_role(user_id, new_role):
         return -1
     u.role = new_role
     db.session.commit()
-    click.echo("User %u (%s) role update to %s." % (user_id, str(u.name), new_role))
+    click.echo("User %u (%s) role update to %s." % (int(user_id), str(u.username), new_role))

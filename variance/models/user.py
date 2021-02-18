@@ -85,3 +85,33 @@ class UserModel(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+        
+    def get_tags(self):
+        tags = []
+        if self.no_pork:
+            tags.append("nopork")
+        if self.no_meat:
+            tags.append("nomeat")
+        if self.no_fish:
+            tags.append("nofish")
+        if self.no_shellfish:
+            tags.append("noshellfish")
+        if self.no_beef:
+            tags.append("nobeef")
+        if self.no_dairy:
+            tags.append("nodairy")
+        if self.no_eggs:
+            tags.append("noeggs")
+        if self.no_peanuts:
+            tags.append("nopeanuts")
+        if self.no_gluten:
+            tags.append("nogluten")
+        if self.no_treenuts:
+            tags.append("notreenuts")
+        if self.is_vegan:
+            tags.append("vegan")
+        if self.is_vegetarian:
+            tags.append("vegetarian")
+        if self.is_kosher:
+            tags.append("kosher")
+        return tags
