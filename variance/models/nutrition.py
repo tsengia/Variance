@@ -1,37 +1,59 @@
 from datetime import datetime
 from variance import db
 
-class NutrientModel(db.Model):
-    __tablename__ = "NutrientIndex"
+class NutrientInfoModel(db.Model):
+    __tablename__ = "NutrientInfoIndex"
+    # This holds non-macro nutritional information about foods. 
+    # Non-macros means that there should be no "Total Carbs" or "Total Fats" in here
+    # Things such as "100mg of Vitamin C" belongs here, with the NutritionalInfoModel being "Vitamin C"
+    # This is a very wide and vauge collection, because specific nutritional information can be spotty.
 
     id = db.Column(db.Integer, primary_key=True)
 
     # Display Name of the Nutrient
     name = db.Column(db.String(100), unique=True, nullable=False)
-    
+
     scientific_name = db.Column(db.String(100), nullable=True)
-    
+
     abbreviation = db.Column(db.String(50), nullable=True)
-    
+
     description = db.Column(db.Text, nullable=True)
+    
+    # Is this nutrient label an amino acid? (Ex: Tryptophan)
+    is_amino_acid = db.Column(db.Boolean, nullable=True)
+    
+    # Is this nutrient label an element? (Ex: Iron, Magnesium, Nitrogen)
+    is_element = db.Column(db.Boolean, nullable=True)
+    
+    # Is this nutrient a vitamin family or a member of a vitamin family? (Ex: Total Vitamin B, Vitamin B12, Retinol
+    is_vitamin = db.Column(db.Boolean, nullable=True)
+    
+    # If this is a vitamin, what vitamin family does this belong to? (Ex: A, B, C, D...)
+    vitamin_family = db.Column(db.String(2), nullable=True)
+    
+    # If this is a vitamin, is it a specific vitamin, and if so, what number? (Ex: Vitamin B12 would have 12 here)
+    vitamin_number = db.Column(db.Integer, nullable=True)
 
     # External databases info
-    # FoodData Central Nutrient ID
-    fdc_nid = db.Column(db.Integer, nullable=True)
+    # Wikipedia Link
+    wikipedia_link = db.Column(db.String(200), nullable=True)
     
+    # FoodData Central Nutrient ID
+    fdc_nid = db.Column(db.String(20), nullable=True)
+
     # FNDDS Nutrient Code
-    fndds = db.Column(db.Integer, nullable=True)
+    fndds = db.Column(db.String(20), nullable=True)
 
 class ConsumableNutrientsModel(db.Model):
     __tablename__ = "ConsumableNutrientsIndex"
-    
+
     consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False, primary_key=True)
-    nutrient_id = db.Column(db.Integer, db.ForeignKey("NutrientIndex.id"), nullable=False, primary_key=True)
+    nutrient_id = db.Column(db.Integer, db.ForeignKey("NutrientInfoIndex.id"), nullable=False, primary_key=True)
     measure_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     measure_value = db.Column(db.Float, nullable=False)
-    
+
     measure_unit = db.relationship("UnitModel", foreign_keys="ConsumableNutrientsModel.measure_unit_id")
-    nutrient = db.relationship("NutrientModel", foreign_keys="ConsumableNutrientsModel.nutrient_id")
+    nutrient = db.relationship("NutrientInfoModel", foreign_keys="ConsumableNutrientsModel.nutrient_id")
     consumable = db.relationship("ConsumableModel", foreign_keys="ConsumableNutrientsModel.consumable_id")
 
 class RecipieIngredientList(db.Model):
@@ -194,16 +216,16 @@ class ConsumableModel(db.Model):
     
     # Would this consumable be considered a side course for a meal?
     is_side = db.Column(db.Boolean, nullable=True)
-    
+
     # Would this consumable be considered a fruit? (raw fruits, fruit salads, etc.)
     is_fruit = db.Column(db.Boolean, nullable=True)
-    
+
     # Would this consumable be considered a vegetable? (raw veggies, sauteed, baked, etc.)
     is_vegetable = db.Column(db.Boolean, nullable=True)
-    
+
     # Would this consumable be considered a meat? (fried meats, breaded meat, grilled, etc.)
     is_meat = db.Column(db.Boolean, nullable=True)
-    
+
     # Would this consumable be considered a soup? (stews count as well)
     is_soup = db.Column(db.Boolean, nullable=True)
 

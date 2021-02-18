@@ -3,10 +3,10 @@ from variance import db
 class GymEquipmentModel(db.Model):
     __tablename__ = "GymEquipmentList"
     
-    equipment_id = db.Column(db.Integer, db.ForeignKey("EquipmentIndex.id"), nullable=False)
+    equipment_id = db.Column(db.Integer, db.ForeignKey("EquipmentIndex.id"), nullable=False, primary_key=True)
     equipment = db.relationship("EquipmentModel", foreign_keys="GymEquipmentModel.equipment_id")
     
-    gym_id = db.Column(db.Integer, db.ForeignKey("GymIndex.id"), nullable=False)
+    gym_id = db.Column(db.Integer, db.ForeignKey("GymIndex.id"), nullable=False, primary_key=True)
     gym = db.relationship("GymModel", foreign_keys="GymEquipmentModel.gym_id")
 
 class GymModel(db.Model):
@@ -35,5 +35,5 @@ class GymModel(db.Model):
     
     # The user who added this gym to the database
     created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
-    created_by = db.relationship("UserModel", back_populates="recipies")
+    created_by = db.relationship("UserModel", backref="gyms")
     
