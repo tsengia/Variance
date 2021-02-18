@@ -9,6 +9,7 @@ DEFAULT_UNITS = [
 (28.34952,("oz", "ounce", "ounces"),"mass"),
 (1000,("kg", "kilogram", "kilograms"),"mass"),
 (0.001, ("mg", "milligram", "milligrams"),"mass"),
+(0.000001, ("ug", "microgram", "micrograms"),"mass"),
 (6350.293, ("st", "stone"), "mass"),
 # Length
 (1,("m", "meter", "meters"),"length"),
