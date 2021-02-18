@@ -19,6 +19,15 @@ def cli_user_get(username):
         return -1
     click.echo("User ID: %u" % u.id)
 
+@user_cli.command("list")
+def cli_user_list():
+    u_list = UserModel.query.all()
+    if u_list is None:
+        click.echo("User list is empty!")
+        return -1
+    for u in u_list:
+        click.echo("%u : %s, Role: %s, Created: %s, Birthday: %s" % (u.id, u.username, u.role, str(u.created_on), str(u.birthdate)))
+
 @user_cli.command("add")
 @click.argument("username")
 @click.argument("password")
