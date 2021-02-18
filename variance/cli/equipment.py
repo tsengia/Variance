@@ -15,7 +15,7 @@ def cli_equipment_get(name):
     if u is None:
         click.echo("No equipment with that name found!")
         return -1
-    click.echo("Equipment ID: " + str(u.id))
+    click.echo("Equipment ID: %u" % u.id)
     
 @equipment_cli.command("list")
 def cli_equipment_list():
@@ -24,7 +24,7 @@ def cli_equipment_list():
         click.echo("Equipment list is empty!")
         return -1
     for a in e_list:
-        click.echo(str(a.id) + ": " + a.name + " - " + a.description)
+        click.echo("%u : %s - %s" % (a.id, a.name, a.description))
 
 @equipment_cli.command("add")
 @click.argument("name")
@@ -37,7 +37,7 @@ def cli_user_add(name, description):
     new_equipment = EquipmentModel(name=name, description=description)
     db.session.add(new_equipment)
     db.session.commit()
-    click.echo("Equipment added.")
+    click.echo("Equipment (%s) added." % (name))
 
 @equipment_cli.command("del")
 @click.argument("equipment_id")
@@ -49,4 +49,4 @@ def cli_user_del(equipment_id):
     name = u.name
     db.session.delete(u)
     db.session.commit()
-    click.echo("Equipment " + str(equipment_id) + " (" + name + ") deleted.")
+    click.echo("Equipment %u (%s) deleted." % (equipment_id, name))

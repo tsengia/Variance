@@ -17,7 +17,7 @@ def cli_user_get(username):
     if u is None:
         click.echo("No user with that username found!")
         return -1
-    click.echo("User ID: " + str(u.id))
+    click.echo("User ID: %u" % u.id)
 
 @user_cli.command("add")
 @click.argument("username")
@@ -37,7 +37,7 @@ def cli_user_add(username, password, birthdate):
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
-    click.echo("User added.")
+    click.echo("User %s added." % (username))
 
 @user_cli.command("del")
 @click.argument("user_id")
@@ -46,6 +46,19 @@ def cli_user_del(user_id):
     if u is None:
         click.echo("No user with that ID found!")
         return -1
+    name = str(u)
     db.session.delete(u)
     db.session.commit()
-    click.echo("User deleted.")
+    click.echo("User %u (%s) deleted." % (user_id, name))
+    
+@user_mod_cli.command("role")
+@click.argument("user_id")
+@click.argument("new_role")
+def cli_user_mod_role(user_id, new_role):
+    u = UserModel.query.get(user_id)
+    if u is None:
+        click.echo("No user with that ID found!")
+        return -1
+    u.role = new_role
+    db.session.commit()
+    click.echo("User %u (%s) role update to %s." % (user_id, str(u.name), new_role))
