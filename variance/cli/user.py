@@ -12,7 +12,7 @@ user_cli.add_command(user_mod_cli)
 
 @user_cli.command("get")
 @click.argument("username")
-def cli_user_add(username):
+def cli_user_get(username):
     u = UserModel.query.filter_by(username=username).first()
     if u is None:
         click.echo("No user with that username found!")
