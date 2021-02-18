@@ -34,7 +34,7 @@ def cli_user_add(name, description):
     if u is not None:
         click.echo("An equipment with that name already exists!")
         return -1
-    new_equipment = UserModel(name=name, description=description)
+    new_equipment = EquipmentModel(name=name, description=description)
     db.session.add(new_equipment)
     db.session.commit()
     click.echo("Equipment added.")
@@ -49,4 +49,4 @@ def cli_user_del(equipment_id):
     name = u.name
     db.session.delete(u)
     db.session.commit()
-    click.echo("Equipment " + str(id) + " (" + name + ") deleted.")
+    click.echo("Equipment " + str(equipment_id) + " (" + name + ") deleted.")
