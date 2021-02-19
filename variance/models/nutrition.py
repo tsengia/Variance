@@ -10,15 +10,17 @@ class NutrientInfoModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Display Name of the Nutrient
+    # Display Name of the nutrition label (common name)
     name = db.Column(db.String(100), unique=True, nullable=False)
 
+    # If this nutrition label is about a specific molecule/element, then give the scientific name here
     scientific_name = db.Column(db.String(100), nullable=True)
 
     abbreviation = db.Column(db.String(50), nullable=True)
 
+    # What does this nutrition label tell us?
     description = db.Column(db.Text, nullable=True)
-    
+
     # Is this nutrient label an amino acid? (Ex: Tryptophan)
     is_amino_acid = db.Column(db.Boolean, nullable=True)
     
@@ -46,7 +48,7 @@ class NutrientInfoModel(db.Model):
 
 class ConsumableNutrientsModel(db.Model):
     __tablename__ = "ConsumableNutrientsIndex"
-
+    # Associates consumables with their nutritional information (other than macros)
     consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False, primary_key=True)
     nutrient_id = db.Column(db.Integer, db.ForeignKey("NutrientInfoIndex.id"), nullable=False, primary_key=True)
     measure_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
@@ -56,17 +58,27 @@ class ConsumableNutrientsModel(db.Model):
     nutrient = db.relationship("NutrientInfoModel", foreign_keys="ConsumableNutrientsModel.nutrient_id")
     consumable = db.relationship("ConsumableModel", foreign_keys="ConsumableNutrientsModel.consumable_id")
 
-class RecipieIngredientList(db.Model):
-    __tablename__ = "RecipieIngredientList"
-    
+class RecipeIngredientList(db.Model):
+    __tablename__ = "RecipeIngredientList"
+    # Associates recipies with the consumables used by it as ingredients
     recipe_id = db.Column(db.Integer, db.ForeignKey("RecipeIndex.id"), nullable=False, primary_key=True)
     measure_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     measure_value = db.Column(db.Float, nullable=False)
     consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False, primary_key=True)
     
-    recipe = db.relationship("RecipeModel", foreign_keys="RecipieIngredientList.recipe_id")
-    measure_unit = db.relationship("UnitModel", foreign_keys="RecipieIngredientList.measure_unit_id")
-    consumable = db.relationship("ConsumableModel", foreign_keys="RecipieIngredientList.consumable_id")
+    recipe = db.relationship("RecipeModel", foreign_keys="RecipeIngredientList.recipe_id")
+    measure_unit = db.relationship("UnitModel", foreign_keys="RecipeIngredientList.measure_unit_id")
+    consumable = db.relationship("ConsumableModel", foreign_keys="RecipeIngredientList.consumable_id")
+
+class RecipeProductsList(db.Model):
+    __tablename__ = "RecipieProductsList"
+    # Associates 1 recipie with the multiple/single consumables it produces, along with the number of servings of consumable it produces
+    recipe_id = db.Column(db.Integer, db.ForeignKey("RecipeIndex.id"), nullable=False, primary_key=True)
+    servings = db.Column(db.Float, nullable=False, default=1)
+    consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False, primary_key=True)
+    
+    recipe = db.relationship("RecipeModel", foreign_keys="RecipeProductsList.recipe_id")
+    product = db.relationship("ConsumableModel", foreign_keys="RecipeProductsList.consumable_id")
 
 class RecipeModel(db.Model):
     __tablename__ = "RecipeIndex"
@@ -84,13 +96,6 @@ class RecipeModel(db.Model):
 
     # Instructions on how to prepare this recipe
     instructions = db.Column(db.Text, nullable=True)
-
-    # The consumable created by this recipie
-    consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=False)
-    consumable = db.relationship("ConsumableModel")
-
-    # How many servings of the consumable are produced by one serving of the recipe?
-    recipe_yield = db.Column(db.Float, nullable=True)
 
     # If set to true, all users can see this ingredient
     public = db.Column(db.Boolean, nullable=False, default=False)
@@ -180,10 +185,10 @@ class ConsumableModel(db.Model):
     is_kosher = db.Column(db.Boolean, nullable=True)
     
     ### Storage, Packaging and Cost
-    # Shelf life while still not opened (fridgerated or shelf) in days
+    # Shelf life while original packaging is still not opened (fridgerated or shelf) in days
     closed_shelf_life = db.Column(db.Integer, nullable=True)
     
-    # Shelf life once opened in days (fridgerated or on shelf)
+    # Shelf life once original packaging is opened in days (fridgerated or on shelf)
     opened_shelf_life = db.Column(db.Integer, nullable=True)
     
     # Freezer life (how many days this can last in a freezer)
