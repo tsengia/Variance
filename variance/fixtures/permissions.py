@@ -28,5 +28,9 @@ DEFAULT_PERMISSIONS=[
 { "endpoint": "recipe", "methods": ["new"], "roles": ["user","admin"] },
 { "endpoint": "recipe", "methods": ["view"], "roles": ["admin"], "owner":True, "check_public":True },
 { "endpoint": "recipe", "methods": ["update","delete"], "roles": ["admin"], "owner":True, "check_public":False },
+# Users
+{ "endpoint": "user", "methods": ["register"], "force_public":True },
+{ "endpoint": "user", "methods": ["login"], "force_public":True },
+{ "endpoint": "user", "methods": ["token"], "force_public":False },
 
 ]

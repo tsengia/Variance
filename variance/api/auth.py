@@ -113,7 +113,8 @@ def check_perms(action, model):
                 allowed = _check_perms(action, g.user, model)
                 
             if not allowed:
-                return {"error":"You do not have permission to perform this action!"}, 401            
+                # TODO: Log an error
+                abort(401, message={"error":"You do not have permission to perform this action!"})        
                 
             return view(*args, **kwargs)
         return wrapped_view
