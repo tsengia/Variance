@@ -1,9 +1,8 @@
-from flask import current_app, g, request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
 from variance import db
-from variance.api.auth import login_required
+from variance.api.auth import check_perms
 from variance.models.unit import UnitModel
 from variance.schemas.unit import UnitSchema
 from variance.schemas.search import SearchSchema
@@ -15,7 +14,7 @@ bp = Blueprint('units', __name__, url_prefix='/units')
 class UnitList(MethodView):
     @bp.arguments(UnitSchema(only=("name", "dimension", "abbreviation")), location="form", unknown=EXCLUDE)
     @bp.response(UnitSchema(only=("id",)), code=201)
-    @login_required
+    @check_perms("unit.new", False)
     def post(self, new_unit): # Create a new unit
         if UnitModel.query.filter_by(name=new_unit["name"]).first() is not None:
             abort(409, message="A unit with that name already exists!")
@@ -27,6 +26,7 @@ class UnitList(MethodView):
     @bp.arguments(SearchSchema(), location="query", required=False)
     @bp.arguments(UnitSchema(only=("dimension",),partial=("dimension",)), location="query", required=False, unknown=EXCLUDE)
     @bp.response(UnitSchema(many=True), code=200)
+    @check_perms("unit.view", False)
     def get(self, search_args, unit_args): # List all units
         if not "dimension" in unit_args:
             result = UnitModel.query.limit(search_args["count"]).offset(search_args["offset"]).all()
@@ -39,7 +39,7 @@ class UnitList(MethodView):
 class Unit(MethodView):
 
     @bp.arguments(UnitSchema(partial=("name", "dimension", "abbreviation", "multiplier"), exclude=("id",)), location="form", unknown=EXCLUDE)
-    @login_required
+    @check_perms("unit.update", False)
     def post(self, update, unit_id): # Update a unit
         u = UnitModel.query.get_or_404(unit_id)
 
@@ -47,12 +47,14 @@ class Unit(MethodView):
             if UnitModel.query.filter_by(name=update["name"]).count() is not 0:
                 abort(409, "A unit with that name already exists!")
 
-        i = UnitSchema().load(update, instance=UnitModel.query.get(unit_id), partial=True)
+        for key, value in update.items():
+            setattr(u, key, value)
+
         db.session.commit()
 
         return {"status":"Unit updated."}, 200
 
-    @login_required
+    @check_perms("unit.delete", False)
     def delete(self, unit_id): # Delete a unit
         u = UnitModel.query.get_or_404(unit_id)
 
@@ -62,6 +64,7 @@ class Unit(MethodView):
         return {"status":"Unit deleted."}, 200
 
     @bp.response(UnitSchema, code=200)
+    @check_perms("unit.view", False)
     def get(self, unit_id): # Display a unit
         u = UnitModel.query.get_or_404(unit_id)
         return u
