@@ -30,6 +30,36 @@ def cli_fixture_load_equipment():
         db.session.commit()
     click.echo("Default equipment added.")
     
+@lf_cli.command("permissions")
+def cli_fixture_load_permissions():
+    click.echo("Adding default permissions...")
+    from variance.fixtures.permissions import DEFAULT_PERMISSIONS
+    from variance.models.permissions import PermissionModel
+
+    for p in DEFAULT_PERMISSIONS:
+        for t in p["methods"]:
+            if "roles" in p:
+                for r in p["roles"]: # Make a row for each role
+                    m = PermissionModel(action=p["endpoint"] + "." + t, allow_role=r)
+                    if "owner" in p:
+                        m.allow_owner = p["owner"]
+                    if "force_public" in p:
+                        m.force_public = p["force_public"]
+                    if "check_public" in p:
+                        m.check_public = p["check_public"]
+                    db.session.add(m)
+            else:
+                m = PermissionModel(action=p["endpoint"] + "." + t, allow_role=r)
+                if "owner" in p:
+                    m.allow_owner = p["owner"]
+                if "force_public" in p:
+                    m.force_public = p["force_public"]
+                if "check_public" in p:
+                    m.check_public = p["check_public"]
+                db.session.add(m)  
+        db.session.commit()
+    click.echo("Default permissions added.")
+    
 @lf_cli.command("nutrients")
 def cli_fixture_load_nutrients():
     click.echo("Adding default nutrients...")
