@@ -27,12 +27,12 @@ class UserModel(db.Model):
     
     ### User Data
     # List of trackers this user has running
-    trackers = db.relationship("TrackerModel", back_populates="user", cascade="all, delete")
+    trackers = db.relationship("TrackerModel", back_populates="owner", cascade="all, delete")
 
     # List of nutritional items created by this user
-    consumables = db.relationship("ConsumableModel", back_populates="created_by", cascade="all, delete")
-    recipies = db.relationship("RecipeModel", back_populates="created_by", cascade="all, delete")
-    mealplans = db.relationship("MealPlanModel", back_populates="created_by", cascade="all, delete")
+    consumables = db.relationship("ConsumableModel", back_populates="owner", cascade="all, delete")
+    recipies = db.relationship("RecipeModel", back_populates="owner", cascade="all, delete")
+    mealplans = db.relationship("MealPlanModel", back_populates="owner", cascade="all, delete")
 
     ### Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies containing peanuts will be suggested)
@@ -85,6 +85,10 @@ class UserModel(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+        
+    @staticmethod
+    def has_owner(self):
+        return False
         
     def get_tags(self):
         tags = []

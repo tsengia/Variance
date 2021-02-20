@@ -32,6 +32,10 @@ class MuscleGroupModel(db.Model):
     # List of muscles in this muscle group
     muscles = db.relationship("MuscleModel", secondary="MuscleGroupAssociation", back_populates="groups")
 
+    @staticmethod
+    def has_owner():
+        return False
+
 class MuscleModel(db.Model):
     __tablename__ = "MuscleIndex"
 
@@ -48,9 +52,13 @@ class MuscleModel(db.Model):
 
     # List of groups this muscle belongs to
     groups = db.relationship("MuscleGroupModel", secondary="MuscleGroupAssociation", back_populates="muscles")
-    
+
     # List of exercises that this muscle is used in as a primary muscle
     primary_exercises = db.relationship("ExerciseModel", secondary="PrimaryExerciseMuscleAssociation", back_populates="primary_muscles")
-    
+
     # List of exercises that this muscle is used in as a secondary muscle
     secondary_exercises = db.relationship("ExerciseModel", secondary="SecondaryExerciseMuscleAssociation", back_populates="secondary_muscles")
+    
+    @staticmethod
+    def has_owner():
+        return False

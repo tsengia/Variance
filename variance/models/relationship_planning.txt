@@ -72,7 +72,9 @@ ONE nutritionlog:
 	ONE of: ingredient, recipie, consumable, null
 	
 ONE exercise:
-	no parents
+	ONE equipment
+	ONE parent_exercise
+	MANY variations
 	MANY primary muscles (M->M)
 	MANY secondary muscles (M->M)
 	

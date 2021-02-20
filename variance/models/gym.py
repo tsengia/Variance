@@ -34,6 +34,13 @@ class GymModel(db.Model):
     is_public = db.Column(db.Boolean, nullable=False, default=False)
     
     # The user who added this gym to the database
-    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
-    created_by = db.relationship("UserModel", backref="gyms")
+    owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
+    owner = db.relationship("UserModel", backref="gyms")
+    
+    @staticmethod
+    def has_owner():
+        return True
+        
+    def check_owner(self, id):
+        return self.owner.id == id
     

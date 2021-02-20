@@ -11,11 +11,18 @@ class MealPlanModel(db.Model):
     description = db.Column(db.Text, nullable=True)
     
     # If set to true, all users can see this ingredient
-    public = db.Column(db.Boolean, nullable=False, default=False)
+    is_public = db.Column(db.Boolean, nullable=False, default=False)
     
     # The user who added this mealplan to the database
-    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
-    created_by = db.relationship("UserModel", back_populates="mealplans")
+    owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
+    owner = db.relationship("UserModel", back_populates="mealplans")
+    
+    @staticmethod
+    def has_owner():
+        return True
+        
+    def check_owner(self, id):
+        return self.owner_id == id
 
     days = db.relationship("MealPlanDayModel", back_populates="mealplan")
     
@@ -34,6 +41,13 @@ class MealPlanDayModel(db.Model):
     # List of meals in this day
     meals = db.relationship("MealModel", back_populates="mealday")
     
+    @staticmethod
+    def has_owner():
+        return True
+        
+    def check_owner(self, id):
+        return self.mealplan.check_owner(id)
+    
 class MealModel(db.Model):
     __tablename__ = "MealIndex"
 
@@ -48,3 +62,10 @@ class MealModel(db.Model):
     # Parent mealday that this meal exists in
     parent_mealday_id = db.Column(db.Integer, db.ForeignKey("MealPlanDayIndex.id"), nullable=False)
     mealday = db.relationship("MealPlanDayModel", back_populates="meals")
+    
+    @staticmethod
+    def has_owner():
+        return True
+        
+    def check_owner(self, id):
+        return self.mealday.check_owner(id)

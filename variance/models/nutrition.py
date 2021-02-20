@@ -45,6 +45,10 @@ class NutrientInfoModel(db.Model):
 
     # FNDDS Nutrient Code
     fndds = db.Column(db.String(20), nullable=True)
+    
+    @staticmethod
+    def has_owner():
+        return False
 
 class ConsumableNutrientsModel(db.Model):
     __tablename__ = "ConsumableNutrientsIndex"
@@ -98,16 +102,23 @@ class RecipeModel(db.Model):
     instructions = db.Column(db.Text, nullable=True)
 
     # If set to true, all users can see this ingredient
-    public = db.Column(db.Boolean, nullable=False, default=False)
+    is_public = db.Column(db.Boolean, nullable=False, default=False)
     
     # The user who added this recipie to the database
-    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
-    created_by = db.relationship("UserModel", back_populates="recipies")
+    owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
+    owner = db.relationship("UserModel", back_populates="recipies")
+    
+    @staticmethod
+    def has_owner():
+        return True
+        
+    def check_owner(self, id):
+        return self.owner_id == id
     
     # Attribution. AKA: Citation, license name, links, etc.
     attribution = db.Column(db.Text, nullable=True)
     
-    # Who created this recipie? Or where was this recipe pulled from?
+    # Who (name of person) created this recipie? Or where was this recipe pulled from?
     author = db.Column(db.String(50), nullable=True)
     
 class ConsumableModel(db.Model):
@@ -126,11 +137,18 @@ class ConsumableModel(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     # The user who added this consumable to the database
-    created_by_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
-    created_by = db.relationship("UserModel", back_populates="consumables")
+    owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
+    owner = db.relationship("UserModel", back_populates="consumables")
+
+    @staticmethod
+    def has_owner():
+        return True
+    
+    def check_owner(self, id):
+        return self.owner_id == id
 
     # If set to true, all users can see this consumable
-    public = db.Column(db.Boolean, nullable=False, default=False)
+    is_public = db.Column(db.Boolean, nullable=False, default=False)
 
     ### Nutritional Info
     # Amount of calories (kcal) in 1 serving of this consumable
