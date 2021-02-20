@@ -1,3 +1,4 @@
+import logging
 from variance import db
 
 class PermissionModel(db.Model):
@@ -27,6 +28,10 @@ class PermissionModel(db.Model):
     # Usually just used for view actions
     force_public = db.Column(db.Boolean, nullable=True)
     
+    # For debugging and CLI purposes
+    def __str__(self):
+        return "Perm ID %5i: %25s - r(%s), u(%s), o(%s), cp(%s), fp(%s)" % (int(self.id), str(self.action), str(self.allow_role), str(self.allow_user), str(self.allow_owner), str(self.check_public), str(self.force_public))
+    
     # Validation process:
     # Get all rows with the target action
     # For each row: If user fits into 1 row, then return True
@@ -48,11 +53,15 @@ class PermissionModel(db.Model):
                     return True
                     
             if not self.allow_owner is None: # If the model is able to have an owner, then check if the owner matches the current user id
-                if model.has_owner() and model.check_owner(user.id):
-                    return True
+                if model: # If the model has not been loaded yet then we cannot check for an owner
+                    if model.has_owner() and model.check_owner(user.id):
+                        return True
+                # TODO: Make a log somewhere to notify dev that we attempted to check owner of a None model
                 
         if not self.check_public is None:
-            if model.is_public:
-                return True
-        
+            if model: # If the model has not been loaded yet then we cannot check for an owner
+                if model.is_public:
+                    return True
+            # TODO: Make a log somewhere to notify dev that we attempted to check owner of a None model   
+
         return False
