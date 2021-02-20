@@ -20,3 +20,7 @@ class UnitModel(db.Model):
     # Can this unit be deleted? (Basically, is this a user defined unit or a pre-packaged unit?)
     # Example: Because the meters unit comes as a default unit in Variance, this would be set to False.
     removable = db.Column(db.Boolean, default=True)
+    
+    @staticmethod
+    def has_owner():
+        return False
