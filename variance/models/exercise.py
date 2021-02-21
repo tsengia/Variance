@@ -104,6 +104,8 @@ class SetPlanModel(db.Model):
     lambda_param3 = db.Column(db.Float, nullable=True)
     lambda_exercise_param1_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)
     lambda_exercise_param1 = db.relationship("ExerciseModel", foreign_keys="SetPlanModel.lambda_exercise_param1_id")
+    lambda_tracker_param1_id = db.Column(db.Integer, db.ForeignKey("TrackerIndex.id"), nullable=True)
+    lambda_tracker_param1 = db.relationship("TrackerModel", foreign_keys="SetPlanModel.lambda_tracker_param1_id")
 
     def get_weight(self):
         return 0 # TODO: Implement this, should return the weight either from value or lambda
