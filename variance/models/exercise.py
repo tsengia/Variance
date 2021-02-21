@@ -2,19 +2,6 @@ from datetime import datetime
 
 from variance import db 
 
-# This is for dynamically calculated measures.
-# For example: 90% of 1 rep max, or 1/2 the pace of the PR time, etc.
-class LambdaModel(db.Model):
-    __tablename__ = "LambdaIndex"
-    
-    id = db.Column(db.Integer, primary_key=True)
-
-    # Name of this lambda function, for example: "Percentage of 1 Rep Max"
-    name = db.Column(db.String(100), nullable=False)
-    
-    # Callable/internal name of this lambda function, for example "percent_1rm"
-    function_name = db.Column(db.String(40), nullable=False)
-
 # These are sets that have been completed by users
 class SetEntryModel(db.Model):
     __tablename__ = "SetEntryIndex"

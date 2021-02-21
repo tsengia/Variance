@@ -21,7 +21,7 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
-    from variance.models import  user, permissions, unit, tracker, equipment, gym, nutrition, mealplan, muscle, exercise
+    from variance.models import  user, permissions, unit, tracker, equipment, gym, nutrition, mealplan, muscle, lambda_measure, exercise
 
     from variance import api
     app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
