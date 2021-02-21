@@ -232,6 +232,9 @@ class ExerciseModel(db.Model):
     # List of secondary muscles worked by this exercise
     secondary_muscles = db.relationship("MuscleModel", secondary="SecondaryExerciseMuscleAssociation", back_populates="secondary_exercises")
     
+    def __str__(self):
+        return "%u Exercise: %s dur(%s), dis($s), wght(%s), equip(%s)" % (self.id, self.name, str(self.use_duration), str(self.use_distance), str(self.use_weight), str(self.equipment.name))
+    
     @staticmethod
     def has_owner():
         return False
