@@ -13,6 +13,9 @@ class LambdaModel(db.Model):
     # Callable/internal name of this lambda function, for example "percent_1rm"
     function_name = db.Column(db.String(40), nullable=False)
     
-def variance_evaluate_lambda(lambda_model, user_model, lambda_param1, lambda_param2, lambda_param3, lambda_exercise_param1, lambda_tracker_param1):
-    if lambda_model.function_name == "max":
+def variance_evaluate_lambda(lambda_model, dimension, exercise_model, user_model, lambda_param1, lambda_param2, lambda_param3, lambda_exercise_param1, lambda_tracker_param1):
+    if lambda_model.function_name == "max_percentage":
         return 1 # TODO: Make actual evaluation, and also return a unit
+    if lambda_model.function_name == "average_percentage":
+        return 1 # TODO: Make actual evaluation, and also return a unit
+    
