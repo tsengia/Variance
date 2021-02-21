@@ -222,8 +222,15 @@ class ConsumableModel(db.Model):
     servings_per_package = db.Column(db.Float, nullable=True)
     
     ### Organizational/sorting/filtering info
+    # Is this a generic food? Ie. Sliced bread, chicken thigh, apple, etc. Useful for recipies
+    # generic != branded
+    is_generic = db.Column(db.Boolean, nullable=False, default=False)
+    
     # Is this consumable a brand name item?
-    branded = db.Column(db.Boolean, nullable=False, default=False)
+    is_branded = db.Column(db.Boolean, nullable=False, default=False)
+    # If this is a branded food, what is the generic consumable? (Ex: Bakery cookie would point to a generic cookie consumable)
+    generic_food_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"), nullable=True)
+    generic_food = db.relationship("ConsumableModel", foreign_keys="ConsumableModel.generic_food_id")
     
     # Is this consumable a raw ingredient? (raw meats, fruits, veggies, seasonings, etc.)
     is_ingredient = db.Column(db.Boolean, nullable=True)
