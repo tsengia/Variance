@@ -23,15 +23,13 @@ def create_app(test_config=None):
 
     from variance.models import  user, permissions, unit, tracker, equipment, gym, nutrition, mealplan, muscle, lambda_measure, exercise
 
-    from variance import api
-    app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
-    app.register_blueprint(api.units.bp, url_prefix="/api/units")
-
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
     app.cli.add_command(cli.permissions.permissions_cli)
     app.cli.add_command(cli.user.user_cli)
     app.cli.add_command(cli.equipment.equipment_cli)
+    app.cli.add_command(cli.gym.gym_cli)
+    app.cli.add_command(cli.muscle.muscle_cli)
     app.cli.add_command(cli.load_fixtures.lf_cli)
     """
     app.cli.add_command(cli.fixtures.fixtures_cli)
@@ -40,6 +38,10 @@ def create_app(test_config=None):
     app.cli.add_command(cli.equipment.equipment_cli)
     app.cli.add_command(cli.muscles.muscles_cli)
     """
+    
+    from variance import api
+    app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
+    app.register_blueprint(api.units.bp, url_prefix="/api/units")
     
     db.init_app(app)
 
