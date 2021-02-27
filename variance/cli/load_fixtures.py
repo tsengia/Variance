@@ -30,6 +30,19 @@ def cli_fixture_load_equipment():
         db.session.commit()
     click.echo("Default equipment added.")
     
+@lf_cli.command("gym")
+def cli_fixture_load_gym():
+    click.echo("Adding default gym...")
+    from variance.models.gym import GymModel
+    from variance.models.equipment import EquipmentModel
+    m = GymModel(name="Default Gym", description="The default gym containing all equipment", is_public=True, owner_id=1)
+    e_list = EquipmentModel.query.all()
+    for e in e_list:
+        m.equipment.append(e)
+    db.session.add(m)
+    db.session.commit()
+    click.echo("Default equipment added.")
+    
 @lf_cli.command("permissions")
 def cli_fixture_load_permissions():
     click.echo("Adding default permissions...")
