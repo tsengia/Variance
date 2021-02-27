@@ -27,3 +27,14 @@ def cli_muscle_group_list():
         return -1
     for g in mg_list:
         click.echo(str(g))
+        
+@muscle_group_cli.command("view")
+@click.argument("id")
+def cli_muscle_group_view(id):
+    mg = MuscleGroupModel.query.get(id)
+    if not mg:
+        click.echo("Could not find a MuscleGroup with that id!")
+        return -1
+    click.echo(str(mg))
+    for m in mg.muscles:
+        click.echo("\t->%u %s" % (m.id, m.name))        
