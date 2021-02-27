@@ -17,3 +17,15 @@ def cli_gym_list():
         return -1
     for g in g_list:
         click.echo(str(g))
+        
+@gym_cli.command("view")
+@click.argument("id")
+def cli_gym_view(id):
+    g = GymModel.query.get(id)
+    if g is None:
+        click.echo("Could not find a Gym with that ID!")
+        return -1
+    click.echo(str(g))
+    click.echo("\t'%s'" % (g.description))
+    for e in g.equipment:
+        click.echo("\t-> %u %s" % (e.id, e.name))
