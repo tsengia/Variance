@@ -49,6 +49,22 @@ class NutrientInfoModel(db.Model):
     @staticmethod
     def has_owner():
         return False
+        
+    def get_tags(self):
+        a = []
+        if self.is_amino_acid:
+            a.append("amino acid")
+        elif self.is_element:
+            a.append("element")
+        elif self.is_vitamin:
+            if not self.vitamin_family is None:
+                a.append("vitamin-" + str(self.vitamin_family))
+            else:
+                a.append("vitamin")
+        return str(a)
+        
+    def __str__(self):
+        return "%u NutrientInfoModel: %s %s" % (self.id, self.name, self.get_tags())
 
 class ConsumableNutrientsModel(db.Model):
     __tablename__ = "ConsumableNutrientsIndex"
@@ -115,6 +131,9 @@ class RecipeModel(db.Model):
     def check_owner(self, id):
         return self.owner_id == id
     
+    def __str__(self):
+        return "%u RecipeModel: %s, public($s), %u(%s)" % (self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
+    
     # Attribution. AKA: Citation, license name, links, etc.
     attribution = db.Column(db.Text, nullable=True)
     
@@ -146,6 +165,9 @@ class ConsumableModel(db.Model):
     
     def check_owner(self, id):
         return self.owner_id == id
+        
+    def __str__(self):
+        return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (self.id, self.name, self.owner.id, self.owner.username, str(self.is_public))
 
     # If set to true, all users can see this consumable
     is_public = db.Column(db.Boolean, nullable=False, default=False)

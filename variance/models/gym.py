@@ -9,6 +9,9 @@ class GymEquipmentModel(db.Model):
     gym_id = db.Column(db.Integer, db.ForeignKey("GymIndex.id"), nullable=False, primary_key=True)
     gym = db.relationship("GymModel", foreign_keys="GymEquipmentModel.gym_id")
 
+    def __str__(self):
+        return "GymEquipModel: %u (%s) -> %u (%s)" % (self.gym.id, self.gym.name, self.equipment.id, self.equipment.name)
+
 class GymModel(db.Model):
     __tablename__ = "GymIndex"
 
@@ -43,4 +46,7 @@ class GymModel(db.Model):
         
     def check_owner(self, id):
         return self.owner.id == id
+        
+    def __str__(self):
+        return "%u Gym: %s public(%s), owned by %u (%s)" % (self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
     

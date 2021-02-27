@@ -43,6 +43,9 @@ class SetEntryModel(db.Model):
     weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     weight_unit = db.relationship("UnitModel", foreign_keys="SetEntryModel.weight_unit_id")
 
+    def __str__(self):
+        return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id, str(self.time), self.owner.id, self.owner.username, self.exercise_id, self.exercise.name. self.reps)
+    
 # Theses are sets that are planned to be completed (in a workout plan)
 class SetPlanModel(db.Model):
     __tablename__ = "SetPlanIndex"
@@ -110,6 +113,9 @@ class SetPlanModel(db.Model):
     # Returns True is the given user id is considered the owner of this tracker entry
     def check_owner(self, id):
         return self.workout.check_owner(id)
+        
+    def __str__(self):
+        return "%u SetPlanModel: w%u, %u reps, %u(%s)" % (self.id, self.workout_id, self.reps, self.exercise_id, self.exercise.name)
 
 class WorkoutDayModel(db.Model):
     __tablename__ = "WorkoutDayIndex"
@@ -136,6 +142,9 @@ class WorkoutDayModel(db.Model):
     # Returns True is the given user id is considered the owner of this tracker entry
     def check_owner(self, id):
         return self.week.check_owner(id)
+        
+    def __str__(self):
+        return "%u WorkoutDayModel: %s on %s, week ID %u" % (self.id, self.name, self.day, self.week_id)
 
 class WorkoutWeekModel(db.Model):
     __tablename__ = "WorkoutWeekIndex"
@@ -148,13 +157,12 @@ class WorkoutWeekModel(db.Model):
     # WorkoutDays in this week
     days = db.relationship("WorkoutDayModel", back_populates="week", cascade="all, delete")
 
-    # What day does this occur on? Freeform entry
-    day = db.Column(db.String(20), nullable=True)
+    # What week does this occur on? Freeform entry
+    week = db.Column(db.String(20), nullable=True)
     
     # What workout program does this belond to?
     program_id = db.Column(db.Integer, db.ForeignKey("WorkoutProgramIndex.id"), nullable=False)
     program = db.relationship("WorkoutProgramModel", foreign_keys="WorkoutWeekModel.program_id", back_populates="weeks")
-
 
     @staticmethod
     def has_owner(self):
@@ -163,6 +171,9 @@ class WorkoutWeekModel(db.Model):
     # Returns True is the given user id is considered the owner of this tracker entry
     def check_owner(self, id):
         return self.program.check_owner(id)
+        
+    def __str__(self):
+        return "%u WorkoutWeekModel: %s on %s, program ID %u" % (self.id, self.name, self.week, self.program_id)
 
 class WorkoutProgramModel(db.Model):
     __tablename__ = "WorkoutProgramIndex"
@@ -192,6 +203,9 @@ class WorkoutProgramModel(db.Model):
     # Returns True is the given user id is considered the owner of this tracker entry
     def check_owner(self, id):
         return self.owner_id == id
+        
+    def __str__(self):
+        return "%u ProgramModel: %s, %u(%s), public(%s)" % (self.id, self.name, self.owner_id, self.owner.username, str(self.is_public))
 
 class ExerciseModel(db.Model):
     __tablename__ = "ExerciseIndex"
@@ -238,3 +252,6 @@ class ExerciseModel(db.Model):
     @staticmethod
     def has_owner():
         return False
+        
+    def __str__(self):
+        return "%u ExerciseModel: %s" % (self.id, self.name)

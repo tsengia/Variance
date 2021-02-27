@@ -6,6 +6,9 @@ class MuscleGroupAssociationTable(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey("MuscleGroupIndex.id"), primary_key=True)
     muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)
 
+    def __str__(self):
+        return "MuscleGroupAssociation: group %u -> muscle %u" % (self.group_id, self.muscle_id)
+
 # Association table. Associates exercises with the PRIMARY muscles they work
 class PrimaryExerciseMuscleAssociationTable(db.Model):
     __tablename__ = "PrimaryExerciseMuscleAssociation"
@@ -13,12 +16,18 @@ class PrimaryExerciseMuscleAssociationTable(db.Model):
     exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), primary_key=True)
     muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)
 
+    def __str__(self):
+        return "PrimaryExerciseMuscleAssociation: exercise %u -> muscle %u" % (self.exercise_id, self.muscle_id)
+
 # Association table. Associates exercises with the SECONDARY muscles they work
 class SecondaryExerciseMuscleAssociationTable(db.Model):
     __tablename__ = "SecondaryExerciseMuscleAssociation"
 
     exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), primary_key=True)
     muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)   
+
+    def __str__(self):
+        return "SecondaryExerciseMuscleAssociation: exercise %u -> muscle %u" % (self.exercise_id, self.muscle_id)
 
 class MuscleGroupModel(db.Model):
     __tablename__ = "MuscleGroupIndex"
@@ -35,6 +44,9 @@ class MuscleGroupModel(db.Model):
     @staticmethod
     def has_owner():
         return False
+        
+    def __str__(self):
+        return "%u MuscleGroupModel: %s" % (self.id, self.name)
 
 class MuscleModel(db.Model):
     __tablename__ = "MuscleIndex"
@@ -62,3 +74,6 @@ class MuscleModel(db.Model):
     @staticmethod
     def has_owner():
         return False
+        
+    def __str__(self):
+        return "%i MuscleModel: %s" % (self.id, self.name)
