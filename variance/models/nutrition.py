@@ -91,7 +91,7 @@ class RecipeIngredientList(db.Model):
     consumable = db.relationship("ConsumableModel", foreign_keys="RecipeIngredientList.consumable_id")
 
 class RecipeProductsList(db.Model):
-    __tablename__ = "RecipieProductsList"
+    __tablename__ = "RecipeProductsList"
     # Associates 1 recipie with the multiple/single consumables it produces, along with the number of servings of consumable it produces
     recipe_id = db.Column(db.Integer, db.ForeignKey("RecipeIndex.id"), nullable=False, primary_key=True)
     servings = db.Column(db.Float, nullable=False, default=1)
@@ -123,6 +123,9 @@ class RecipeModel(db.Model):
     # The user who added this recipie to the database
     owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     owner = db.relationship("UserModel", back_populates="recipies")
+    
+    ingredients = db.relationship("ConsumableModel", secondary="RecipeIngredientList")
+    products = db.relationship("ConsumableModel", secondary="RecipeProductsList")
     
     @staticmethod
     def has_owner():
