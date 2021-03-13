@@ -71,9 +71,32 @@ class MuscleModel(db.Model):
     # List of exercises that this muscle is used in as a secondary muscle
     secondary_exercises = db.relationship("ExerciseModel", secondary="SecondaryExerciseMuscleAssociation", back_populates="secondary_muscles")
     
+    
     @staticmethod
     def has_owner():
         return False
         
     def __str__(self):
         return "%i MuscleModel: %s" % (self.id, self.name)
+        
+class MuscleSectionModel(db.Model):
+    __tablename__ = "MuscleSectionIndex"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    
+    # Optional: ID of this muscle section sused to locate on the anatomy chart
+    diagram_id = db.Column(db.Integer, nullable=True)
+
+    # Name of this muscle section. For example "Upper pec"
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    
+    # What muscle is this muscle section of?
+    parent_muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), nullable=False)
+    parent_muscle = db.relationship("MuscleMode", back_ref="sections")
+
+    @staticmethod
+    def has_owner():
+        return False
+        
+    def __str__(self):
+        return "%i MuscleSectionModel: %s" % (self.id, self.name)
