@@ -1,6 +1,18 @@
 from datetime import datetime
 
-from variance import db 
+from variance import db
+
+class ExerciseEquipmentAssociation(db.Model):
+    __tablename__ = "ExerciseEquipmentList"
+
+    equipment_id = db.Column(db.Integer, db.ForeignKey("EquipmentIndex.id"), nullable=False, primary_key=True)
+    equipment = db.relationship("EquipmentModel", foreign_keys="ExerciseEquipmentAssociation.equipment_id")
+
+    exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=False, primary_key=True)
+    exercise = db.relationship("ExerciseModel", foreign_keys="ExerciseEquipmentAssociation.exercise_id")
+
+    def __str__(self):
+        return "GymEquipAssoc: %u (%s) -> %u (%s)" % (self.exercise.id, self.exercise.name, self.equipment.id, self.equipment.name)
 
 class ExerciseModel(db.Model):
     __tablename__ = "ExerciseIndex"
@@ -20,9 +32,8 @@ class ExerciseModel(db.Model):
     # Is this exercise measured in weight?
     use_weight = db.Column(db.Boolean, nullable=False, default=0)
 
-    # What piece of equipment does this exercise use?
-    equipment_id = db.Column(db.Integer, db.ForeignKey("EquipmentIndex.id"), nullable=True)
-    equipment = db.relationship("EquipmentModel")
+    # What pieces of equipment does this exercise use?
+    equipment = db.relationship("EquipmentModel", secondary="ExerciseEquipmentList")
 
     # Is this exercise a variation of another exercise, if so, which exercise? (Ex: Close grip bench is a variation of bench press)
     parent_exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)

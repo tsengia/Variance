@@ -10,3 +10,6 @@ class EquipmentModel(db.Model):
 
     # Describe this piece of equipment.
     description = db.Column(db.String(20), nullable=True)
+
+    # List of exercises that use this piece of equipment.
+    exercises = db.relationship("ExerciseModel", secondary="ExerciseEquipmentList")
