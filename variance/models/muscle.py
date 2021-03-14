@@ -9,26 +9,6 @@ class MuscleGroupAssociationTable(db.Model):
     def __str__(self):
         return "MuscleGroupAssociation: group %u -> muscle %u" % (self.group_id, self.muscle_id)
 
-# Association table. Associates exercises with the PRIMARY muscles they work
-class PrimaryExerciseMuscleAssociationTable(db.Model):
-    __tablename__ = "PrimaryExerciseMuscleAssociation"
-
-    exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), primary_key=True)
-    muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)
-
-    def __str__(self):
-        return "PrimaryExerciseMuscleAssociation: exercise %u -> muscle %u" % (self.exercise_id, self.muscle_id)
-
-# Association table. Associates exercises with the SECONDARY muscles they work
-class SecondaryExerciseMuscleAssociationTable(db.Model):
-    __tablename__ = "SecondaryExerciseMuscleAssociation"
-
-    exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), primary_key=True)
-    muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), primary_key=True)   
-
-    def __str__(self):
-        return "SecondaryExerciseMuscleAssociation: exercise %u -> muscle %u" % (self.exercise_id, self.muscle_id)
-
 class MuscleGroupModel(db.Model):
     __tablename__ = "MuscleGroupIndex"
 
@@ -65,13 +45,6 @@ class MuscleModel(db.Model):
     # List of groups this muscle belongs to
     groups = db.relationship("MuscleGroupModel", secondary="MuscleGroupAssociation", back_populates="muscles")
 
-    # List of exercises that this muscle is used in as a primary muscle
-    primary_exercises = db.relationship("ExerciseModel", secondary="PrimaryExerciseMuscleAssociation", back_populates="primary_muscles")
-
-    # List of exercises that this muscle is used in as a secondary muscle
-    secondary_exercises = db.relationship("ExerciseModel", secondary="SecondaryExerciseMuscleAssociation", back_populates="secondary_muscles")
-    
-    
     @staticmethod
     def has_owner():
         return False
@@ -92,7 +65,7 @@ class MuscleSectionModel(db.Model):
     
     # What muscle is this muscle section of?
     parent_muscle_id = db.Column(db.Integer, db.ForeignKey("MuscleIndex.id"), nullable=False)
-    parent_muscle = db.relationship("MuscleMode", back_ref="sections")
+    parent_muscle = db.relationship("MuscleModel", backref="sections")
 
     @staticmethod
     def has_owner():
