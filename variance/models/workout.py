@@ -10,17 +10,6 @@ class SetEntryModel(db.Model):
     
     # Time this set was done/entered
     time = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    
-    owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
-    owner = db.relationship("UserModel", foreign_keys="SetEntryModel.owner_id", back_populates="set_entries")
-    
-    @staticmethod
-    def has_owner(self):
-        return True
-        
-    # Returns True is the given user id is considered the owner of this set entry
-    def check_owner(self, id):
-        return self.owner_id == id
 
     exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=False)
     exercise = db.relationship("ExerciseModel", foreign_keys="SetEntryModel.exercise_id")
@@ -43,6 +32,17 @@ class SetEntryModel(db.Model):
     weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     weight_unit = db.relationship("UnitModel", foreign_keys="SetEntryModel.weight_unit_id")
 
+    owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
+    owner = db.relationship("UserModel", foreign_keys="SetEntryModel.owner_id", back_populates="set_entries")
+
+    @staticmethod
+    def has_owner(self):
+        return True
+
+    # Returns True is the given user id is considered the owner of this set entry
+    def check_owner(self, id):
+        return self.owner_id == id
+
     def __str__(self):
         return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id, str(self.time), self.owner.id, self.owner.username, self.exercise_id, self.exercise.name. self.reps)
     
@@ -57,8 +57,11 @@ class SetPlanModel(db.Model):
     exercise = db.relationship("ExerciseModel", foreign_keys="SetPlanModel.exercise_id")
     
     # What workout day does this belond to?
-    workout_id = db.Column(db.Integer, db.ForeignKey("WorkoutDayIndex.id"), nullable=False)
-    workout = db.relationship("WorkoutDayModel", foreign_keys="SetPlanModel.workout_id", back_populates="sets")
+    workout_id = db.Column(db.Integer, db.ForeignKey("WorkoutIndex.id"), nullable=False)
+    workout = db.relationship("WorkoutModel", foreign_keys="SetPlanModel.workout_id", back_populates="sets")
+    
+    # Field for specifying where this set falls.
+    order = db.Column(db.Integer, nullable=True)
     
     # Number of times this exercise was performed in this set
     reps = db.Column(db.Integer, nullable=False, default=1)
@@ -117,63 +120,37 @@ class SetPlanModel(db.Model):
     def __str__(self):
         return "%u SetPlanModel: w%u, %u reps, %u(%s)" % (self.id, self.workout_id, self.reps, self.exercise_id, self.exercise.name)
 
-class WorkoutDayModel(db.Model):
-    __tablename__ = "WorkoutDayIndex"
-    
+class WorkoutModel(db.Model):
+    __tablename__ = "WorkoutIndex"
+
     id = db.Column(db.Integer, primary_key=True)
 
     # Name of the workout day
     name = db.Column(db.String(100), nullable=False)
-    
+
     # What day does this occur on? Freeform entry
     day = db.Column(db.String(20), nullable=True)
-    
-    # Sets of exercises that are performed on this day
-    sets = db.relationship("SetPlanModel", back_populates="workout", cascade="all, delete")
-
-    # What workout week does this belond to?
-    week_id = db.Column(db.Integer, db.ForeignKey("WorkoutWeekIndex.id"), nullable=False)
-    week = db.relationship("WorkoutWeekModel", foreign_keys="WorkoutDayModel.week_id", back_populates="days")
-
-    @staticmethod
-    def has_owner(self):
-        return True
-        
-    # Returns True is the given user id is considered the owner of this tracker entry
-    def check_owner(self, id):
-        return self.week.check_owner(id)
-        
-    def __str__(self):
-        return "%u WorkoutDayModel: %s on %s, week ID %u" % (self.id, self.name, self.day, self.week_id)
-
-class WorkoutWeekModel(db.Model):
-    __tablename__ = "WorkoutWeekIndex"
-    
-    id = db.Column(db.Integer, primary_key=True)
-
-    # Name of the workout day
-    name = db.Column(db.String(100), nullable=False)
-    
-    # WorkoutDays in this week
-    days = db.relationship("WorkoutDayModel", back_populates="week", cascade="all, delete")
 
     # What week does this occur on? Freeform entry
     week = db.Column(db.String(20), nullable=True)
-    
-    # What workout program does this belond to?
-    program_id = db.Column(db.Integer, db.ForeignKey("WorkoutProgramIndex.id"), nullable=False)
-    program = db.relationship("WorkoutProgramModel", foreign_keys="WorkoutWeekModel.program_id", back_populates="weeks")
+
+    # Sets of exercises that are performed on this day
+    sets = db.relationship("SetPlanModel", back_populates="workout", cascade="all, delete")
+
+    # Workout Program this workout belongs to
+    parent_program_id = db.Column(db.Integer, db.ForeignKey("WorkoutProgramIndex.id"), nullable=False)
+    program = db.relationship("WorkoutProgramModel", back_populates="workouts")
 
     @staticmethod
     def has_owner(self):
         return True
-        
+
     # Returns True is the given user id is considered the owner of this tracker entry
     def check_owner(self, id):
         return self.program.check_owner(id)
-        
+
     def __str__(self):
-        return "%u WorkoutWeekModel: %s on %s, program ID %u" % (self.id, self.name, self.week, self.program_id)
+        return "%u WorkoutModel: %s on %s, %u" % (self.id, self.name, self.day, self.week_id)
 
 class WorkoutProgramModel(db.Model):
     __tablename__ = "WorkoutProgramIndex"
@@ -193,8 +170,8 @@ class WorkoutProgramModel(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     owner = db.relationship("UserModel", back_populates="programs")
     
-    # WorkoutWeeks in this program
-    weeks = db.relationship("WorkoutWeekModel", back_populates="program", cascade="all, delete")
+    # Workouts in this program
+    workouts = db.relationship("WorkoutModel", back_populates="program", cascade="all, delete")
 
     @staticmethod
     def has_owner(self):
