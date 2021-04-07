@@ -30,6 +30,23 @@ def cli_fixture_load_equipment():
         db.session.commit()
     click.echo("Default equipment added.")
     
+@lf_cli.command("exercises")
+def cli_fixture_load_exercises():
+    click.echo("Adding default exercises...")
+    from variance.fixtures.exercise import DEFAULT_EXERCISES
+    from variance.models.exercise import ExerciseModel
+    
+    for e in DEFAULT_EXERCISES:
+        ###TODO: Add in variations and equipment
+        m = ExerciseModel(name=e[0],\
+            description=e[1],\
+            use_duration=(e[2]=="duration"),\
+            use_distance=(e[3]=="distance"),\
+            use_weight=(e[4]=="weight"))
+        db.session.add(m)
+        db.session.commit()
+    click.echo("Default exercises added.")
+    
 @lf_cli.command("gym")
 def cli_fixture_load_gym():
     click.echo("Adding default gym...")
