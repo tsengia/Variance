@@ -21,7 +21,7 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
-    from variance.models import  user, permissions, unit, tracker, equipment, gym, nutrition, mealplan, muscle, lambda_measure, exercise
+    from variance.models import  user, permissions, unit, tracker, equipment, gym, nutrition, mealplan, workout, muscle, lambda_measure, exercise
 
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
@@ -30,6 +30,7 @@ def create_app(test_config=None):
     app.cli.add_command(cli.equipment.equipment_cli)
     app.cli.add_command(cli.gym.gym_cli)
     app.cli.add_command(cli.muscle.muscle_cli)
+    app.cli.add_command(cli.exercise.exercise_cli)
     app.cli.add_command(cli.load_fixtures.lf_cli)
     """
     app.cli.add_command(cli.fixtures.fixtures_cli)
