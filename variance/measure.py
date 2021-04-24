@@ -1,3 +1,6 @@
+import re
+from models import UnitModel
+
 class Measure():
     def __init__(self, value, unit, accuracy=6):
         if not isinstance(unit, UnitModel):
@@ -107,3 +110,44 @@ class Measure():
             return lhs - self.value
 
     __repr__ = __str__
+
+class UnitParser():
+    @staticmethod
+    def parse(text):
+        text = text.strip().lower().replace(".", "")
+
+        abbreviation_match = UnitModel.query.filter_by(abbreviation=text).first()
+        if abbreviation_match:
+            return abbreviation_match
+
+        name_match = UnitModel.query.filter_by(name=text).first()
+        if name_match:
+            return name_match
+
+class MeasurementParser():
+    _measure_split_regex = re.compile("(?<=[0-9])[\s](?=([a-zA-Z.]+(\s[a-zA-Z]+[.]*)?))")
+    _measure_space_regex = re.compile("([0-9])([a-zA-Z])")
+
+    @staticmethod
+    def parse(text):
+        spaced_text = re.sub(MeasurementParser._measure_space_regex, r"\1 \2", text) # Put a space between the value and units if there wasn't one already
+        s = MeasurementParser._measure_split_regex.split(spaced_text) # split at the space between the value and the unit
+        if len(s) < 2:
+            return None # Failed to parse a measurement from this, return None
+        if len(s) > 2:
+            s = s[0:2]
+
+        try:
+            if "/" in s[0]: # value is a fraction....
+                numerator, denominator = s[0].split("/")
+                value = round(float(numerator) / float(denominator), 3)
+            else:
+                value = float(s[0])
+        except ValueError:
+            return None
+
+        unit = UnitParser.parse(s[1])
+        if not unit:
+            return None
+        
+        return Measure(value, unit)
