@@ -25,4 +25,3 @@ def cli_unit_view(id):
         click.echo("Could not find an unit with that ID!")
         return -1
     click.echo(str(u))
-    click.echo("\t'%s'" % (u.description))
