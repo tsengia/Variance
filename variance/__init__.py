@@ -31,6 +31,7 @@ def create_app(test_config=None):
     app.cli.add_command(cli.gym.gym_cli)
     app.cli.add_command(cli.muscle.muscle_cli)
     app.cli.add_command(cli.exercise.exercise_cli)
+    app.cli.add_command(cli.unit.unit_cli)
     app.cli.add_command(cli.load_fixtures.lf_cli)
     """
     app.cli.add_command(cli.fixtures.fixtures_cli)
@@ -39,11 +40,11 @@ def create_app(test_config=None):
     app.cli.add_command(cli.equipment.equipment_cli)
     app.cli.add_command(cli.muscles.muscles_cli)
     """
-    
+
     from variance import api
     app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
     app.register_blueprint(api.units.bp, url_prefix="/api/units")
-    
+
     db.init_app(app)
 
     @app.route("/api/apiversion")
