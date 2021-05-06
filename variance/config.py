@@ -31,3 +31,4 @@ class DevConfig(Config):
 
 class UnitTestConfig(DevConfig):
     SQLALCHEMY_DATABASE_URI=e.get("UNIT_TEST_DATABASE_URI")
+    SQLALCHEMY_ECHO=False
