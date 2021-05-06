@@ -37,12 +37,11 @@ def cli_fixture_load_exercises():
     from variance.models.exercise import ExerciseModel
     
     for e in DEFAULT_EXERCISES:
-        ###TODO: Add in variations and equipment
         m = ExerciseModel(name=e[0],\
             description=e[1],\
             use_duration=(e[2]=="duration"),\
-            use_distance=(e[3]=="distance"),\
-            use_weight=(e[4]=="weight"))
+            use_distance=(e[2]=="distance"),\
+            use_weight=(e[2]=="weight"))
         db.session.add(m)
         db.session.commit()
     click.echo("Default exercises added.")

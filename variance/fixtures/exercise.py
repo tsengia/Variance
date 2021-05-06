@@ -1,42 +1,72 @@
 # List of default exercises
 DEFAULT_EXERCISES=[
-# Name, Description, Measurement, list of equipment ID, parent exercise ID
+# Name, Description, Measurement
 
 # Bench Press
-("Bench Press", "Flat bench press using a barbell.", "weight", [2,7], None), # 1
-("DB Bench Press", "Flat bench press using dumbbells.", "weight", [1,7], 1),
-("Incline Bench Press", "Inclined bench press using a barbell.", "weight", [2,8], 1),
-("Incline DB Bench Press", "Inclined bench press using a dumbbell.", "weight", [1,8], 1),
-("Decline Bench Press", "Declined bench press using a barbell", "weight", [2,9], 1),
-("Decline DB Bench Press", "Declined bench press using dumbbells", "weight", [1,9], 1),
-("Narrow Grip Bench Press", "Flat bench press using a barbell, hands placed shoulder width apart.", "weight", [2,7], 1),
+("Bench Press", "Flat bench press using a barbell.", "weight"), # 1
+("DB Bench Press", "Flat bench press using dumbbells.", "weight"),
+("Incline Bench Press", "Inclined bench press using a barbell.", "weight"),
+("Incline DB Bench Press", "Inclined bench press using a dumbbell.", "weight"),
+("Decline Bench Press", "Declined bench press using a barbell", "weight"),
+("Decline DB Bench Press", "Declined bench press using dumbbells", "weight"),
+("Narrow Grip Bench Press", "Flat bench press using a barbell, hands placed shoulder width apart.", "weight"),
 
 # Squat
-("Back Squat", "Traditional back squat with a barbell", "weight", [2,3], None), # 8
-("Front Squat", "Front squat using a barbell.", "weight", [2,3], 8),
-("Goblet Squat", "Front squat using a sinngle barbell.", "weight", [1], 8),
-("Pause Squat", "Back squat with a barbell, but a pause in movement at the bottom of the motion", "weight", [2,3], 8),
+("Back Squat", "Traditional back squat with a barbell", "weight"), # 8
+("Front Squat", "Front squat using a barbell.", "weight"),
+("Goblet Squat", "Front squat using a sinngle barbell.", "weight"),
+("Pause Squat", "Back squat with a barbell, but a pause in movement at the bottom of the motion", "weight"),
+("DB Split Squat", "One legged squats with DBs as weight. Also called bulgarian split squats.", "weight"),
 
-# Overhead Press
-("Standing Overhead Press", "Overhead press with a barbell while standing.", "weight", [2], None), # 12
-("Seated Overhead Press", "Overhead press with a barbell while sitting.", "weight", [2], 12),
-("Standing DB Overhead Press", "Overhead press with dumbbells while standing.", "weight", [1], 12),
-("Seated DB Overhead Press", "Overhead press with dumbbells while sitting.", "weight", [1], 12),
+# Overhead Press/Military Press
+("Standing Overhead Press", "Overhead press with a barbell while standing.", "weight"), # 12
+("Seated Overhead Press", "Overhead press with a barbell while sitting.", "weight"),
+("Standing DB Overhead Press", "Overhead press with dumbbells while standing.", "weight"),
+("Seated DB Overhead Press", "Overhead press with dumbbells while sitting.", "weight"),
 
-# Rows
-("Seated Cable Rows", "Seated rows using a rowing machine.", "weight", [12], None), # 16
-("Bent Over Row", "Standing, bent over rows using a barbell.", "weight", [2], None), # 17
-("DB Bent Over Row", "Single arm bent over rows using a barbell.", "weight", [1,7], 17),
+# Rows & Back
+("Seated Cable Rows", "Seated rows using a rowing machine.", "weight"),
+("Seated One-Arm Cable Rows", "Seated one-arm rows using a rowing machine.", "weight"),
+("Bent Over Row", "Standing, bent over rows using a barbell.", "weight"),
+("DB Bent Over Row", "Single arm bent over rows using a barbell.", "weight"),
+("Barbell Shrugs", "Standing barbell shrugs.", "weight"),
+("Seated Overhead Cable Pulldown", "Lat pull downs.", "weight"),
 
-# Curls
-("Barbell Curl", "Standing bicep curl using a barbell.", "weight", [2], None),
-("DB Curl", "Standing bicep curl using dumbbells.", "weight", [1], None),
+# Arm Curls
+("Barbell Curl", "Standing bicep curl using a barbell.", "weight"),
+("DB Curl", "Standing bicep curl using dumbbells.", "weight"),
+("Wrist Curl", "Single forearm curls using a dumbbell.", "weight"),
+### TO ADD: Preacher curls? Cable curls?
 
 # Bodyweight
-("Pull Ups", "Pull Up.", "reps", [6], None),
-("Weighted Pull Ups", "Pull up with additional weight attached.", "weight", None, None),
-("Push Ups", "Push up.", "reps", None, None),
-("Weighted Push Ups", "Push up with additional weight on top.", "weight", None, None),
+("Pull Ups", "Pull Up.", "reps"),
+("Weighted Pull Ups", "Pull up with additional weight attached.", "weight"),
+("Push Ups", "Push up.", "reps"),
+("Weighted Push Ups", "Push up with additional weight on top.", "weight"),
+("Dips", "Dips.", "reps"),
+("Weighted Dips", "Dips with additional weight on top.", "weight"),
+("Box Jumps", "Box jumps", "reps"),
+
+# Cleans/Pulls
+("Power Clean", "Barbell power clean.", "weight"),
+("Hang Clean", "Barbell hang clean.", "weight"),
+("Clean and Jerk", "Barbell clean and jerk.", "weight"),
+("Snatch", "Barbell snatch.", "weight"),
+("Deadlift", "Barbell deadlift", "weight"),
+
+# Triceps
+("Cable Tricep Pushdowns", "Tricep pushdown using a cable machine.", "weight"),
+("Lying Tricep Extension", "Tricep extension done overhead while lying down.", "weight"),
+
+# Misc. Legs
+("Leg Curls", "Seated leg curls using a leg curl machine.", "weight"),
+("Leg Extension", "Seated leg extension using a leg extension machine.", "weight"),
+("DB Lunges", "Weighted lunges.", "weight"),
+("Toe Raises", "Weighted toe raises.", "weight"),
+
+# Misc.
+("DB Lateral Side Raises", "Standing side raises with DBs, also called 'pouring milk'.", "weight"),
+("DB Front Raises", "Standing front raises with DBs", "weight")
 
 ]
 
