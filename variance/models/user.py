@@ -34,6 +34,40 @@ class UserModel(db.Model):
     recipies = db.relationship("RecipeModel", back_populates="owner", cascade="all, delete")
     mealplans = db.relationship("MealPlanModel", back_populates="owner", cascade="all, delete")
 
+    set_entries = db.relationship("SetEntryModel", back_populates="owner", cascade="all, delete")
+    consumption_entries = db.relationship("ConsumedEntryModel", back_populates="owner", cascade="all, delete")
+    programs = db.relationship("WorkoutProgramModel", back_populates="owner", cascade="all, delete")
+    
+    ### Unit Display Preferences
+    # lb or kg
+    exercise_weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    exercise_weight_unit = db.relationship("UnitModel", foreign_keys="UserModel.exercise_weight_unit_id")
+    
+    # mile or km
+    exercise_distance_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    exercise_distance_unit = db.relationship("UnitModel", foreign_keys="UserModel.exercise_distance_unit_id")
+    
+    # oz/lb or grams
+    food_weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    food_weight_unit = db.relationship("UnitModel", foreign_keys="UserModel.food_weight_unit_id")
+    
+    # fl. oz or Liters
+    food_volume_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    food_volume_unit = db.relationship("UnitModel", foreign_keys="UserModel.food_volume_unit_id")
+    
+    # Pounds, stone, or kg?
+    body_weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    body_weight_unit = db.relationship("UnitModel", foreign_keys="UserModel.body_weight_unit_id")
+    
+    # Feet or meters?
+    body_distance_large_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    body_distance_large_unit = db.relationship("UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
+    
+    # Inches or cm?
+    body_distance_small_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    body_distance_small_unit = db.relationship("UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
+    
+    
     ### Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies containing peanuts will be suggested)
     no_peanuts = db.Column(db.Boolean, nullable=True)
@@ -79,16 +113,6 @@ class UserModel(db.Model):
         bday = datetime.date(self.birthdate)
         today = date.today()
         return today.year - bday.year - ((today.month, today.day) < (bday.month, bday.day))
-
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-        
-    @staticmethod
-    def has_owner(self):
-        return False
         
     def get_tags(self):
         tags = []
@@ -119,3 +143,13 @@ class UserModel(db.Model):
         if self.is_kosher:
             tags.append("kosher")
         return tags
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+    
+    @staticmethod
+    def has_owner(self):
+        return False

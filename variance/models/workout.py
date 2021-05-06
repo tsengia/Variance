@@ -11,6 +11,7 @@ class SetEntryModel(db.Model):
     # Time this set was done/entered
     time = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
+    # Exercise performed for this Set
     exercise_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=False)
     exercise = db.relationship("ExerciseModel", foreign_keys="SetEntryModel.exercise_id")
     
@@ -82,23 +83,25 @@ class SetPlanModel(db.Model):
     weight_unit = db.relationship("UnitModel", foreign_keys="SetPlanModel.weight_unit_id")
 
     # Lambda measures. These are for dynamically generated goals. Aka, 90% of 1 rep max, etc
+    # Each lambda function can take a Float parameter and a Tracker parameter.
     duration_lambda_id = db.Column(db.Integer, db.ForeignKey("LambdaIndex.id"), nullable=True)
     duration_lambda = db.relationship("LambdaModel", foreign_keys="SetPlanModel.duration_lambda_id")
-    
+    duration_lambda_param = db.Column(db.Float, nullable=True)
+    duration_lambda_tracker_id = db.Column(db.Integer, db.ForeignKey("TrackerIndex.id"), nullable=True)
+    duration_lambda_tracker_param = db.relationship("TrackerModel", foreign_keys="SetPlanModel.duration_lambda_tracker_id")
+
     distance_lambda_id = db.Column(db.Integer, db.ForeignKey("LambdaIndex.id"), nullable=True)
     distance_lambda = db.relationship("LambdaModel", foreign_keys="SetPlanModel.distance_lambda_id")
-    
+    distance_lambda_param = db.Column(db.Float, nullable=True)
+    distance_lambda_tracker_id = db.Column(db.Integer, db.ForeignKey("TrackerIndex.id"), nullable=True)
+    distance_lambda_tracker_param = db.relationship("TrackerModel", foreign_keys="SetPlanModel.distance_lambda_tracker_id")
+
     weight_lambda_id = db.Column(db.Integer, db.ForeignKey("LambdaIndex.id"), nullable=True)
     weight_lambda = db.relationship("LambdaModel", foreign_keys="SetPlanModel.weight_lambda_id")
-    
-    # Parameters to be passed in to the lambda function. Examples are: percentage, days, ratios, another exercise
-    lambda_param1 = db.Column(db.Float, nullable=True)
-    lambda_param2 = db.Column(db.Float, nullable=True)
-    lambda_param3 = db.Column(db.Float, nullable=True)
-    lambda_exercise_param1_id = db.Column(db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)
-    lambda_exercise_param1 = db.relationship("ExerciseModel", foreign_keys="SetPlanModel.lambda_exercise_param1_id")
-    lambda_tracker_param1_id = db.Column(db.Integer, db.ForeignKey("TrackerIndex.id"), nullable=True)
-    lambda_tracker_param1 = db.relationship("TrackerModel", foreign_keys="SetPlanModel.lambda_tracker_param1_id")
+    weight_lambda_param = db.Column(db.Float, nullable=True)
+    weight_lambda_tracker_id = db.Column(db.Integer, db.ForeignKey("TrackerIndex.id"), nullable=True)
+    weight_lambda_tracker_param = db.relationship("TrackerModel", foreign_keys="SetPlanModel.weight_lambda_tracker_id")
+
 
     def get_weight(self):
         return 0 # TODO: Implement this, should return the weight either from value or lambda
