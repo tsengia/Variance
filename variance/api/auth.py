@@ -1,7 +1,5 @@
-import functools
 import datetime
 import jwt
-import click
 from flask import g, session, request, current_app
 from flask_smorest import Blueprint, abort
 
