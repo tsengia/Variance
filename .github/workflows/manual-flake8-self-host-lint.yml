@@ -1,0 +1,29 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual Self-Hosted flake8
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "lint-job"
+  lint-job:
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        python3.7 -m pip install --upgrade pip
+        pip install flake8
+        if [ -f dev_requirements.txt ]; then pip install -r dev_requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
