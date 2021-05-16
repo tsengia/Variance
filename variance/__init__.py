@@ -6,16 +6,18 @@ from flask_smorest import Api
 
 db = SQLAlchemy()
 
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=False)
-    
-    logging.basicConfig(filename='variance.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+
+    logging.basicConfig(filename='variance.log', level=logging.DEBUG,
+                        format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
     if test_config is None:
         app.config.from_object("variance.config.DevConfig")
     else:
         app.config.from_object(test_config)
-        
+
     logging.info("Variance configuration loaded.")
 
     # Setup the instance directory structure
@@ -26,7 +28,7 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
-    from variance.models import  unit, user, permissions, tracker, equipment, gym, nutrition, mealplan, workout, muscle, lambda_measure, exercise
+    from variance.models import unit, user, permissions, tracker, equipment, gym, nutrition, mealplan, workout, muscle, lambda_measure, exercise
     logging.info("Variance Models imported.")
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
@@ -45,7 +47,7 @@ def create_app(test_config=None):
     app.cli.add_command(cli.equipment.equipment_cli)
     app.cli.add_command(cli.muscles.muscles_cli)
     """
-    
+
     logging.info("Variance CLI loaded.")
 
     from variance import api
@@ -55,17 +57,15 @@ def create_app(test_config=None):
     logging.info("Variance blueprints loaded.")
 
     db.init_app(app)
-    
+
     logging.info("Variance AppDB init done.")
 
     @app.route("/api/apiversion")
     def api_verison():
-        return { "apiversion": "0.1" }
+        return {"apiversion": "0.1"}
 
     @app.route("/api/version")
     def version():
-        return { "version":"0.0.1 alpha" }
+        return {"version": "0.0.1 alpha"}
 
     return app
-
-
