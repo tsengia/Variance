@@ -7,14 +7,16 @@ class NutrientInfoModel(db.Model):
     # This holds non-macro nutritional information about foods.
     # Non-macros means that there should be no "Total Carbs" or "Total Fats" in here
     # Things such as "100mg of Vitamin C" belongs here, with the NutritionalInfoModel being "Vitamin C"
-    # This is a very wide and vauge collection, because specific nutritional information can be spotty.
+    # This is a very wide and vauge collection, because specific nutritional
+    # information can be spotty.
 
     id = db.Column(db.Integer, primary_key=True)
 
     # Display Name of the nutrition label (common name)
     name = db.Column(db.String(100), unique=True, nullable=False)
 
-    # If this nutrition label is about a specific molecule/element, then give the scientific name here
+    # If this nutrition label is about a specific molecule/element, then give
+    # the scientific name here
     scientific_name = db.Column(db.String(100), nullable=True)
 
     abbreviation = db.Column(db.String(50), nullable=True)
@@ -28,13 +30,16 @@ class NutrientInfoModel(db.Model):
     # Is this nutrient label an element? (Ex: Iron, Magnesium, Nitrogen)
     is_element = db.Column(db.Boolean, nullable=True)
 
-    # Is this nutrient a vitamin family or a member of a vitamin family? (Ex: Total Vitamin B, Vitamin B12, Retinol
+    # Is this nutrient a vitamin family or a member of a vitamin family? (Ex:
+    # Total Vitamin B, Vitamin B12, Retinol
     is_vitamin = db.Column(db.Boolean, nullable=True)
 
-    # If this is a vitamin, what vitamin family does this belong to? (Ex: A, B, C, D...)
+    # If this is a vitamin, what vitamin family does this belong to? (Ex: A,
+    # B, C, D...)
     vitamin_family = db.Column(db.String(2), nullable=True)
 
-    # If this is a vitamin, is it a specific vitamin, and if so, what number? (Ex: Vitamin B12 would have 12 here)
+    # If this is a vitamin, is it a specific vitamin, and if so, what number?
+    # (Ex: Vitamin B12 would have 12 here)
     vitamin_number = db.Column(db.Integer, nullable=True)
 
     # External databases info
@@ -58,19 +63,21 @@ class NutrientInfoModel(db.Model):
         elif self.is_element:
             a.append("element")
         elif self.is_vitamin:
-            if not self.vitamin_family is None:
+            if self.vitamin_family is not None:
                 a.append("vitamin-" + str(self.vitamin_family))
             else:
                 a.append("vitamin")
         return str(a)
 
     def __str__(self):
-        return "%u NutrientInfoModel: %s %s" % (self.id, self.name, self.get_tags())
+        return "%u NutrientInfoModel: %s %s" % (
+            self.id, self.name, self.get_tags())
 
 
 class ConsumableNutrientsModel(db.Model):
     __tablename__ = "ConsumableNutrientsIndex"
-    # Associates consumables with their nutritional information (other than macros)
+    # Associates consumables with their nutritional information (other than
+    # macros)
     consumable_id = db.Column(db.Integer, db.ForeignKey(
         "ConsumableIndex.id"), nullable=False, primary_key=True)
     nutrient_id = db.Column(db.Integer, db.ForeignKey(
@@ -82,9 +89,11 @@ class ConsumableNutrientsModel(db.Model):
     measure_unit = db.relationship(
         "UnitModel", foreign_keys="ConsumableNutrientsModel.measure_unit_id")
     nutrient = db.relationship(
-        "NutrientInfoModel", foreign_keys="ConsumableNutrientsModel.nutrient_id")
+        "NutrientInfoModel",
+        foreign_keys="ConsumableNutrientsModel.nutrient_id")
     consumable = db.relationship(
-        "ConsumableModel", foreign_keys="ConsumableNutrientsModel.consumable_id")
+        "ConsumableModel",
+        foreign_keys="ConsumableNutrientsModel.consumable_id")
 
 
 class RecipeIngredientList(db.Model):
@@ -108,7 +117,8 @@ class RecipeIngredientList(db.Model):
 
 class RecipeProductsList(db.Model):
     __tablename__ = "RecipeProductsList"
-    # Associates 1 recipie with the multiple/single consumables it produces, along with the number of servings of consumable it produces
+    # Associates 1 recipie with the multiple/single consumables it produces,
+    # along with the number of servings of consumable it produces
     recipe_id = db.Column(db.Integer, db.ForeignKey(
         "RecipeIndex.id"), nullable=False, primary_key=True)
     servings = db.Column(db.Float, nullable=False, default=1)
@@ -159,12 +169,14 @@ class RecipeModel(db.Model):
         return self.owner_id == id
 
     def __str__(self):
-        return "%u RecipeModel: %s, public($s), %u(%s)" % (self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
+        return "%u RecipeModel: %s, public($s), %u(%s)" % (
+            self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
 
     # Attribution. AKA: Citation, license name, links, etc.
     attribution = db.Column(db.Text, nullable=True)
 
-    # Who (name of person) created this recipie? Or where was this recipe pulled from?
+    # Who (name of person) created this recipie? Or where was this recipe
+    # pulled from?
     author = db.Column(db.String(50), nullable=True)
 
 
@@ -196,7 +208,8 @@ class ConsumableModel(db.Model):
         return self.owner_id == id
 
     def __str__(self):
-        return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (self.id, self.name, self.owner.id, self.owner.username, str(self.is_public))
+        return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (
+            self.id, self.name, self.owner.id, self.owner.username, str(self.is_public))
 
     # If set to true, all users can see this consumable
     is_public = db.Column(db.Boolean, nullable=False, default=False)
@@ -254,10 +267,12 @@ class ConsumableModel(db.Model):
     is_kosher = db.Column(db.Boolean, nullable=True)
 
     ### Storage, Packaging and Cost
-    # Shelf life while original packaging is still not opened (fridgerated or shelf) in days
+    # Shelf life while original packaging is still not opened (fridgerated or
+    # shelf) in days
     closed_shelf_life = db.Column(db.Integer, nullable=True)
 
-    # Shelf life once original packaging is opened in days (fridgerated or on shelf)
+    # Shelf life once original packaging is opened in days (fridgerated or on
+    # shelf)
     opened_shelf_life = db.Column(db.Integer, nullable=True)
 
     # Freezer life (how many days this can last in a freezer)
@@ -279,13 +294,15 @@ class ConsumableModel(db.Model):
 
     # Is this consumable a brand name item?
     is_branded = db.Column(db.Boolean, nullable=False, default=False)
-    # If this is a branded food, what is the generic consumable? (Ex: Bakery cookie would point to a generic cookie consumable)
+    # If this is a branded food, what is the generic consumable? (Ex: Bakery
+    # cookie would point to a generic cookie consumable)
     generic_food_id = db.Column(db.Integer, db.ForeignKey(
         "ConsumableIndex.id"), nullable=True)
     generic_food = db.relationship(
         "ConsumableModel", foreign_keys="ConsumableModel.generic_food_id")
 
-    # Is this consumable a raw ingredient? (raw meats, fruits, veggies, seasonings, etc.)
+    # Is this consumable a raw ingredient? (raw meats, fruits, veggies,
+    # seasonings, etc.)
     is_ingredient = db.Column(db.Boolean, nullable=True)
 
     # Can this consumable be considered a snack?
@@ -300,13 +317,16 @@ class ConsumableModel(db.Model):
     # Would this consumable be considered a side course for a meal?
     is_side = db.Column(db.Boolean, nullable=True)
 
-    # Would this consumable be considered a fruit? (raw fruits, fruit salads, etc.)
+    # Would this consumable be considered a fruit? (raw fruits, fruit salads,
+    # etc.)
     is_fruit = db.Column(db.Boolean, nullable=True)
 
-    # Would this consumable be considered a vegetable? (raw veggies, sauteed, baked, etc.)
+    # Would this consumable be considered a vegetable? (raw veggies, sauteed,
+    # baked, etc.)
     is_vegetable = db.Column(db.Boolean, nullable=True)
 
-    # Would this consumable be considered a meat? (fried meats, breaded meat, grilled, etc.)
+    # Would this consumable be considered a meat? (fried meats, breaded meat,
+    # grilled, etc.)
     is_meat = db.Column(db.Boolean, nullable=True)
 
     # Would this consumable be considered a soup? (stews count as well)
@@ -316,7 +336,8 @@ class ConsumableModel(db.Model):
     # Attribution. AKA: Citation, license name, links, etc.
     attribution = db.Column(db.Text, nullable=True)
 
-    # Short display name of where this entry came from. Set to a value if ingested from another database
+    # Short display name of where this entry came from. Set to a value if
+    # ingested from another database
     data_source = db.Column(db.String(70), nullable=True)
 
     # External database IDs

@@ -91,7 +91,8 @@ class UserModel(db.Model):
         "UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
 
     # Diet Settings
-    # Can this user not eat peanuts? (setting to True means that no recipies containing peanuts will be suggested)
+    # Can this user not eat peanuts? (setting to True means that no recipies
+    # containing peanuts will be suggested)
     no_peanuts = db.Column(db.Boolean, nullable=True)
 
     # Can this user not eat treenuts?
@@ -134,7 +135,8 @@ class UserModel(db.Model):
     def age(self):
         bday = datetime.date(self.birthdate)
         today = date.today()
-        return today.year - bday.year - ((today.month, today.day) < (bday.month, bday.day))
+        return today.year - bday.year - \
+            ((today.month, today.day) < (bday.month, bday.day))
 
     def get_tags(self):
         tags = []

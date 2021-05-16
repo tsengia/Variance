@@ -19,10 +19,16 @@ class LambdaModel(db.Model):
     function_name = db.Column(db.String(40), nullable=False)
 
     def __str__(self):
-        return "LambdaModel (%i): %s - %s" % (self.id, self.name, self.function_name)
+        return "LambdaModel (%i): %s - %s" % (self.id,
+                                              self.name, self.function_name)
 
 
-def variance_evaluate_lambda(lambda_model, dimension, user_model, float_param, tracker_param):
+def variance_evaluate_lambda(
+        lambda_model,
+        dimension,
+        user_model,
+        float_param,
+        tracker_param):
     if lambda_model.function_name == "latest_percentage":
         if tracker_param is None or float_param is None:
             # TODO: Log this error
@@ -30,8 +36,9 @@ def variance_evaluate_lambda(lambda_model, dimension, user_model, float_param, t
                 "Lambda evaluated missing a parameter!")
             return None
 
-        latest = select(TrackerEntryModel).where(TrackerEntryModel.parent_tracker_id ==
-                                                 tracker_param.id).order_by(TrackerEntryModel.time).first()
+        latest = select(TrackerEntryModel).where(
+            TrackerEntryModel.parent_tracker_id == tracker_param.id).order_by(
+            TrackerEntryModel.time).first()
         if latest is None:
             # TODO: Log this error
             return None

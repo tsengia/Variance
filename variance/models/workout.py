@@ -46,18 +46,26 @@ class SetEntryModel(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey(
         "UserIndex.id"), nullable=False)
     owner = db.relationship(
-        "UserModel", foreign_keys="SetEntryModel.owner_id", back_populates="set_entries")
+        "UserModel",
+        foreign_keys="SetEntryModel.owner_id",
+        back_populates="set_entries")
 
     @staticmethod
     def has_owner(self):
         return True
 
-    # Returns True is the given user id is considered the owner of this set entry
+    # Returns True is the given user id is considered the owner of this set
+    # entry
     def check_owner(self, id):
         return self.owner_id == id
 
     def __str__(self):
-        return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id, str(self.time), self.owner.id, self.owner.username, self.exercise_id, self.exercise.name. self.reps)
+        return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id,
+                                                                str(self.time),
+                                                                self.owner.id,
+                                                                self.owner.username,
+                                                                self.exercise_id,
+                                                                self.exercise.name. self.reps)
 
 # Theses are sets that are planned to be completed (in a workout plan)
 
@@ -77,7 +85,9 @@ class SetPlanModel(db.Model):
     workout_id = db.Column(db.Integer, db.ForeignKey(
         "WorkoutIndex.id"), nullable=False)
     workout = db.relationship(
-        "WorkoutModel", foreign_keys="SetPlanModel.workout_id", back_populates="sets")
+        "WorkoutModel",
+        foreign_keys="SetPlanModel.workout_id",
+        back_populates="sets")
 
     # Field for specifying where this set falls.
     order = db.Column(db.Integer, nullable=True)
@@ -151,12 +161,14 @@ class SetPlanModel(db.Model):
     def has_owner(self):
         return True
 
-    # Returns True is the given user id is considered the owner of this tracker entry
+    # Returns True is the given user id is considered the owner of this
+    # tracker entry
     def check_owner(self, id):
         return self.workout.check_owner(id)
 
     def __str__(self):
-        return "%u SetPlanModel: w%u, %u reps, %u(%s)" % (self.id, self.workout_id, self.reps, self.exercise_id, self.exercise.name)
+        return "%u SetPlanModel: w%u, %u reps, %u(%s)" % (
+            self.id, self.workout_id, self.reps, self.exercise_id, self.exercise.name)
 
 
 class WorkoutModel(db.Model):
@@ -186,12 +198,14 @@ class WorkoutModel(db.Model):
     def has_owner(self):
         return True
 
-    # Returns True is the given user id is considered the owner of this tracker entry
+    # Returns True is the given user id is considered the owner of this
+    # tracker entry
     def check_owner(self, id):
         return self.program.check_owner(id)
 
     def __str__(self):
-        return "%u WorkoutModel: %s on %s, %u" % (self.id, self.name, self.day, self.week_id)
+        return "%u WorkoutModel: %s on %s, %u" % (
+            self.id, self.name, self.day, self.week_id)
 
 
 class WorkoutProgramModel(db.Model):
@@ -221,9 +235,11 @@ class WorkoutProgramModel(db.Model):
     def has_owner(self):
         return True
 
-    # Returns True is the given user id is considered the owner of this tracker entry
+    # Returns True is the given user id is considered the owner of this
+    # tracker entry
     def check_owner(self, id):
         return self.owner_id == id
 
     def __str__(self):
-        return "%u ProgramModel: %s, %u(%s), public(%s)" % (self.id, self.name, self.owner_id, self.owner.username, str(self.is_public))
+        return "%u ProgramModel: %s, %u(%s), public(%s)" % (
+            self.id, self.name, self.owner_id, self.owner.username, str(self.is_public))

@@ -11,7 +11,8 @@ class MuscleGroupAssociationTable(db.Model):
         "MuscleIndex.id"), primary_key=True)
 
     def __str__(self):
-        return "MuscleGroupAssociation: group %u -> muscle %u" % (self.group_id, self.muscle_id)
+        return "MuscleGroupAssociation: group %u -> muscle %u" % (
+            self.group_id, self.muscle_id)
 
 
 class MuscleGroupModel(db.Model):
@@ -25,7 +26,9 @@ class MuscleGroupModel(db.Model):
 
     # List of muscles in this muscle group
     muscles = db.relationship(
-        "MuscleModel", secondary="MuscleGroupAssociation", back_populates="groups")
+        "MuscleModel",
+        secondary="MuscleGroupAssociation",
+        back_populates="groups")
 
     @staticmethod
     def has_owner():
@@ -51,7 +54,9 @@ class MuscleModel(db.Model):
 
     # List of groups this muscle belongs to
     groups = db.relationship(
-        "MuscleGroupModel", secondary="MuscleGroupAssociation", back_populates="muscles")
+        "MuscleGroupModel",
+        secondary="MuscleGroupAssociation",
+        back_populates="muscles")
 
     @staticmethod
     def has_owner():

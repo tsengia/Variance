@@ -15,12 +15,14 @@ class UnitModel(db.Model):
     dimension = db.Column(db.String(20), nullable=False)
 
     # What do we multiply this unit by to get the base unit for the dimension?
-    # Example: The "length" dimension's base unit is centimeters, there are 100cm in 1m, so for the meters unit this would be set to 100
+    # Example: The "length" dimension's base unit is centimeters, there are
+    # 100cm in 1m, so for the meters unit this would be set to 100
     multiplier = db.Column(db.Float(decimal_return_scale=4),
                            nullable=False, default=1.0)
 
     # Can this unit be deleted? (Basically, is this a user defined unit or a pre-packaged unit?)
-    # Example: Because the meters unit comes as a default unit in Variance, this would be set to False.
+    # Example: Because the meters unit comes as a default unit in Variance,
+    # this would be set to False.
     removable = db.Column(db.Boolean, default=True)
 
     @staticmethod
@@ -41,7 +43,8 @@ class UnitModel(db.Model):
             return abbreviation_match
 
     def __str__(self):
-        return "UnitModel (%i): %s (%s) %s, removable(%s), mult(%s) " % (int(self.id), self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
+        return "UnitModel (%i): %s (%s) %s, removable(%s), mult(%s) " % (int(
+            self.id), self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
 
     def __int__(self):
         return int(self.multiplier)

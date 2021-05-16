@@ -15,7 +15,8 @@ class TrackerModel(db.Model):
     entries = db.relationship("TrackerEntry", back_populates="tracker")
 
     def __str__(self):
-        return "%u Tracker: %s (%s), user %s (%u)" % (int(self.id), str(self.name), str(self.dimension), str(self.owner.username), int(self.owner_id))
+        return "%u Tracker: %s (%s), user %s (%u)" % (int(self.id), str(
+            self.name), str(self.dimension), str(self.owner.username), int(self.owner_id))
 
     @staticmethod
     def has_owner(self):
@@ -41,12 +42,14 @@ class TrackerEntry(db.Model):
                               foreign_keys="TrackerEntry.parent_tracker_id")
 
     def __str__(self):
-        return "%u Tracker Entry: %s %s, tracker (%u) @ %s" % (int(self.id), str(self.value), str(self.unit.abbreviation), int(self.parent_tracker_id), str(self.time))
+        return "%u Tracker Entry: %s %s, tracker (%u) @ %s" % (int(self.id), str(
+            self.value), str(self.unit.abbreviation), int(self.parent_tracker_id), str(self.time))
 
     @staticmethod
     def has_owner(self):
         return True
 
-    # Returns True is the given user id is considered the owner of this tracker entry
+    # Returns True is the given user id is considered the owner of this
+    # tracker entry
     def check_owner(self, id):
         return self.tracker.check_owner(id)

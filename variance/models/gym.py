@@ -15,7 +15,8 @@ class GymEquipmentAssociation(db.Model):
         "GymModel", foreign_keys="GymEquipmentAssociation.gym_id")
 
     def __str__(self):
-        return "GymEquipAssoc: %u (%s) -> %u (%s)" % (self.gym.id, self.gym.name, self.equipment.id, self.equipment.name)
+        return "GymEquipAssoc: %u (%s) -> %u (%s)" % (self.gym.id,
+                                                      self.gym.name, self.equipment.id, self.equipment.name)
 
 
 class GymModel(db.Model):
@@ -39,7 +40,8 @@ class GymModel(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     ### Ownership and visibility
-    # Is this gym visible to all users? If set to true, then all users can use this gym
+    # Is this gym visible to all users? If set to true, then all users can use
+    # this gym
     is_public = db.Column(db.Boolean, nullable=False, default=False)
 
     # The user who added this gym to the database
@@ -57,4 +59,5 @@ class GymModel(db.Model):
         return self.owner.id == id
 
     def __str__(self):
-        return "%u Gym: %s public(%s), owned by %u (%s)" % (self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
+        return "%u Gym: %s public(%s), owned by %u (%s)" % (
+            self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
