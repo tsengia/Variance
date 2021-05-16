@@ -13,7 +13,7 @@ def create_app(test_config=None):
     logging.basicConfig(
         filename='variance.log',
         level=logging.DEBUG,
-        format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+        format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
     if test_config is None:
         app.config.from_object("variance.config.DevConfig")
@@ -30,7 +30,6 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
-    from variance.models import unit, user, permissions, tracker, equipment, gym, nutrition, mealplan, workout, muscle, lambda_measure, exercise
     logging.info("Variance Models imported.")
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
