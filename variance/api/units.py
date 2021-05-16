@@ -44,7 +44,7 @@ class Unit(MethodView):
         u = UnitModel.query.get_or_404(unit_id)
 
         if "name" in update and update["name"] != u.name:
-            if UnitModel.query.filter_by(name=update["name"]).count() is not 0:
+            if UnitModel.query.filter_by(name=update["name"]).count() != 0:
                 abort(409, "A unit with that name already exists!")
 
         for key, value in update.items():
