@@ -12,7 +12,8 @@ def cli_fixture_load_units():
     from variance.fixtures.units import DEFAULT_UNITS
     from variance.models.unit import UnitModel
 
-    # By default all fixture units are not removable. Aka they are not created by a user
+    # By default all fixture units are not removable. Aka they are not created
+    # by a user
     for u in DEFAULT_UNITS:
         m = UnitModel(multiplier=u[0], name=u[1][-1],
                       dimension=u[2], abbreviation=u[1][0], removable=False)
@@ -56,8 +57,11 @@ def cli_fixture_load_gym():
     click.echo("Adding default gym...")
     from variance.models.gym import GymModel
     from variance.models.equipment import EquipmentModel
-    m = GymModel(name="Default Gym",
-                 description="The default gym containing all equipment", is_public=True, owner_id=1)
+    m = GymModel(
+        name="Default Gym",
+        description="The default gym containing all equipment",
+        is_public=True,
+        owner_id=1)
     e_list = EquipmentModel.query.all()
     for e in e_list:
         m.equipment.append(e)
@@ -107,8 +111,19 @@ def cli_fixture_load_nutrients():
 
     count = 0
     for e in DEFAULT_NUTRIENTS:
-        n = NutrientInfoModel(name=e[0], scientific_name=e[1], abbreviation=e[2], description=e[3], is_element=e[4], is_amino_acid=e[5],
-                              is_vitamin=e[6], vitamin_family=e[7], vitamin_number=e[8], wikipedia_link=e[9], fdc_nid=e[10], fndds=e[11])
+        n = NutrientInfoModel(
+            name=e[0],
+            scientific_name=e[1],
+            abbreviation=e[2],
+            description=e[3],
+            is_element=e[4],
+            is_amino_acid=e[5],
+            is_vitamin=e[6],
+            vitamin_family=e[7],
+            vitamin_number=e[8],
+            wikipedia_link=e[9],
+            fdc_nid=e[10],
+            fndds=e[11])
         db.session.add(n)
         db.session.commit()
         count += 1
