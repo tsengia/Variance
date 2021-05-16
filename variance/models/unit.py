@@ -25,6 +25,18 @@ class UnitModel(db.Model):
     def has_owner():
         return False
 
+    @staticmethod
+    def get_id_by_name(text):
+        name_match = UnitModel.query.filter_by(name=text).first()
+        if name_match:
+            return name_match
+
+    @staticmethod
+    def get_id_by_abbreviation(text):
+        abbreviation_match = UnitModel.query.filter_by(abbreviation=text).first()
+        if abbreviation_match:
+            return abbreviation_match
+
     def __str__(self):
         return "UnitModel (%i): %s (%s) %s, removable(%s), mult(%s) "%(int(self.id), self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
 

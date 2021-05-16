@@ -1,16 +1,16 @@
 from variance import db 
 
-class GymEquipmentModel(db.Model):
+class GymEquipmentAssociation(db.Model):
     __tablename__ = "GymEquipmentList"
     
     equipment_id = db.Column(db.Integer, db.ForeignKey("EquipmentIndex.id"), nullable=False, primary_key=True)
-    equipment = db.relationship("EquipmentModel", foreign_keys="GymEquipmentModel.equipment_id")
+    equipment = db.relationship("EquipmentModel", foreign_keys="GymEquipmentAssociation.equipment_id")
     
     gym_id = db.Column(db.Integer, db.ForeignKey("GymIndex.id"), nullable=False, primary_key=True)
-    gym = db.relationship("GymModel", foreign_keys="GymEquipmentModel.gym_id")
+    gym = db.relationship("GymModel", foreign_keys="GymEquipmentAssociation.gym_id")
 
     def __str__(self):
-        return "GymEquipModel: %u (%s) -> %u (%s)" % (self.gym.id, self.gym.name, self.equipment.id, self.equipment.name)
+        return "GymEquipAssoc: %u (%s) -> %u (%s)" % (self.gym.id, self.gym.name, self.equipment.id, self.equipment.name)
 
 class GymModel(db.Model):
     __tablename__ = "GymIndex"
@@ -39,6 +39,8 @@ class GymModel(db.Model):
     # The user who added this gym to the database
     owner_id = db.Column(db.Integer, db.ForeignKey("UserIndex.id"), nullable=False)
     owner = db.relationship("UserModel", backref="gyms")
+    
+    equipment = db.relationship("EquipmentModel", secondary="GymEquipmentList")
     
     @staticmethod
     def has_owner():

@@ -168,7 +168,7 @@ class ConsumableModel(db.Model):
     
     def check_owner(self, id):
         return self.owner_id == id
-        
+
     def __str__(self):
         return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (self.id, self.name, self.owner.id, self.owner.username, str(self.is_public))
 
