@@ -1,5 +1,6 @@
 from variance import db
 
+
 class EquipmentModel(db.Model):
     __tablename__ = "EquipmentIndex"
 
@@ -12,4 +13,5 @@ class EquipmentModel(db.Model):
     description = db.Column(db.String(20), nullable=True)
 
     # List of exercises that use this piece of equipment.
-    exercises = db.relationship("ExerciseModel", secondary="ExerciseEquipmentList")
+    exercises = db.relationship(
+        "ExerciseModel", secondary="ExerciseEquipmentList")

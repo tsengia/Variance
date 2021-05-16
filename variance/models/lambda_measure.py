@@ -5,6 +5,8 @@ import logging as logger
 
 # This is for dynamically calculated measures.
 # For example: 90% of 1 rep max, or 1/2 the pace of the PR time, etc.
+
+
 class LambdaModel(db.Model):
     __tablename__ = "LambdaIndex"
 
@@ -19,22 +21,24 @@ class LambdaModel(db.Model):
     def __str__(self):
         return "LambdaModel (%i): %s - %s" % (self.id, self.name, self.function_name)
 
-    
+
 def variance_evaluate_lambda(lambda_model, dimension, user_model, float_param, tracker_param):
     if lambda_model.function_name == "latest_percentage":
         if tracker_param is None or float_param is None:
-            ### TODO: Log this error
-            logger.getLogger("variance").warning("Lambda evaluated missing a parameter!")
+            # TODO: Log this error
+            logger.getLogger("variance").warning(
+                "Lambda evaluated missing a parameter!")
             return None
-        
-        latest = select(TrackerEntryModel).where(TrackerEntryModel.parent_tracker_id == tracker_param.id).order_by(TrackerEntryModel.time).first()
+
+        latest = select(TrackerEntryModel).where(TrackerEntryModel.parent_tracker_id ==
+                                                 tracker_param.id).order_by(TrackerEntryModel.time).first()
         if latest is None:
-            ### TODO: Log this error
+            # TODO: Log this error
             return None
-    
-        return (latest.value * float_param, latest.unit) # TODO: Make actual evaluation, and also return a unit
+
+        # TODO: Make actual evaluation, and also return a unit
+        return (latest.value * float_param, latest.unit)
     if lambda_model.function_name == "average_percentage":
         if tracker_param is None or float_param is None:
             return None
-        return 1 # TODO: Make actual evaluation, and also return a unit
-    
+        return 1  # TODO: Make actual evaluation, and also return a unit

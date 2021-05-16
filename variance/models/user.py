@@ -3,108 +3,130 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from variance import db
 
+
 class UserModel(db.Model):
     __tablename__ = "UserIndex"
 
     id = db.Column(db.Integer, primary_key=True)
-    ### Management Info
+    # Management Info
     username = db.Column(db.String(30), unique=True, nullable=False)
-    
+
     # Email address of the user. NOTE: Can be NULL!
     email = db.Column(db.String(80), nullable=True)
-    
+
     # Password hash of the user.
     password = db.Column(db.String(128), nullable=False)
-    
+
     # Date this user was born. Used for calculating age.
     birthdate = db.Column(db.Date(), nullable=False)
-    
+
     # Datetime this user was created.
-    created_on = db.Column(db.DateTime(), nullable=False, default=datetime.now())
-    
+    created_on = db.Column(db.DateTime(), nullable=False,
+                           default=datetime.now())
+
     # User role. Current values: "user", "admin"
     role = db.Column(db.String(10), nullable=False, default="user")
-    
-    ### User Data
+
+    # User Data
     # List of trackers this user has running
-    trackers = db.relationship("TrackerModel", back_populates="owner", cascade="all, delete")
+    trackers = db.relationship(
+        "TrackerModel", back_populates="owner", cascade="all, delete")
 
     # List of nutritional items created by this user
-    consumables = db.relationship("ConsumableModel", back_populates="owner", cascade="all, delete")
-    recipies = db.relationship("RecipeModel", back_populates="owner", cascade="all, delete")
-    mealplans = db.relationship("MealPlanModel", back_populates="owner", cascade="all, delete")
+    consumables = db.relationship(
+        "ConsumableModel", back_populates="owner", cascade="all, delete")
+    recipies = db.relationship(
+        "RecipeModel", back_populates="owner", cascade="all, delete")
+    mealplans = db.relationship(
+        "MealPlanModel", back_populates="owner", cascade="all, delete")
 
-    set_entries = db.relationship("SetEntryModel", back_populates="owner", cascade="all, delete")
-    consumption_entries = db.relationship("ConsumedEntryModel", back_populates="owner", cascade="all, delete")
-    programs = db.relationship("WorkoutProgramModel", back_populates="owner", cascade="all, delete")
-    
-    ### Unit Display Preferences
+    set_entries = db.relationship(
+        "SetEntryModel", back_populates="owner", cascade="all, delete")
+    consumption_entries = db.relationship(
+        "ConsumedEntryModel", back_populates="owner", cascade="all, delete")
+    programs = db.relationship(
+        "WorkoutProgramModel", back_populates="owner", cascade="all, delete")
+
+    # Unit Display Preferences
     # lb or kg
-    exercise_weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    exercise_weight_unit = db.relationship("UnitModel", foreign_keys="UserModel.exercise_weight_unit_id")
-    
+    exercise_weight_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    exercise_weight_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.exercise_weight_unit_id")
+
     # mile or km
-    exercise_distance_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    exercise_distance_unit = db.relationship("UnitModel", foreign_keys="UserModel.exercise_distance_unit_id")
-    
+    exercise_distance_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    exercise_distance_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.exercise_distance_unit_id")
+
     # oz/lb or grams
-    food_weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    food_weight_unit = db.relationship("UnitModel", foreign_keys="UserModel.food_weight_unit_id")
-    
+    food_weight_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    food_weight_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.food_weight_unit_id")
+
     # fl. oz or Liters
-    food_volume_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    food_volume_unit = db.relationship("UnitModel", foreign_keys="UserModel.food_volume_unit_id")
-    
+    food_volume_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    food_volume_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.food_volume_unit_id")
+
     # Pounds, stone, or kg?
-    body_weight_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    body_weight_unit = db.relationship("UnitModel", foreign_keys="UserModel.body_weight_unit_id")
-    
+    body_weight_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    body_weight_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.body_weight_unit_id")
+
     # Feet or meters?
-    body_distance_large_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    body_distance_large_unit = db.relationship("UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
-    
+    body_distance_large_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    body_distance_large_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
+
     # Inches or cm?
-    body_distance_small_unit_id = db.Column(db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    body_distance_small_unit = db.relationship("UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
-    
-    
-    ### Diet Settings
+    body_distance_small_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    body_distance_small_unit = db.relationship(
+        "UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
+
+    # Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies containing peanuts will be suggested)
     no_peanuts = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat treenuts?
     no_treenuts = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat dairy?
     no_dairy = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat eggs?
     no_eggs = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat pork?
     no_pork = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat beef (cow)?
     no_beef = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat meat?
     no_meat = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat fish?
     no_fish = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat shellfish?
     no_shellfish = db.Column(db.Boolean, nullable=True)
-    
+
     # Can this user not eat gluten?
     no_gluten = db.Column(db.Boolean, nullable=True)
-    
+
     # Does this user require vegetarian only foods?
     is_vegetarian = db.Column(db.Boolean, nullable=True)
-    
+
     # Does this user require vegan only foods?
     is_vegan = db.Column(db.Boolean, nullable=True)
-    
+
     # Does this user require kosher only foods?
     is_kosher = db.Column(db.Boolean, nullable=True)
 
@@ -113,7 +135,7 @@ class UserModel(db.Model):
         bday = datetime.date(self.birthdate)
         today = date.today()
         return today.year - bday.year - ((today.month, today.day) < (bday.month, bday.day))
-        
+
     def get_tags(self):
         tags = []
         if self.no_pork:
@@ -149,7 +171,7 @@ class UserModel(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
-    
+
     @staticmethod
     def has_owner(self):
         return False
