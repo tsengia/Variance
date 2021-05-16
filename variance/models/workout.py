@@ -65,7 +65,7 @@ class SetEntryModel(db.Model):
                                                                 self.owner.id,
                                                                 self.owner.username,
                                                                 self.exercise_id,
-                                                                self.exercise.name. self.reps)
+                                                                self.exercise.name, self.reps)
 
 # Theses are sets that are planned to be completed (in a workout plan)
 
