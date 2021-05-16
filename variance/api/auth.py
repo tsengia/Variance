@@ -16,10 +16,12 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 @bp.route("/register", methods=["POST"])
-@bp.arguments(UserSchema(only=("username", "password", "birthdate")), location="form")
+@bp.arguments(UserSchema(only=("username", "password",
+              "birthdate")), location="form")
 @bp.response(UserSchema(only=("id",)), code=201)
 def register(new_user):
-    if UserModel.query.filter_by(username=new_user["username"]).first() is not None:
+    if UserModel.query.filter_by(
+            username=new_user["username"]).first() is not None:
         abort(409, message="A user with that username already exists!")
     u = UserModel(username=new_user["username"],
                   birthdate=new_user["birthdate"])
@@ -79,7 +81,7 @@ def load_logged_in_user():
                 decoded_token = jwt.decode(
                     token, current_app.config["SECRET_KEY"], algorithms="HS256")
                 user_id = int(decoded_token["user_id"])
-            except:
+            except BaseException:
                 current_app.logger.warning(
                     "User attempted to use an invalid token!")
     else:
@@ -88,7 +90,8 @@ def load_logged_in_user():
     if user_id is not None:
         g.user = UserModel.query.get(user_id)
 
-# Internal function that checks to see if there are any permission entries that permit the user/client to perform the action
+# Internal function that checks to see if there are any permission entries
+# that permit the user/client to perform the action
 
 
 def _check_perms(action, user, model):
@@ -96,7 +99,8 @@ def _check_perms(action, user, model):
     for p in a:
         if p.check_user(user, model):
             return True
-    # TODO: Make log to notify dev if no perm entries for that action can be found
+    # TODO: Make log to notify dev if no perm entries for that action can be
+    # found
     return False
 
 
@@ -111,8 +115,9 @@ def check_perms(action, model):
 
             if not allowed:
                 # TODO: Log an error
-                abort(401, message={
-                      "error": "You do not have permission to perform this action!"})
+                abort(
+                    401, message={
+                        "error": "You do not have permission to perform this action!"})
 
             return view(*args, **kwargs)
         return wrapped_view

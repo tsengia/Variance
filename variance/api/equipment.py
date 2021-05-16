@@ -13,11 +13,13 @@ bp = Blueprint('equipment', __name__, url_prefix='/equipment')
 
 @bp.route("/")
 class EquipmentList(MethodView):
-    @bp.arguments(EquipmentSchema(only=("name", "description")), location="form", unknown=EXCLUDE)
+    @bp.arguments(EquipmentSchema(only=("name", "description")),
+                  location="form", unknown=EXCLUDE)
     @bp.response(EquipmentSchema(only=("id",)), code=201)
     @login_required
     def post(self, new_equipment):  # Create a new equipment
-        if EquipmentModel.query.filter_by(name=new_equipment["name"]).first() is not None:
+        if EquipmentModel.query.filter_by(
+                name=new_equipment["name"]).first() is not None:
             abort(409, message="An equipment with that name already exists!")
         e = EquipmentModel(**new_equipment)
         db.session.add(e)
@@ -40,13 +42,15 @@ class EquipmentList(MethodView):
 @bp.route("/<int:e_id>")
 class Equipment(MethodView):
 
-    @bp.arguments(EquipmentSchema(partial=("name", "description"), exclude=("id",)), location="form", unknown=EXCLUDE)
+    @bp.arguments(EquipmentSchema(partial=("name", "description"),
+                  exclude=("id",)), location="form", unknown=EXCLUDE)
     @login_required
     def post(self, update, e_id):  # Update an equipment
         e = EquipmentModel.query.get_or_404(e_id)
 
         if "name" in update and update["name"] != e.name:
-            if EquipmentModel.query.filter_by(name=update["name"]).count() != 0:
+            if EquipmentModel.query.filter_by(
+                    name=update["name"]).count() != 0:
                 abort(409, "An equipment with that name already exists!")
 
         for key, value in update.items():

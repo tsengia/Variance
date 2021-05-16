@@ -13,11 +13,13 @@ bp = Blueprint('units', __name__, url_prefix='/units')
 
 @bp.route("/")
 class UnitList(MethodView):
-    @bp.arguments(UnitSchema(only=("name", "dimension", "abbreviation")), location="form", unknown=EXCLUDE)
+    @bp.arguments(UnitSchema(only=("name", "dimension",
+                  "abbreviation")), location="form", unknown=EXCLUDE)
     @bp.response(UnitSchema(only=("id",)), code=201)
     @check_perms("unit.new", False)
     def post(self, new_unit):  # Create a new unit
-        if UnitModel.query.filter_by(name=new_unit["name"]).first() is not None:
+        if UnitModel.query.filter_by(
+                name=new_unit["name"]).first() is not None:
             abort(409, message="A unit with that name already exists!")
         u = UnitModel(**new_unit)
         db.session.add(u)
@@ -25,16 +27,19 @@ class UnitList(MethodView):
         return u
 
     @bp.arguments(SearchSchema(), location="query", required=False)
-    @bp.arguments(UnitSchema(only=("dimension",), partial=("dimension",)), location="query", required=False, unknown=EXCLUDE)
+    @bp.arguments(UnitSchema(only=("dimension",), partial=("dimension",)),
+                  location="query", required=False, unknown=EXCLUDE)
     @bp.response(UnitSchema(many=True), code=200)
     @check_perms("unit.view", False)
     def get(self, search_args, unit_args):  # List all units
-        if not "dimension" in unit_args:
+        if "dimension" not in unit_args:
             result = UnitModel.query.limit(search_args["count"]).offset(
                 search_args["offset"]).all()
         else:
-            result = UnitModel.query.filter_by(dimension=unit_args["dimension"]).limit(
-                search_args["count"]).offset(search_args["offset"]).all()
+            result = UnitModel.query.filter_by(
+                dimension=unit_args["dimension"]).limit(
+                search_args["count"]).offset(
+                search_args["offset"]).all()
 
         return result
 
@@ -42,7 +47,8 @@ class UnitList(MethodView):
 @bp.route("/<int:unit_id>")
 class Unit(MethodView):
 
-    @bp.arguments(UnitSchema(partial=("name", "dimension", "abbreviation", "multiplier"), exclude=("id",)), location="form", unknown=EXCLUDE)
+    @bp.arguments(UnitSchema(partial=("name", "dimension", "abbreviation",
+                  "multiplier"), exclude=("id",)), location="form", unknown=EXCLUDE)
     @check_perms("unit.update", False)
     def post(self, update, unit_id):  # Update a unit
         u = UnitModel.query.get_or_404(unit_id)
