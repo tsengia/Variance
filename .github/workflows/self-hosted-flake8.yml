@@ -22,8 +22,8 @@ jobs:
         if [ -f requirements_dev.txt ]; then python3.7 -m pip install -r requirements_dev.txt; fi
     - name: Lint with flake8
       run: |
-        # Perform sanity check on the code (aka, check for syntax/undefined reference errors)
+        # Perform sanity check on the code (aka, check for syntax/undefined reference errors), exit with error if errors
         python3.7 -m flake8 . --config=flake8-sanity-check.cfg
         echo "Sanity Check done"
-        # Perform style based check on the code
-        python3.7 -m flake8 . --config=flake8-style-check.cfg
+        # Perform style based check on the code, always exit OK
+        python3.7 -m flake8 . --config=flake8-style-check.cfg --exit-zero
