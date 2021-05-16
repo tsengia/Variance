@@ -10,8 +10,10 @@ db = SQLAlchemy()
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=False)
 
-    logging.basicConfig(filename='variance.log', level=logging.DEBUG,
-                        format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+    logging.basicConfig(
+        filename='variance.log',
+        level=logging.DEBUG,
+        format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
     if test_config is None:
         app.config.from_object("variance.config.DevConfig")
@@ -43,7 +45,7 @@ def create_app(test_config=None):
     """
     app.cli.add_command(cli.fixtures.fixtures_cli)
     app.cli.add_command(cli.units.units_cli)
-    
+
     app.cli.add_command(cli.equipment.equipment_cli)
     app.cli.add_command(cli.muscles.muscles_cli)
     """
