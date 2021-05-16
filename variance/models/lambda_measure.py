@@ -26,7 +26,7 @@ def variance_evaluate_lambda(lambda_model, dimension, user_model, float_param, t
             logger.getLogger("variance").warning("Lambda evaluated missing a parameter!")
             return None
         
-        latest = select(TrackerEntryModel).where(TrackerEntryModel.parent_tracker_id == tracker_param.id).order_by(TrackerEntry.time).first()
+        latest = select(TrackerEntryModel).where(TrackerEntryModel.parent_tracker_id == tracker_param.id).order_by(TrackerEntryModel.time).first()
         if latest is None:
             ### TODO: Log this error
             return None
