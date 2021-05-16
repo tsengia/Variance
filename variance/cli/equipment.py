@@ -8,6 +8,7 @@ equipment_cli = AppGroup("equipment")
 equipment_mod_cli = AppGroup("mod")
 equipment_cli.add_command(equipment_mod_cli)
 
+
 @equipment_cli.command("get")
 @click.argument("name")
 def cli_equipment_get(name):
@@ -16,7 +17,8 @@ def cli_equipment_get(name):
         click.echo("No equipment with that name found!")
         return -1
     click.echo("Equipment ID: %u" % u.id)
-    
+
+
 @equipment_cli.command("list")
 def cli_equipment_list():
     e_list = EquipmentModel.query.all()
@@ -25,6 +27,7 @@ def cli_equipment_list():
         return -1
     for a in e_list:
         click.echo("%u : %s - %s" % (a.id, a.name, a.description))
+
 
 @equipment_cli.command("add")
 @click.argument("name")
@@ -38,6 +41,7 @@ def cli_user_add(name, description):
     db.session.add(new_equipment)
     db.session.commit()
     click.echo("Equipment (%s) added." % (name))
+
 
 @equipment_cli.command("del")
 @click.argument("equipment_id")

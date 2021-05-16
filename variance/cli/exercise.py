@@ -8,6 +8,7 @@ exercise_cli = AppGroup("exercise")
 exercise_mod_cli = AppGroup("mod")
 exercise_cli.add_command(exercise_mod_cli)
 
+
 @exercise_cli.command("list")
 def cli_exercise_list():
     e_list = ExerciseModel.query.all()
@@ -16,6 +17,7 @@ def cli_exercise_list():
         return -1
     for e in e_list:
         click.echo(str(e))
+
 
 @exercise_cli.command("view")
 @click.argument("id")

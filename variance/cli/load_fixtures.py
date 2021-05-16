@@ -5,6 +5,7 @@ from variance import db
 
 lf_cli = AppGroup("load-fixture")
 
+
 @lf_cli.command("units")
 def cli_fixture_load_units():
     click.echo("Adding default units...")
@@ -13,10 +14,12 @@ def cli_fixture_load_units():
 
     # By default all fixture units are not removable. Aka they are not created by a user
     for u in DEFAULT_UNITS:
-        m = UnitModel(multiplier=u[0], name=u[1][-1], dimension=u[2], abbreviation=u[1][0], removable=False)
+        m = UnitModel(multiplier=u[0], name=u[1][-1],
+                      dimension=u[2], abbreviation=u[1][0], removable=False)
         db.session.add(m)
         db.session.commit()
     click.echo("Default units added.")
+
 
 @lf_cli.command("equipment")
 def cli_fixture_load_equipment():
@@ -29,36 +32,40 @@ def cli_fixture_load_equipment():
         db.session.add(m)
         db.session.commit()
     click.echo("Default equipment added.")
-    
+
+
 @lf_cli.command("exercises")
 def cli_fixture_load_exercises():
     click.echo("Adding default exercises...")
     from variance.fixtures.exercise import DEFAULT_EXERCISES
     from variance.models.exercise import ExerciseModel
-    
+
     for e in DEFAULT_EXERCISES:
-        m = ExerciseModel(name=e[0],\
-            description=e[1],\
-            use_duration=(e[2]=="duration"),\
-            use_distance=(e[2]=="distance"),\
-            use_weight=(e[2]=="weight"))
+        m = ExerciseModel(name=e[0],
+                          description=e[1],
+                          use_duration=(e[2] == "duration"),
+                          use_distance=(e[2] == "distance"),
+                          use_weight=(e[2] == "weight"))
         db.session.add(m)
         db.session.commit()
     click.echo("Default exercises added.")
-    
+
+
 @lf_cli.command("gym")
 def cli_fixture_load_gym():
     click.echo("Adding default gym...")
     from variance.models.gym import GymModel
     from variance.models.equipment import EquipmentModel
-    m = GymModel(name="Default Gym", description="The default gym containing all equipment", is_public=True, owner_id=1)
+    m = GymModel(name="Default Gym",
+                 description="The default gym containing all equipment", is_public=True, owner_id=1)
     e_list = EquipmentModel.query.all()
     for e in e_list:
         m.equipment.append(e)
     db.session.add(m)
     db.session.commit()
     click.echo("Default equipment added.")
-    
+
+
 @lf_cli.command("permissions")
 def cli_fixture_load_permissions():
     click.echo("Adding default permissions...")
@@ -68,8 +75,9 @@ def cli_fixture_load_permissions():
     for p in DEFAULT_PERMISSIONS:
         for t in p["methods"]:
             if "roles" in p:
-                for r in p["roles"]: # Make a row for each role
-                    m = PermissionModel(action=p["endpoint"] + "." + t, allow_role=r)
+                for r in p["roles"]:  # Make a row for each role
+                    m = PermissionModel(
+                        action=p["endpoint"] + "." + t, allow_role=r)
                     if "owner" in p:
                         m.allow_owner = p["owner"]
                     if "force_public" in p:
@@ -78,17 +86,19 @@ def cli_fixture_load_permissions():
                         m.check_public = p["check_public"]
                     db.session.add(m)
             else:
-                m = PermissionModel(action=p["endpoint"] + "." + t, allow_role=r)
+                m = PermissionModel(
+                    action=p["endpoint"] + "." + t, allow_role=r)
                 if "owner" in p:
                     m.allow_owner = p["owner"]
                 if "force_public" in p:
                     m.force_public = p["force_public"]
                 if "check_public" in p:
                     m.check_public = p["check_public"]
-                db.session.add(m)  
+                db.session.add(m)
         db.session.commit()
     click.echo("Default permissions added.")
-    
+
+
 @lf_cli.command("nutrients")
 def cli_fixture_load_nutrients():
     click.echo("Adding default nutrients...")
@@ -97,12 +107,14 @@ def cli_fixture_load_nutrients():
 
     count = 0
     for e in DEFAULT_NUTRIENTS:
-        n = NutrientInfoModel(name=e[0],scientific_name=e[1],abbreviation=e[2],description=e[3],is_element=e[4],is_amino_acid=e[5],is_vitamin=e[6],vitamin_family=e[7],vitamin_number=e[8],wikipedia_link=e[9],fdc_nid=e[10],fndds=e[11])
+        n = NutrientInfoModel(name=e[0], scientific_name=e[1], abbreviation=e[2], description=e[3], is_element=e[4], is_amino_acid=e[5],
+                              is_vitamin=e[6], vitamin_family=e[7], vitamin_number=e[8], wikipedia_link=e[9], fdc_nid=e[10], fndds=e[11])
         db.session.add(n)
         db.session.commit()
         count += 1
     click.echo("Default " + str(count) + " nutrient info added.")
-    
+
+
 @lf_cli.command("test_users")
 def cli_fixture_load_test_users():
     click.echo("Adding users for testing...")
@@ -111,7 +123,8 @@ def cli_fixture_load_test_users():
 
     count = 0
     for i in TESTING_USERS:
-        u = UserModel(username=i[0],email=i[1],birthdate=datetime.fromisoformat(i[3]),role=i[4])
+        u = UserModel(username=i[0], email=i[1],
+                      birthdate=datetime.fromisoformat(i[3]), role=i[4])
         u.set_password(i[2])
         if i[5]:
             if "nopeanuts" in i[5]:
@@ -145,6 +158,7 @@ def cli_fixture_load_test_users():
         count += 1
     click.echo("Added " + str(count) + " users for testing.")
 
+
 @lf_cli.command("default_admin")
 def cli_fixture_load_default_admin():
     click.echo("Adding default admin user...")
@@ -153,7 +167,8 @@ def cli_fixture_load_default_admin():
 
     count = 0
     for i in DEFAULT_USERS:
-        u = UserModel(username=i[0],email=i[1],birthdate=datetime.fromisoformat(i[3]),role=i[4])
+        u = UserModel(username=i[0], email=i[1],
+                      birthdate=datetime.fromisoformat(i[3]), role=i[4])
         u.set_password(i[2])
         if i[5]:
             if "nopeanuts" in i[5]:
@@ -186,6 +201,7 @@ def cli_fixture_load_default_admin():
         db.session.commit()
         count += 1
     click.echo("Added " + str(count) + " users.")
+
 
 @lf_cli.command("muscles")
 def cli_fixture_load_muscles():

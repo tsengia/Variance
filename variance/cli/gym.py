@@ -9,6 +9,7 @@ gym_cli = AppGroup("gym")
 gym_mod_cli = AppGroup("mod")
 gym_cli.add_command(gym_mod_cli)
 
+
 @gym_cli.command("list")
 def cli_gym_list():
     g_list = GymModel.query.all()
@@ -17,6 +18,7 @@ def cli_gym_list():
         return -1
     for g in g_list:
         click.echo(str(g))
+
 
 @gym_cli.command("view")
 @click.argument("id")

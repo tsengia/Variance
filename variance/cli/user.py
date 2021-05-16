@@ -10,6 +10,7 @@ user_cli = AppGroup("user")
 user_mod_cli = AppGroup("mod")
 user_cli.add_command(user_mod_cli)
 
+
 @user_cli.command("get")
 @click.argument("username")
 def cli_user_get(username):
@@ -19,6 +20,7 @@ def cli_user_get(username):
         return -1
     click.echo("User ID: %u" % u.id)
 
+
 @user_cli.command("list")
 def cli_user_list():
     u_list = UserModel.query.all()
@@ -26,7 +28,9 @@ def cli_user_list():
         click.echo("User list is empty!")
         return -1
     for u in u_list:
-        click.echo("%u : %s, Role: %s, Created: %s, Birthday: %s" % (u.id, u.username, u.role, str(u.created_on), str(u.birthdate)))
+        click.echo("%u : %s, Role: %s, Created: %s, Birthday: %s" % (
+            u.id, u.username, u.role, str(u.created_on), str(u.birthdate)))
+
 
 @user_cli.command("add")
 @click.argument("username")
@@ -48,6 +52,7 @@ def cli_user_add(username, password, birthdate):
     db.session.commit()
     click.echo("User %s added." % (username))
 
+
 @user_cli.command("del")
 @click.argument("user_id")
 def cli_user_del(user_id):
@@ -59,7 +64,8 @@ def cli_user_del(user_id):
     db.session.delete(u)
     db.session.commit()
     click.echo("User %u (%s) deleted." % (user_id, name))
-    
+
+
 @user_cli.command("view")
 @click.argument("user_id")
 def cli_user_del(user_id):
@@ -73,7 +79,8 @@ def cli_user_del(user_id):
     click.echo("\tCreated on: %s" % (u.created_on))
     click.echo("\tEmail: %s" % (u.email))
     click.echo("\tTags: %s" % (str(u.get_tags())))
-    
+
+
 @user_mod_cli.command("role")
 @click.argument("user_id")
 @click.argument("new_role")
@@ -84,4 +91,5 @@ def cli_user_mod_role(user_id, new_role):
         return -1
     u.role = new_role
     db.session.commit()
-    click.echo("User %u (%s) role update to %s." % (int(user_id), str(u.username), new_role))
+    click.echo("User %u (%s) role update to %s." %
+               (int(user_id), str(u.username), new_role))
