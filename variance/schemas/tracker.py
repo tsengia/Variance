@@ -1,5 +1,5 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from variance.models.tracker import TrackerModel, TrackerEntry
+from variance.models.tracker import TrackerModel, TrackerEntryModel
 
 class TrackerSchema(SQLAlchemyAutoSchema):
     class Meta:
