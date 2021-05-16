@@ -68,7 +68,7 @@ def cli_user_del(user_id):
 
 @user_cli.command("view")
 @click.argument("user_id")
-def cli_user_del(user_id):
+def cli_user_view(user_id):
     u = UserModel.query.get(user_id)
     if u is None:
         click.echo("No user with that ID found!")
