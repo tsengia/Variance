@@ -17,14 +17,13 @@ def cli_permission_get_by_action(action):
         return -1
     for i in p:
         click.echo(str(i))
-        
+
 @permissions_cli.command("list")
 def cli_permission_list():
     p = PermissionModel.query.all()
     for i in p:
         click.echo(str(i))
-        
-        
+
 @permissions_cli.command("del")
 @click.argument("perm_id")
 def cli_permission_del(perm_id):

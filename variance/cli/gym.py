@@ -17,7 +17,7 @@ def cli_gym_list():
         return -1
     for g in g_list:
         click.echo(str(g))
-        
+
 @gym_cli.command("view")
 @click.argument("id")
 def cli_gym_view(id):
