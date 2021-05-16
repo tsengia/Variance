@@ -169,7 +169,7 @@ class RecipeModel(db.Model):
         return self.owner_id == id
 
     def __str__(self):
-        return "%u RecipeModel: %s, public($s), %u(%s)" % (
+        return "%u RecipeModel: %s, public(%s), %u(%s)" % (
             self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
 
     # Attribution. AKA: Citation, license name, links, etc.
