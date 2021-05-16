@@ -1,76 +1,69 @@
-import functools
-from flask import (
-    current_app, g, request
-)
-import click
-from flask.cli import AppGroup
-from flask_restful import Resource
-from flask_restful.reqparse import RequestParser
-from variance.db import get_db
+from flask.views import MethodView
+from flask_smorest import Blueprint, abort
+
+from variance import db
 from variance.api.auth import login_required
+from variance.models.equipment import EquipmentModel
+from variance.schemas.equipment import EquipmentSchema
+from variance.schemas.search import SearchSchema
+from marshmallow import EXCLUDE
 
-class EquipmentList(Resource):
+bp = Blueprint('equipment', __name__, url_prefix='/equipment')
+
+@bp.route("/")
+class EquipmentList(MethodView):
+    @bp.arguments(EquipmentSchema(only=("name", "description")), location="form", unknown=EXCLUDE)
+    @bp.response(EquipmentSchema(only=("id",)), code=201)
     @login_required
-    def post(self):
-        pass
-
-    def get(self):
-        parser = RequestParser()
-        parser.add_argument("name", type=str)
-        parser.add_argument("count", type=int)
-        parser.add_argument("offset", type=int, default=0)
-        args = parser.parse_args()
-        db = get_db()
-
-        if args["name"] is not None:
-            if args["count"] is not None:
-                rows = db.execute("SELECT * FROM EquipmentIndex WHERE name LIKE ? LIMIT ? OFFSET ?", ("%" + args["name"] + "%", args["count"], args["offset"])).fetchall()
-            else:
-                rows = db.execute("SELECT * FROM EquipmentIndex WHERE name LIKE ?", ("%" + args["name"] + "%",)).fetchall()
-        elif args["count"] is not None:
-            rows = db.execute("SELECT * FROM EquipmentIndex LIMIT ? OFFSET ?", (args["count"], args["offset"])).fetchall()
+    def post(self, new_equipment): # Create a new equipment
+        if EquipmentModel.query.filter_by(name=new_equipment["name"]).first() is not None:
+            abort(409, message="An equipment with that name already exists!")
+        e = EquipmentModel(**new_equipment)
+        db.session.add(e)
+        db.session.commit()
+        return e
+    """
+    @bp.arguments(SearchSchema(), location="query", required=False)
+    @bp.arguments(EquipmentSchema(only=("dimension",),partial=("dimension",)), location="query", required=False, unknown=EXCLUDE)
+    @bp.response(EquipmentSchema(many=True), code=200)
+    def get(self, search_args, equipment_args): # List all equipment
+        if not "dimension" in equipment_args:
+            result = EquipmentModel.query.limit(search_args["count"]).offset(search_args["offset"]).all()
         else:
-            rows = db.execute("SELECT * FROM EquipmentIndex").fetchall()
-            current_app.logger.info(str(len(rows)))
+            result = EquipmentModel.query.filter_by(dimension=unit_args["dimension"]).limit(search_args["count"]).offset(search_args["offset"]).all()
 
-        equipment_list = []
-        for r in rows:
-            equipment_list.append({"id":r["id"],"name":r["name"],"description":r["description"]})
+        return result
+    """
 
-        return { "equipment":equipment_list }, 200
+@bp.route("/<int:e_id>")
+class Equipment(MethodView):
 
-class Equipment(Resource):
-    def get(self, equipment_id):
-        db = get_db()
-        equipment = db.execute("SELECT * FROM EquipmentIndex WHERE id=?", (equipment_id,)).fetchone()
-        if equipment is None:
-            return {"error":"No equipment with that ID found!"}, 404
-        return { "id":equipment_id, "name":equipment["name"], "description":equipment["description"] }, 200
-
+    @bp.arguments(EquipmentSchema(partial=("name", "description"), exclude=("id",)), location="form", unknown=EXCLUDE)
     @login_required
-    def put(self, equipment_id):
-        parser = RequestParser()
-        parser.add_argument("name", type=str)
-        parser.add_argument("descriptio", type=str)
-        args = parser.parse_args()
-        db = get_db()
+    def post(self, update, e_id): # Update an equipment
+        e = EquipmentModel.query.get_or_404(e_id)
 
-        equipment = db.execute("SELECT * FROM EquipmentIndex WHERE id=?", (equipment_id,)).fetchone()
-        if equipment is None:
-            return {"error":"No equipment found with what ID!"}, 404
+        if "name" in update and update["name"] != e.name:
+            if EquipmentModel.query.filter_by(name=update["name"]).count() != 0:
+                abort(409, "An equipment with that name already exists!")
 
-        if args["name"] is not None:
-            if db.execute("SELECT id FROM EquipmentIndex WHERE name=?", (args["name"],)).fetchone() is not None:
-                return {"error":"An equipment with that name already exists!"}, 409
-            new_name = args["name"]
-        else:
-            new_name = equipment["name"]
+        for key, value in update.items():
+            setattr(e, key, value)
 
-        if args["description"] is not None:
-            new_description = args["description"]
-        else:
-            new_description = equipment["description"]
+        db.session.commit()
 
-        db.execute("UPDATE EquipmentIndex (name, description) VALUES (?, ?) WHERE id=?", (new_name, new_description, equipment_id))
-        db.commit()
         return {"status":"Equipment updated."}, 200
+
+    @login_required
+    def delete(self, e_id): # Delete a piece of equipment
+        e = EquipmentModel.query.get_or_404(e_id)
+
+        db.session.delete(e)
+        db.session.commit()
+
+        return {"status":"Equipment deleted."}, 200
+
+    @bp.response(EquipmentSchema, code=200)
+    def get(self, e_id): # Display a unit
+        e = EquipmentModel.query.get_or_404(e_id)
+        return e
