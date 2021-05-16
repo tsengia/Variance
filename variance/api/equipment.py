@@ -10,12 +10,13 @@ from marshmallow import EXCLUDE
 
 bp = Blueprint('equipment', __name__, url_prefix='/equipment')
 
+
 @bp.route("/")
 class EquipmentList(MethodView):
     @bp.arguments(EquipmentSchema(only=("name", "description")), location="form", unknown=EXCLUDE)
     @bp.response(EquipmentSchema(only=("id",)), code=201)
     @login_required
-    def post(self, new_equipment): # Create a new equipment
+    def post(self, new_equipment):  # Create a new equipment
         if EquipmentModel.query.filter_by(name=new_equipment["name"]).first() is not None:
             abort(409, message="An equipment with that name already exists!")
         e = EquipmentModel(**new_equipment)
@@ -35,12 +36,13 @@ class EquipmentList(MethodView):
         return result
     """
 
+
 @bp.route("/<int:e_id>")
 class Equipment(MethodView):
 
     @bp.arguments(EquipmentSchema(partial=("name", "description"), exclude=("id",)), location="form", unknown=EXCLUDE)
     @login_required
-    def post(self, update, e_id): # Update an equipment
+    def post(self, update, e_id):  # Update an equipment
         e = EquipmentModel.query.get_or_404(e_id)
 
         if "name" in update and update["name"] != e.name:
@@ -52,18 +54,18 @@ class Equipment(MethodView):
 
         db.session.commit()
 
-        return {"status":"Equipment updated."}, 200
+        return {"status": "Equipment updated."}, 200
 
     @login_required
-    def delete(self, e_id): # Delete a piece of equipment
+    def delete(self, e_id):  # Delete a piece of equipment
         e = EquipmentModel.query.get_or_404(e_id)
 
         db.session.delete(e)
         db.session.commit()
 
-        return {"status":"Equipment deleted."}, 200
+        return {"status": "Equipment deleted."}, 200
 
     @bp.response(EquipmentSchema, code=200)
-    def get(self, e_id): # Display a unit
+    def get(self, e_id):  # Display a unit
         e = EquipmentModel.query.get_or_404(e_id)
         return e
