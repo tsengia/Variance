@@ -15,6 +15,9 @@ class Measure():
         else:
             raise TypeError("value passed to Measure must be int, float, or Measure type!")
 
+    def clone(self):
+        return Measure(self.value, self.unit.clone(), accuracy=self.accuracy)
+
     def __str__(self):
         return str(self.value) + " " + str(self.unit.abbreviation)
 
@@ -52,31 +55,31 @@ class Measure():
 
     def __mul__(self, rhs):
         com = Measure(rhs, self.unit)
-        res = copy(self)
+        res = self.clone()
         res.value *= com.value
         return res
 
     def __truediv__(self, rhs):
         com = Measure(rhs, self.unit)
-        res = copy(self)
+        res = self.clone()
         res.value /= com.value
         return res       
 
     def __floordiv__(self, rhs):
         com = Measure(rhs, self.unit)
-        res = copy(self)
+        res = self.clone()
         res.value = res.value // com.value
         return res
 
     def __sub__(self, rhs):
         com = Measure(rhs, self.unit)
-        res = copy(self)
+        res = self.clone()
         res.value -= com.value
         return res
 
     def __add__(self, rhs):
         com = Measure(rhs, self.unit)
-        res = copy(self)
+        res = self.clone()
         res.value += com.value
         return res        
 
