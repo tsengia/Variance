@@ -45,7 +45,7 @@ class ConsumedEntryModel(db.Model):
         return self.owner_id == id
 
     def __str__(self):
-        return "%u ConsumedEntryModel: %s @ @s, o(%u), c(%u)" % (
+        return "%u ConsumedEntryModel: %s @ %s, o(%u), c(%u)" % (
             self.id, self.name, str(self.time), self.owner_id, self.consumable_id)
 
 
