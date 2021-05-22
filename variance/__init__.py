@@ -30,6 +30,7 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
+    from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, permissions, workout, nutrition, mealplan
     logging.info("Variance Models imported.")
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
