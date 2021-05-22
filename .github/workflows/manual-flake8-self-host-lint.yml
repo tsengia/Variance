@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3.7 -m pip install --upgrade pip
-        python3.7 -m pip install flake8
+        pip install flake8
         if [ -f requirements_dev.txt ]; then pip install -r requirements_dev.txt; fi
     - name: Lint with flake8
       run: |
