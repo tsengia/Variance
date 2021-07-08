@@ -1,7 +1,7 @@
 import pathlib
 import shutil
 import logging
-from flask import Flask
+from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_smorest import Api
 
@@ -36,13 +36,12 @@ def create_app(test_config=None):
             exit()
         shutil.copyfile(str(pathlib.Path("variance") / "defaults" / "user.json"), str(defaults_path / "user.json")) 
 
-    from variance.api.defaults import DefaultSettingsManager
-    app.defaults_manager = DefaultSettingsManager(defaults_path)
 
     rest_api = Api(app)
 
     from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, permissions, workout, nutrition, mealplan
     logging.info("Variance Models imported.")
+    
     from variance import cli
     app.cli.add_command(cli.db.db_cli)
     app.cli.add_command(cli.permissions.permissions_cli)
@@ -62,7 +61,7 @@ def create_app(test_config=None):
     """
 
     logging.info("Variance CLI loaded.")
-
+    
     from variance import api
     app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
     app.register_blueprint(api.units.bp, url_prefix="/api/units")
@@ -72,7 +71,13 @@ def create_app(test_config=None):
     db.init_app(app)
 
     logging.info("Variance AppDB init done.")
-
+ 
+    from variance.api.defaults import DefaultSettingsManager
+    @app.before_first_request
+    def load_default_settings():
+        app.defaults_manager = DefaultSettingsManager(defaults_path)
+        logging.info("Default settings loaded.")
+    
     @app.route("/api/apiversion")
     def api_verison():
         return {"apiversion": "0.1"}
@@ -82,3 +87,4 @@ def create_app(test_config=None):
         return {"version": "0.0.1 alpha"}
 
     return app
+

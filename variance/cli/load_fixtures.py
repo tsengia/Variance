@@ -1,14 +1,14 @@
 from datetime import datetime
+import pathlib
+
 import click
 from flask.cli import AppGroup
+
 from variance import db
 
 lf_cli = AppGroup("load-fixture")
 
-
-@lf_cli.command("units")
-def cli_fixture_load_units():
-    click.echo("Adding default units...")
+def fixture_load_units():
     from variance.fixtures.units import DEFAULT_UNITS
     from variance.models.unit import UnitModel
 
@@ -19,8 +19,12 @@ def cli_fixture_load_units():
                       dimension=u[2], abbreviation=u[1][0], removable=False)
         db.session.add(m)
         db.session.commit()
-    click.echo("Default units added.")
 
+@lf_cli.command("units")
+def cli_fixture_load_units():
+    click.echo("Adding default units...")
+    fixture_load_units()
+    click.echo("Default units added.")
 
 @lf_cli.command("equipment")
 def cli_fixture_load_equipment():
@@ -69,10 +73,7 @@ def cli_fixture_load_gym():
     db.session.commit()
     click.echo("Default equipment added.")
 
-
-@lf_cli.command("permissions")
-def cli_fixture_load_permissions():
-    click.echo("Adding default permissions...")
+def fixture_load_permissions():
     from variance.fixtures.permissions import DEFAULT_PERMISSIONS
     from variance.models.permissions import PermissionModel
 
@@ -100,6 +101,11 @@ def cli_fixture_load_permissions():
                     m.check_public = p["check_public"]
                 db.session.add(m)
         db.session.commit()
+
+@lf_cli.command("permissions")
+def cli_fixture_load_permissions():
+    click.echo("Adding default permissions...")
+    fixture_load_permissions()
     click.echo("Default permissions added.")
 
 
@@ -129,12 +135,12 @@ def cli_fixture_load_nutrients():
         count += 1
     click.echo("Default " + str(count) + " nutrient info added.")
 
-
-@lf_cli.command("test_users")
-def cli_fixture_load_test_users():
-    click.echo("Adding users for testing...")
+def fixture_load_test_users():
     from variance.fixtures.users import TESTING_USERS
     from variance.models.user import UserModel
+    from variance.api.defaults import DefaultSettingsManager
+
+    defaults_manager = DefaultSettingsManager(pathlib.Path("variance") / "defaults")
 
     count = 0
     for i in TESTING_USERS:
@@ -168,9 +174,16 @@ def cli_fixture_load_test_users():
                 u.is_vegan = True
             if "kosher" in i[5]:
                 u.is_kosher = True
+        defaults_manager.populate_user_with_defaults(u)
         db.session.add(u)
         db.session.commit()
         count += 1
+    return count
+
+@lf_cli.command("test_users")
+def cli_fixture_load_test_users():
+    click.echo("Adding users for testing...")
+    count = fixture_load_test_users()
     click.echo("Added " + str(count) + " users for testing.")
 
 
