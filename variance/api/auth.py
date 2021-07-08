@@ -16,7 +16,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route("/register", methods=["POST"])
 @bp.arguments(UserSchema(only=("username", "password",
               "birthdate")), location="form")
-@bp.response(UserSchema(only=("id",)), code=201)
+@bp.response(201, UserSchema(only=("id",)))
 def register(new_user):
     if UserModel.query.filter_by(
             username=new_user["username"]).first() is not None:

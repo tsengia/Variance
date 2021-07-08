@@ -1,0 +1,11 @@
+{
+  "units": {
+    "exercise_weight_unit_id":"lb",
+    "exercise_distance_unit_id":"mi",
+    "food_weight_unit_id":"g",
+    "food_volume_unit_id":"cup",
+    "body_weight_unit_id":"lb",
+    "body_distance_large_unit_id":"ft",
+    "body_distance_small_unit_id":"in"
+  }
+}

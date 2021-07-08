@@ -15,7 +15,7 @@ bp = Blueprint('units', __name__, url_prefix='/units')
 class UnitList(MethodView):
     @bp.arguments(UnitSchema(only=("name", "dimension",
                   "abbreviation")), location="form", unknown=EXCLUDE)
-    @bp.response(UnitSchema(only=("id",)), code=201)
+    @bp.response(201, UnitSchema(only=("id",)))
     @check_perms("unit.new", False)
     def post(self, new_unit):  # Create a new unit
         if UnitModel.query.filter_by(
@@ -29,7 +29,7 @@ class UnitList(MethodView):
     @bp.arguments(SearchSchema(), location="query", required=False)
     @bp.arguments(UnitSchema(only=("dimension",), partial=("dimension",)),
                   location="query", required=False, unknown=EXCLUDE)
-    @bp.response(UnitSchema(many=True), code=200)
+    @bp.response(200, UnitSchema(many=True))
     @check_perms("unit.view", False)
     def get(self, search_args, unit_args):  # List all units
         if "dimension" not in unit_args:
@@ -73,7 +73,7 @@ class Unit(MethodView):
 
         return {"status": "Unit deleted."}, 200
 
-    @bp.response(UnitSchema, code=200)
+    @bp.response(200, UnitSchema)
     @check_perms("unit.view", False)
     def get(self, unit_id):  # Display a unit
         u = UnitModel.query.get_or_404(unit_id)
