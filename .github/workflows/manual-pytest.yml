@@ -16,6 +16,8 @@ jobs:
         python3.7 -m pip install --upgrade pip
         python3.7 -m pip install pytest
         if [ -f requirements_dev.txt ]; then python3.7 -m pip install -r requirements_dev.txt; fi
+    - name: Copy .env for test
+      run: cp testing.env .env
     - name: Test with pytest
       run: |
         python3.7 -m pytest
