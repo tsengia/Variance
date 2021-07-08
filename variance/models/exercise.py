@@ -25,9 +25,13 @@ class ExerciseModel(db.Model):
     __tablename__ = "ExerciseIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+    
+    # Internal name of the exercise for linking + id
+    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
 
-    # Name of the exercise
+    # Name of the exercise to display to the user
     name = db.Column(db.String(100), unique=True, nullable=False)
+    
     description = db.Column(db.Text, nullable=True)
 
     # Is this exercise measured in time?

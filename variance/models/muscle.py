@@ -19,8 +19,9 @@ class MuscleGroupModel(db.Model):
     __tablename__ = "MuscleGroupIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
 
-    # Name of this muscle group
+    # Display name of this muscle group
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=True)
 

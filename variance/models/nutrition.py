@@ -11,7 +11,8 @@ class NutrientInfoModel(db.Model):
     # information can be spotty.
 
     id = db.Column(db.Integer, primary_key=True)
-
+    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+    
     # Display Name of the nutrition label (common name)
     name = db.Column(db.String(100), unique=True, nullable=False)
 
@@ -136,7 +137,9 @@ class RecipeModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Name of the recipe
+    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+
+    # Display name of the recipe
     name = db.Column(db.String(100), unique=True, nullable=False)
 
     # When was this recipe created?
@@ -185,8 +188,10 @@ class ConsumableModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+
     # Management Info
-    # Name of the consumable
+    # Display name of the consumable
     name = db.Column(db.String(100), unique=True, nullable=False)
 
     # When was this consumable created?
