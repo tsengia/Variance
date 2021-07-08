@@ -1,11 +1,11 @@
 import pathlib
+import shutil
 import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_smorest import Api
 
 db = SQLAlchemy()
-
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=False)
@@ -23,10 +23,18 @@ def create_app(test_config=None):
     logging.info("Variance configuration loaded.")
 
     # Setup the instance directory structure
-    pathlib.Path(app.instance_path).mkdir(exist_ok=True)
-    if not pathlib.Path(app.instance_path).is_dir():
-        print("Instance directory could not be created! Exiting.")
-        exit()
+    instance_path = pathlib.Path(app.instance_path)
+    defaults_path = instance_path / "defaults"
+    if not instance_path.exists():
+        instance_path.mkdir(exist_ok=True)
+        if not instance_path.is_dir():
+            print("Instance directory could not be created! Exiting.")
+            exit()
+        defaults_path.mkdir(exist_ok=True)
+        if not defaults_path.is_dir():
+            print("Defaults settings directory could not be created! Exiting.")
+            exit()
+        shutil.copyfile(str(pathlib.Path("variance") / "defaults" / "user.json"), str(defaults_path / "user.json")) 
 
     rest_api = Api(app)
 
