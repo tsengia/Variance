@@ -1,7 +1,6 @@
 import pytest
 
-
-def test_new_unit(client, user_token):
+def test_new_unit(app_with_default_units, client, user_token):
     r = client.post("/api/units/",
                     data={
                         "token": user_token,

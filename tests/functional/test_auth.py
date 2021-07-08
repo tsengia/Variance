@@ -1,8 +1,6 @@
 import pytest
 
-
-@pytest.mark.usefixtures("database")
-def test_good_registration(client):
+def test_good_registration(app_with_default_units, client):
     r = client.post("/api/auth/register",
                     data={
                         "username": "test2",
@@ -12,9 +10,7 @@ def test_good_registration(client):
     assert r.status_code == 201
     assert "id" in r.get_json()
 
-
-@pytest.mark.usefixtures("database")
-def test_bad_birthdate_registration(client):
+def test_bad_birthdate_registration(app_with_default_units, client):
     r = client.post("/api/auth/register",
                     data={
                         "username": "test2",

@@ -33,14 +33,14 @@ class UnitModel(db.Model):
     def get_id_by_name(text):
         name_match = UnitModel.query.filter_by(name=text).first()
         if name_match:
-            return name_match
+            return name_match.id
 
     @staticmethod
     def get_id_by_abbreviation(text):
         abbreviation_match = UnitModel.query.filter_by(
             abbreviation=text).first()
         if abbreviation_match:
-            return abbreviation_match
+            return abbreviation_match.id
 
     def __str__(self):
         return "UnitModel (%i): %s (%s) %s, removable(%s), mult(%s) " % (int(

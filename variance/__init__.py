@@ -36,6 +36,9 @@ def create_app(test_config=None):
             exit()
         shutil.copyfile(str(pathlib.Path("variance") / "defaults" / "user.json"), str(defaults_path / "user.json")) 
 
+    from variance.api.defaults import DefaultSettingsManager
+    app.defaults_manager = DefaultSettingsManager(defaults_path)
+
     rest_api = Api(app)
 
     from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, permissions, workout, nutrition, mealplan
