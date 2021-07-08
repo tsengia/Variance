@@ -11,8 +11,6 @@ from variance.schemas.user import UserSchema
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Create new user
-
-
 @bp.route("/register", methods=["POST"])
 @bp.arguments(UserSchema(only=("username", "password",
               "birthdate")), location="form")
@@ -24,13 +22,12 @@ def register(new_user):
     u = UserModel(username=new_user["username"],
                   birthdate=new_user["birthdate"])
     u.set_password(new_user["password"])
+    current_app.defaults_manager.populate_user_with_defaults(u)
     db.session.add(u)
     db.session.commit()
     return u
 
 # User login via JWT
-
-
 @bp.route("/token", methods=["POST"])
 @bp.arguments(UserSchema(only=("username", "password")), location="form")
 def get_token(req_user):
@@ -44,8 +41,6 @@ def get_token(req_user):
     return {"token": token}, 200
 
 # User login via session
-
-
 @bp.route("/login", methods=["POST"])
 @bp.arguments(UserSchema(only=("username", "password")), location="form")
 def login(req_user):
@@ -59,8 +54,6 @@ def login(req_user):
     return {"status": "You have been logged in."}, 200
 
 # User logout via session
-
-
 @bp.route("/logout", methods=["POST", "GET"])
 def logout():
     session.clear()
@@ -90,8 +83,6 @@ def load_logged_in_user():
 
 # Internal function that checks to see if there are any permission entries
 # that permit the user/client to perform the action
-
-
 def _check_perms(action, user, model):
     a = PermissionModel.query.filter_by(action=action)
     for p in a:
