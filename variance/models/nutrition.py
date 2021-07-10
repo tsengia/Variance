@@ -1,6 +1,62 @@
 from datetime import datetime
 from variance import db
 
+class ConsumableNutrientsModel(db.Model):
+    __tablename__ = "ConsumableNutrientsIndex"
+    # Associates consumables with their nutritional information (other than
+    # macros)
+    consumable_id = db.Column(db.Integer, db.ForeignKey(
+        "ConsumableIndex.id"), nullable=False, primary_key=True)
+    nutrient_id = db.Column(db.Integer, db.ForeignKey(
+        "NutrientInfoIndex.id"), nullable=False, primary_key=True)
+    measure_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    measure_value = db.Column(db.Float, nullable=False)
+
+    measure_unit = db.relationship(
+        "UnitModel", foreign_keys="ConsumableNutrientsModel.measure_unit_id")
+    nutrient = db.relationship(
+        "NutrientInfoModel",
+        foreign_keys="ConsumableNutrientsModel.nutrient_id")
+    consumable = db.relationship(
+        "ConsumableModel",
+        foreign_keys="ConsumableNutrientsModel.consumable_id")
+
+
+class RecipeIngredientList(db.Model):
+    __tablename__ = "RecipeIngredientList"
+    # Associates recipies with the consumables used by it as ingredients
+    recipe_id = db.Column(db.Integer, db.ForeignKey(
+        "RecipeIndex.id"), nullable=False, primary_key=True)
+    measure_unit_id = db.Column(
+        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
+    measure_value = db.Column(db.Float, nullable=False)
+    consumable_id = db.Column(db.Integer, db.ForeignKey(
+        "ConsumableIndex.id"), nullable=False, primary_key=True)
+
+    recipe = db.relationship(
+        "RecipeModel", foreign_keys="RecipeIngredientList.recipe_id")
+    measure_unit = db.relationship(
+        "UnitModel", foreign_keys="RecipeIngredientList.measure_unit_id")
+    consumable = db.relationship(
+        "ConsumableModel", foreign_keys="RecipeIngredientList.consumable_id")
+
+
+class RecipeProductsList(db.Model):
+    __tablename__ = "RecipeProductsList"
+    # Associates 1 recipie with the multiple/single consumables it produces,
+    # along with the number of servings of consumable it produces
+    recipe_id = db.Column(db.Integer, db.ForeignKey(
+        "RecipeIndex.id"), nullable=False, primary_key=True)
+    servings = db.Column(db.Float, nullable=False, default=1)
+    consumable_id = db.Column(db.Integer, db.ForeignKey(
+        "ConsumableIndex.id"), nullable=False, primary_key=True)
+
+    recipe = db.relationship(
+        "RecipeModel", foreign_keys="RecipeProductsList.recipe_id")
+    product = db.relationship(
+        "ConsumableModel", foreign_keys="RecipeProductsList.consumable_id")
+
 
 class NutrientInfoModel(db.Model):
     __tablename__ = "NutrientInfoIndex"
@@ -74,64 +130,6 @@ class NutrientInfoModel(db.Model):
         return "%u NutrientInfoModel: %s %s" % (
             self.id, self.name, self.get_tags())
 
-
-class ConsumableNutrientsModel(db.Model):
-    __tablename__ = "ConsumableNutrientsIndex"
-    # Associates consumables with their nutritional information (other than
-    # macros)
-    consumable_id = db.Column(db.Integer, db.ForeignKey(
-        "ConsumableIndex.id"), nullable=False, primary_key=True)
-    nutrient_id = db.Column(db.Integer, db.ForeignKey(
-        "NutrientInfoIndex.id"), nullable=False, primary_key=True)
-    measure_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    measure_value = db.Column(db.Float, nullable=False)
-
-    measure_unit = db.relationship(
-        "UnitModel", foreign_keys="ConsumableNutrientsModel.measure_unit_id")
-    nutrient = db.relationship(
-        "NutrientInfoModel",
-        foreign_keys="ConsumableNutrientsModel.nutrient_id")
-    consumable = db.relationship(
-        "ConsumableModel",
-        foreign_keys="ConsumableNutrientsModel.consumable_id")
-
-
-class RecipeIngredientList(db.Model):
-    __tablename__ = "RecipeIngredientList"
-    # Associates recipies with the consumables used by it as ingredients
-    recipe_id = db.Column(db.Integer, db.ForeignKey(
-        "RecipeIndex.id"), nullable=False, primary_key=True)
-    measure_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    measure_value = db.Column(db.Float, nullable=False)
-    consumable_id = db.Column(db.Integer, db.ForeignKey(
-        "ConsumableIndex.id"), nullable=False, primary_key=True)
-
-    recipe = db.relationship(
-        "RecipeModel", foreign_keys="RecipeIngredientList.recipe_id")
-    measure_unit = db.relationship(
-        "UnitModel", foreign_keys="RecipeIngredientList.measure_unit_id")
-    consumable = db.relationship(
-        "ConsumableModel", foreign_keys="RecipeIngredientList.consumable_id")
-
-
-class RecipeProductsList(db.Model):
-    __tablename__ = "RecipeProductsList"
-    # Associates 1 recipie with the multiple/single consumables it produces,
-    # along with the number of servings of consumable it produces
-    recipe_id = db.Column(db.Integer, db.ForeignKey(
-        "RecipeIndex.id"), nullable=False, primary_key=True)
-    servings = db.Column(db.Float, nullable=False, default=1)
-    consumable_id = db.Column(db.Integer, db.ForeignKey(
-        "ConsumableIndex.id"), nullable=False, primary_key=True)
-
-    recipe = db.relationship(
-        "RecipeModel", foreign_keys="RecipeProductsList.recipe_id")
-    product = db.relationship(
-        "ConsumableModel", foreign_keys="RecipeProductsList.consumable_id")
-
-
 class RecipeModel(db.Model):
     __tablename__ = "RecipeIndex"
 
@@ -164,6 +162,13 @@ class RecipeModel(db.Model):
     products = db.relationship(
         "ConsumableModel", secondary="RecipeProductsList")
 
+    # Attribution. AKA: Citation, license name, links, etc.
+    attribution = db.Column(db.Text, nullable=True)
+
+    # Who (name of person) created this recipie? Or where was this recipe
+    # pulled from?
+    author = db.Column(db.String(50), nullable=True)
+    
     @staticmethod
     def has_owner():
         return True
@@ -174,14 +179,6 @@ class RecipeModel(db.Model):
     def __str__(self):
         return "%u RecipeModel: %s, public(%s), %u(%s)" % (
             self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
-
-    # Attribution. AKA: Citation, license name, links, etc.
-    attribution = db.Column(db.Text, nullable=True)
-
-    # Who (name of person) created this recipie? Or where was this recipe
-    # pulled from?
-    author = db.Column(db.String(50), nullable=True)
-
 
 class ConsumableModel(db.Model):
     __tablename__ = "ConsumableIndex"
@@ -204,17 +201,6 @@ class ConsumableModel(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey(
         "UserIndex.id"), nullable=False)
     owner = db.relationship("UserModel", back_populates="consumables")
-
-    @staticmethod
-    def has_owner():
-        return True
-
-    def check_owner(self, id):
-        return self.owner_id == id
-
-    def __str__(self):
-        return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (
-            self.id, self.name, self.owner.id, self.owner.username, str(self.is_public))
 
     # If set to true, all users can see this consumable
     is_public = db.Column(db.Boolean, nullable=False, default=False)
@@ -354,3 +340,14 @@ class ConsumableModel(db.Model):
     upc_e = db.Column(db.Integer, nullable=True)
     ean_8 = db.Column(db.Integer, nullable=True)
     ean_13 = db.Column(db.Integer, nullable=True)
+
+    @staticmethod
+    def has_owner():
+        return True
+
+    def check_owner(self, id):
+        return self.owner_id == id
+
+    def __str__(self):
+        return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (
+            self.id, self.name, self.owner.id, self.owner.username, str(self.is_public))

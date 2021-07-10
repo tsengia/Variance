@@ -103,6 +103,5 @@ def create_app(test_config=None):
     def load_def_settings():
         load_default_settings(app)
 
-
     return app
 
