@@ -1,5 +1,5 @@
 ## GymModel
-`GymIndex`  
+Table: `GymIndex`  
 `id`  
 `name`  
 `location`  
@@ -12,7 +12,7 @@
 `__str__()`  
 
 ### GymEquipmentAssociation
-`GymEquipmentList`  
+Table: `GymEquipmentList`  
 `equipment_id` -> `equipment`  
 `gym_id` -> `gym`  
 `__str__()`  
