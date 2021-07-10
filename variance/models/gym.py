@@ -22,12 +22,11 @@ class GymEquipmentAssociation(db.Model):
 class GymModel(db.Model):
     __tablename__ = "GymIndex"
 
-    ###
-    # Every Gym can have multiple pieces of equipment associated with it.
-    # Gyms can be public or private (private by default).
-    # Gyms are really nothing more than a collection of equipment, making it easier to plan workouts
-    #
-    ###
+    """
+    Every Gym can have multiple pieces of equipment associated with it.
+    Gyms can be public or private (private by default).
+    Gyms are really nothing more than a collection of equipment, making it easier to plan workouts
+    """
 
     id = db.Column(db.Integer, primary_key=True)
 
