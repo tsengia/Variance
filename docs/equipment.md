@@ -1,6 +1,6 @@
 ## EquipmentModel
-`EquipmentIndex`
-`id`
-`name`
-`description`
-`exercises` <-> ExerciseEquipmentList
+Table: `EquipmentIndex`  
+`id`   
+`name`  
+`description`  
+`exercises` <-> ExerciseEquipmentList  
