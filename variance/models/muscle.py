@@ -1,9 +1,8 @@
 from variance import db
 
-# Association table. Associates MuscleGroups with their Muscles and vice-versa
-
 
 class MuscleGroupAssociationTable(db.Model):
+    """Association table. Associates MuscleGroups with their Muscles and vice-versa"""    
     __tablename__ = "MuscleGroupAssociation"
     group_id = db.Column(db.Integer, db.ForeignKey(
         "MuscleGroupIndex.id"), primary_key=True)
