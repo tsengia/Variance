@@ -66,14 +66,14 @@ class MealPlanModel(db.Model):
         "UserIndex.id"), nullable=False)
     owner = db.relationship("UserModel", back_populates="mealplans")
 
+    days = db.relationship("MealPlanDayModel", back_populates="mealplan")
+    
     @staticmethod
     def has_owner():
         return True
 
     def check_owner(self, id):
         return self.owner_id == id
-
-    days = db.relationship("MealPlanDayModel", back_populates="mealplan")
 
 
 class MealPlanDayModel(db.Model):
