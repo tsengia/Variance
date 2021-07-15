@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from variance import db
+from variance.extensions import db
 
 
 class UserModel(db.Model):

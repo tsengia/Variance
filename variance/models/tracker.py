@@ -1,5 +1,5 @@
 from datetime import datetime
-from variance import db
+from variance.extensions import db
 
 
 class TrackerModel(db.Model):

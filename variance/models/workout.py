@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from variance import db
-
-# These are sets that have been completed by users
+from variance.extensions import db
 
 
 class SetEntryModel(db.Model):
+    """These are sets that have been completed by users"""
+
     __tablename__ = "SetEntryIndex"
 
     id = db.Column(db.Integer, primary_key=True)

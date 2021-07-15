@@ -1,4 +1,4 @@
-from variance import db
+from variance.extensions import db
 
 
 class GymEquipmentAssociation(db.Model):

@@ -1,4 +1,4 @@
-from variance import db
+from variance.extensions import db
 from variance.models.tracker import TrackerEntryModel
 from sqlalchemy import select
 import logging as logger
