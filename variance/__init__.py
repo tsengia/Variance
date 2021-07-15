@@ -5,7 +5,7 @@ from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_smorest import Api
 
-db = SQLAlchemy()
+from variance.extensions import db
 
 def load_default_settings(app):
     from variance.api.defaults import DefaultSettingsManager
@@ -104,4 +104,3 @@ def create_app(test_config=None):
         load_default_settings(app)
 
     return app
-
