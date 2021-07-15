@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
-from variance import db
+from variance.extensions import db
 from variance.api.auth import check_perms
 from variance.models.unit import UnitModel
 from variance.schemas.unit import UnitSchema

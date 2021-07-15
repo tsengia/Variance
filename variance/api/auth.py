@@ -3,7 +3,7 @@ import jwt
 from flask import g, session, request, current_app
 from flask_smorest import Blueprint, abort
 
-from variance import db
+from variance.extensions import db
 from variance.models.user import UserModel
 from variance.models.permissions import PermissionModel
 from variance.schemas.user import UserSchema
