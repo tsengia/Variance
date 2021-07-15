@@ -1,7 +1,7 @@
 import click
 from flask.cli import AppGroup
 
-from variance import db
+from variance.extensions import db
 from variance.models.muscle import MuscleModel, MuscleGroupModel
 
 muscle_cli = AppGroup("muscle")

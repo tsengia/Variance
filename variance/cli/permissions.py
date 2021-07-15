@@ -1,7 +1,7 @@
 import click
 from flask.cli import AppGroup
 
-from variance import db
+from variance.extensions import db
 from variance.models.permissions import PermissionModel
 
 permissions_cli = AppGroup("perm")

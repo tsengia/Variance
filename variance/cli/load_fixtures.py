@@ -4,7 +4,7 @@ import pathlib
 import click
 from flask.cli import AppGroup
 
-from variance import db
+from variance.extensions import db
 
 lf_cli = AppGroup("load-fixture")
 

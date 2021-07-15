@@ -1,7 +1,7 @@
 import click
 from flask.cli import AppGroup
 
-from variance import db
+from variance.extensions import db
 from variance.models.exercise import ExerciseModel
 
 exercise_cli = AppGroup("exercise")

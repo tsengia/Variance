@@ -3,7 +3,7 @@ from datetime import datetime
 import click
 from flask.cli import AppGroup
 
-from variance import db
+from variance.extensions import db
 from variance.models.user import UserModel
 
 user_cli = AppGroup("user")
