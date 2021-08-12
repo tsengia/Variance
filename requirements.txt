@@ -1,8 +1,8 @@
-python-usda
-flask
-flask-marshmallow
-flask-sqlalchemy
-flask-smorest
-marshmallow-sqlalchemy
-pyjwt
-python-dotenv
+python-usda==0.4.6
+flask==2.0.1
+flask-marshmallow==0.14.0
+flask-sqlalchemy==2.5.1
+flask-smorest==0.32.0
+marshmallow-sqlalchemy==0.26.1
+pyjwt==2.1.0
+python-dotenv=0.19.0
