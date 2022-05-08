@@ -6,19 +6,12 @@ class ExerciseEquipmentAssociation(db.Model):
 
     equipment_id = db.Column(db.Integer, db.ForeignKey(
         "EquipmentIndex.id"), nullable=False, primary_key=True)
-    equipment = db.relationship(
-        "EquipmentModel",
-        foreign_keys="ExerciseEquipmentAssociation.equipment_id")
 
-    exercise_id = db.Column(db.Integer, db.ForeignKey(
-        "ExerciseIndex.id"), nullable=False, primary_key=True)
-    exercise = db.relationship(
-        "ExerciseModel",
-        foreign_keys="ExerciseEquipmentAssociation.exercise_id")
+    exercise_id = db.Column(db.Integer, 
+        db.ForeignKey("ExerciseIndex.id"), nullable=False, primary_key=True)
 
     def __str__(self):
-        return "GymEquipAssoc: %u (%s) -> %u (%s)" % (self.exercise.id,
-                                                      self.exercise.name, self.equipment.id, self.equipment.name)
+        return "GymEquipAssoc: %u  -> %u " % (self.exercise.id, self.equipment.id)
 
 
 class ExerciseModel(db.Model):
@@ -45,7 +38,8 @@ class ExerciseModel(db.Model):
 
     # What pieces of equipment does this exercise use?
     equipment = db.relationship(
-        "EquipmentModel", secondary="ExerciseEquipmentList")
+        "EquipmentModel", 
+        secondary="ExerciseEquipmentList", back_populates="exercises")
 
     # Is this exercise a variation of another exercise, if so, which exercise?
     # (Ex: Close grip bench is a variation of bench press)
