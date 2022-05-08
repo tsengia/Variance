@@ -35,16 +35,16 @@ class RecipeIngredientList(db.Model):
         "ConsumableIndex.id"), nullable=False, primary_key=True)
 
     recipe = db.relationship(
-        "RecipeModel", foreign_keys="RecipeIngredientList.recipe_id")
+        "RecipeModel", foreign_keys="RecipeIngredientList.recipe_id", viewonly=True)
     measure_unit = db.relationship(
         "UnitModel", foreign_keys="RecipeIngredientList.measure_unit_id")
     consumable = db.relationship(
-        "ConsumableModel", foreign_keys="RecipeIngredientList.consumable_id")
+        "ConsumableModel", foreign_keys="RecipeIngredientList.consumable_id", viewonly=True)
 
 
 class RecipeProductsList(db.Model):
     __tablename__ = "RecipeProductsList"
-    # Associates 1 recipie with the multiple/single consumables it produces,
+    # Associates 1 recipe with the multiple/single consumables it produces,
     # along with the number of servings of consumable it produces
     recipe_id = db.Column(db.Integer, db.ForeignKey(
         "RecipeIndex.id"), nullable=False, primary_key=True)
@@ -53,9 +53,11 @@ class RecipeProductsList(db.Model):
         "ConsumableIndex.id"), nullable=False, primary_key=True)
 
     recipe = db.relationship(
-        "RecipeModel", foreign_keys="RecipeProductsList.recipe_id")
+        "RecipeModel", foreign_keys="RecipeProductsList.recipe_id", 
+        viewonly=True)
     product = db.relationship(
-        "ConsumableModel", foreign_keys="RecipeProductsList.consumable_id")
+        "ConsumableModel", foreign_keys="RecipeProductsList.consumable_id",
+        viewonly=True)
 
 
 class NutrientInfoModel(db.Model):
