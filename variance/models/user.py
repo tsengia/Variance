@@ -88,7 +88,7 @@ class UserModel(db.Model):
     body_distance_small_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     body_distance_small_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
+        "UnitModel", foreign_keys="UserModel.body_distance_small_unit_id")
 
     # Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies
