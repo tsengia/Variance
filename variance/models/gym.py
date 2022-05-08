@@ -6,17 +6,12 @@ class GymEquipmentAssociation(db.Model):
 
     equipment_id = db.Column(db.Integer, db.ForeignKey(
         "EquipmentIndex.id"), nullable=False, primary_key=True)
-    equipment = db.relationship(
-        "EquipmentModel", foreign_keys="GymEquipmentAssociation.equipment_id")
 
     gym_id = db.Column(db.Integer, db.ForeignKey(
         "GymIndex.id"), nullable=False, primary_key=True)
-    gym = db.relationship(
-        "GymModel", foreign_keys="GymEquipmentAssociation.gym_id")
 
     def __str__(self):
-        return "GymEquipAssoc: %u (%s) -> %u (%s)" % (self.gym.id,
-                                                      self.gym.name, self.equipment.id, self.equipment.name)
+        return "GymEquipAssoc (GymID -> EquipID): %u -> %u " % (self.gym.id, self.equipment.id)
 
 
 class GymModel(db.Model):
