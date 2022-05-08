@@ -18,6 +18,12 @@ To initialize the database:
 To add in the default units:
 `flask add-default-units`
 
+# Developing
+First, `git clone` the repo and `cd` into it.  
+Next, create a virtual environment: `python3 -m venv env`   
+Then activate the virtual environment: `./env/Scripts/activate`  
+Now install the dependencies: `pip install -r requirements_dev.txt`  
+
 # Testing
 Because Variance is a flask web API, it uses both unit testing and functional testing to verify that it works.  
 To run the test suite, `cd` into the toplevel directory and run:  
