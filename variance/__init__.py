@@ -45,13 +45,6 @@ def load_cli(app):
     app.cli.add_command(cli.exercise.exercise_cli)
     app.cli.add_command(cli.unit.unit_cli)
     app.cli.add_command(cli.load_fixtures.lf_cli)
-    """
-    app.cli.add_command(cli.fixtures.fixtures_cli)
-    app.cli.add_command(cli.units.units_cli)
-
-    app.cli.add_command(cli.equipment.equipment_cli)
-    app.cli.add_command(cli.muscles.muscles_cli)
-    """
 
     logging.info("Variance CLI loaded.")
 
