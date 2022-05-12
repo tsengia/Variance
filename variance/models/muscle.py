@@ -46,6 +46,9 @@ class MuscleModel(db.Model):
     # Optional: ID of this muscle used to locate on the anatomy chart
     diagram_id = db.Column(db.Integer, nullable=True)
 
+    # Canonical name used when exporting and importing/linking data.
+    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+    
     # Long, anatomical name for this muscle
     name = db.Column(db.String(100), unique=True, nullable=False)
 

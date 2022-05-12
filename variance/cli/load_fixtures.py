@@ -46,7 +46,9 @@ def cli_fixture_load_exercises():
     from variance.models.exercise import ExerciseModel
 
     for e in DEFAULT_EXERCISES:
-        m = ExerciseModel(name=e[0],
+        cname = e[0].lower().replace(" ","-")
+        m = ExerciseModel(canonical_name=cname,
+                          name=e[0],
                           description=e[1],
                           use_duration=(e[2] == "duration"),
                           use_distance=(e[2] == "distance"),
@@ -238,7 +240,8 @@ def cli_fixture_load_muscles():
     from variance.models.muscle import MuscleModel, MuscleGroupModel
 
     for e in DEFAULT_MUSCLE_GROUPS:
-        m = MuscleGroupModel(name=e[0], description=e[1])
+        cname = e[0].lower().replace(" ","-")
+        m = MuscleGroupModel(canonical_name=cname, name=e[0], description=e[1])
         db.session.add(m)
         db.session.commit()
 
@@ -246,7 +249,8 @@ def cli_fixture_load_muscles():
         short_name = e[1]
         if len(short_name) == 0:
             short_name = e[0]
-        m = MuscleModel(name=e[0], short_name=short_name, diagram_id=e[3])
+        cname = e[0].lower().replace(" ","-")
+        m = MuscleModel(canonical_name=cname, name=e[0], short_name=short_name, diagram_id=e[3])
         db.session.add(m)
         for g in e[2]:
             m.groups.append(MuscleGroupModel.query.get(g))
