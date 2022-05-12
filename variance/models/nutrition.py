@@ -208,6 +208,11 @@ class ConsumableModel(db.Model):
     is_public = db.Column(db.Boolean, nullable=False, default=False)
 
     # Nutritional Info
+    serving_size_value = db.Column(db.Float, nullable=False)
+    serving_size_unit_id = db.Column(db.Integer, db.ForeignKey(
+        "UnitIndex.id"), nullable=False)
+    serving_size_unit = db.relationship("UnitModel")
+
     # Amount of calories (kcal) in 1 serving of this consumable
     calories = db.Column(db.Float, nullable=False, default=0)
 
