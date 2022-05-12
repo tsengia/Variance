@@ -3,7 +3,7 @@ import shutil
 import logging
 from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
-from flask_smorest import Api
+from flask_smorest import Api, Blueprint
 
 from variance.extensions import db
 
@@ -48,18 +48,20 @@ def load_cli(app):
 
     logging.info("Variance CLI loaded.")
 
-def load_api(app):
-    @app.route("/api/apiversion")
+def load_api(rest_api):
+    version_bp = Blueprint("version", "version", url_prefix="/", description="Provides versioning information about the app.")
+
+    @version_bp.route("/api/apiversion")
     def api_verison():
         return {"apiversion": "0.1"}
 
-    @app.route("/api/version")
+    @version_bp.route("/api/version")
     def version():
         return {"version": "0.0.1 alpha"}
     
     from variance import api
-    app.register_blueprint(api.auth.bp, url_prefix="/api/auth")
-    app.register_blueprint(api.units.bp, url_prefix="/api/units")
+    rest_api.register_blueprint(api.auth.bp, url_prefix="/api/auth")
+    rest_api.register_blueprint(api.units.bp, url_prefix="/api/units")
 
     logging.info("Variance API blueprints loaded.")
 
@@ -86,7 +88,7 @@ def create_app(test_config=None):
 
     load_cli(app)
 
-    load_api(app)
+    load_api(rest_api)
 
     db.init_app(app)
 

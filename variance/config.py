@@ -14,7 +14,7 @@ class Config():
     API_TITLE = "VarianceAPI"
     API_VERSION = "v1"
     OPENAPI_VERSION = "3.0"
-
+    OPENAPI_JSON_PATH = "variance-openapi.json"
 
 class ProdConfig(Config):
     SECRET_KEY = e.get("SECRET_KEY")
