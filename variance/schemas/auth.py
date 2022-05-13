@@ -1,18 +1,9 @@
 from marshmallow import fields, Schema, ValidationError
+from variance.schemas.user import username_regex
 
 class TokenAuthSchema(Schema):
     token = fields.String()
 
-def validate_usename(username):
-    """
-    This helper function simply checks that the username meets all legal username critera.
-    Does NOT check to see if the username is registered.
-    """
-    
-    if len(username) < 4 || len(username) > 20:
-        return False
-
-    return True
 
 class RegisterSchema(Schema):
     username = fields.String(required=True)
@@ -22,13 +13,26 @@ class RegisterSchema(Schema):
     @validates("username")
     def validate_new_username(self, value):
         # Make sure there are no illegal characters, meets length requirements, and is unique.
-        pass
+        if not username_regex.match(value):
+            raise ValidationError("Username must be between 3 and 21 characters and can only contain alphanumeric values!")
 
     @validates("password")
     def validate_new_password(self, value):
-        # Make sure it meets all password strength requirements.
-        pass
+        if len(value) < 8:
+            raise ValidationError("Password must be at least 8 characters long!")
+
 
 class LoginSchema(Schema):
     username = fields.String(required=True)
     password = fields.String(required=True)
+
+    @validates("username")
+    def validate_username(self, value):
+        # By double checking that the username is legal, we save ourselves a hit to the database.
+        if not username_regex.match(value):
+            raise ValidationError("Username must be between 3 and 21 characters and can only contain alphanumeric values!")
+
+    @validates("password")
+        # By checking the length of the password, we save ourselve a hit to the database.
+        if len(password) < 8:
+            raise ValidationError("Password must be at least 8 characters long!")
