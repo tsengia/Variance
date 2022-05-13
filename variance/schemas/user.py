@@ -5,7 +5,7 @@ import re
 # Regex used to check if a username is legal or not.
 # Usernames can contain any lower or uppercase letters and numbers.
 # Usernames must be between 3 and 21 charecters long.
-username_regex = re.compile("[a-zA-Z0-9]{3,21}")
+username_regex = re.compile("^[a-zA-Z0-9]{3,21}$")
 
 class PublicProfileSchema(Schema):
     """
