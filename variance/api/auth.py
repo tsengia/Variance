@@ -6,15 +6,13 @@ from flask_smorest import Blueprint, abort
 from variance.extensions import db
 from variance.models.user import UserModel
 from variance.models.permissions import PermissionModel
-from variance.schemas.user import UserSchema
+from variance.schemas.auth import RegisterSchema, LoginSchema
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Create new user
 @bp.route("/register", methods=["POST"])
-@bp.arguments(UserSchema(only=("username", "password",
-              "birthdate")), location="form")
-@bp.response(201, UserSchema(only=("id",)))
+@bp.arguments(RegisterSchema, location="form")
 def register(new_user):
     if UserModel.query.filter_by(
             username=new_user["username"]).first() is not None:
@@ -25,11 +23,11 @@ def register(new_user):
     current_app.defaults_manager.populate_user_with_defaults(u)
     db.session.add(u)
     db.session.commit()
-    return u
+    return {"id": u.id}, 201
 
 # User login via JWT
 @bp.route("/token", methods=["POST"])
-@bp.arguments(UserSchema(only=("username", "password")), location="form")
+@bp.arguments(LoginSchema, location="form")
 def get_token(req_user):
     u = UserModel.query.filter_by(username=req_user["username"]).first()
     if u is None:
@@ -42,7 +40,7 @@ def get_token(req_user):
 
 # User login via session
 @bp.route("/login", methods=["POST"])
-@bp.arguments(UserSchema(only=("username", "password")), location="form")
+@bp.arguments(LoginSchema, location="form")
 def login(req_user):
     u = UserModel.query.filter_by(username=req_user["username"]).first()
     if u is None:
@@ -58,7 +56,6 @@ def login(req_user):
 def logout():
     session.clear()
     return {"message": "Logged out."}
-
 
 @bp.before_app_request
 def load_logged_in_user():

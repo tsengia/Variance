@@ -1,4 +1,4 @@
-from marshmallow import fields, Schema, ValidationError
+from marshmallow import fields, Schema, ValidationError, validates
 from variance.schemas.user import username_regex
 
 class TokenAuthSchema(Schema):
@@ -33,6 +33,7 @@ class LoginSchema(Schema):
             raise ValidationError("Username must be between 3 and 21 characters and can only contain alphanumeric values!")
 
     @validates("password")
+    def validate_password(self, value):
         # By checking the length of the password, we save ourselve a hit to the database.
-        if len(password) < 8:
+        if len(value) < 8:
             raise ValidationError("Password must be at least 8 characters long!")
