@@ -1,5 +1,5 @@
 from marshmallow import Schema, validates, ValidationError, fields
-
+from flask_smorest import abort
 
 def validate_unique(value, field_name, model, errmsg):
     """
@@ -9,10 +9,9 @@ def validate_unique(value, field_name, model, errmsg):
     """
     def validate_unique_inner(view):
         def validate_unique_wrapped(*args, **kwargs):
-            unique = False
-            # TODO: Perform a query on the model to check if the field is unique.
+            unique = not model.query.filter(model[field_name] == value[field_name]).exists()
             if not unique:
-                abort(400, message={"error":errmsg})
+                abort(400, message=errmsg)
 
             return view(*args, **kwargs)
         return validate_unique_wrapped
