@@ -14,6 +14,6 @@ def validate_unique(value, field_name, model, errmsg):
             if not unique:
                 abort(400, message={"error":errmsg})
 
-            return view(*args, **kwargs
+            return view(*args, **kwargs)
         return validate_unique_wrapped
     return validate_unique_inner
