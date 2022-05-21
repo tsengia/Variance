@@ -16,8 +16,8 @@ class UnitList(MethodView):
     @bp.arguments(UnitSchema(only=("name", "dimension",
                   "abbreviation")), location="form", unknown=EXCLUDE)
     @bp.response(201, UnitSchema(only=("id",)))
-    @check_perms("unit.new", False)
     def post(self, new_unit):  # Create a new unit
+        check_perms("unit.new", False)
         if UnitModel.query.filter_by(
                 name=new_unit["name"]).first() is not None:
             abort(409, message="A unit with that name already exists!")
@@ -30,8 +30,8 @@ class UnitList(MethodView):
     @bp.arguments(UnitSchema(only=("dimension",), partial=("dimension",)),
                   location="query", required=False, unknown=EXCLUDE)
     @bp.response(200, UnitSchema(many=True))
-    @check_perms("unit.view", False)
     def get(self, search_args, unit_args):  # List all units
+        check_perms("unit.view", False)
         if "dimension" not in unit_args:
             result = UnitModel.query.limit(search_args["count"]).offset(
                 search_args["offset"]).all()
@@ -49,10 +49,10 @@ class Unit(MethodView):
 
     @bp.arguments(UnitSchema(partial=("name", "dimension", "abbreviation",
                   "multiplier"), exclude=("id",)), location="form", unknown=EXCLUDE)
-    @check_perms("unit.update", False)
     def post(self, update, unit_id):  # Update a unit
         u = UnitModel.query.get_or_404(unit_id)
-
+        check_perms("unit.update", u)
+        
         if "name" in update and update["name"] != u.name:
             if UnitModel.query.filter_by(name=update["name"]).count() != 0:
                 abort(409, "A unit with that name already exists!")
@@ -64,9 +64,9 @@ class Unit(MethodView):
 
         return {"status": "Unit updated."}, 200
 
-    @check_perms("unit.delete", False)
     def delete(self, unit_id):  # Delete a unit
         u = UnitModel.query.get_or_404(unit_id)
+        check_perms("unit.delete", u)
 
         db.session.delete(u)
         db.session.commit()
@@ -74,7 +74,7 @@ class Unit(MethodView):
         return {"status": "Unit deleted."}, 200
 
     @bp.response(200, UnitSchema)
-    @check_perms("unit.view", False)
     def get(self, unit_id):  # Display a unit
         u = UnitModel.query.get_or_404(unit_id)
+        check_perms("unit.view", u)
         return u

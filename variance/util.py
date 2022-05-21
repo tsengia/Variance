@@ -27,20 +27,12 @@ def _check_perms(action, user, model):
 
 
 def check_perms(action, model):
-    def inner_wrap(view):
-        def wrapped_view(*args, **kwargs):
-            allowed = False
-            if not g.user:
-                allowed = _check_perms(action, False, model)
-            else:
-                allowed = _check_perms(action, g.user, model)
+    allowed = False
+    if not g.user:
+        allowed = _check_perms(action, False, model)
+    else:
+        allowed = _check_perms(action, g.user, model)
 
-            if not allowed:
-                # TODO: Log an error
-                abort(
-                    401, message={
-                        "error": "You do not have permission to perform this action!"})
-
-            return view(*args, **kwargs)
-        return wrapped_view
-    return inner_wrap
+    if not allowed:
+        # TODO: Log an error
+        abort(401, message={"error": "You do not have permission to perform this action!"})
