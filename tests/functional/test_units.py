@@ -79,7 +79,7 @@ def test_new_unit(app_with_defaults, user_token, admin_token):
         r = client.get("/api/units/400")
         assert r.status_code == 404
 
-        # Attempt an upate without logging in
+        # Attempt an update without logging in
         r = client.post("/api/units/" + test_unit_2_id, data={"name": "Renamed unit"})
         assert r.status_code == 401
 
