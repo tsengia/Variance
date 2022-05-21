@@ -65,8 +65,10 @@ class PermissionModel(db.Model):
                 if model:  # If the model has not been loaded yet then we cannot check for an owner
                     if model.has_owner() and model.check_owner(user.id):
                         return True
-                # TODO: Make a log somewhere to notify dev that we attempted to
-                # check owner of a None model
+                else:
+                    logging.warning("Attempted to check ownership of a model for perms rule " + str(self))
+                    # TODO: Make a log somewhere to notify dev that we attempted to
+                    # check owner of a None model
 
         if self.check_public is not None:
             if model:  # If the model has not been loaded yet then we cannot check for an owner
