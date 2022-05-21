@@ -14,11 +14,8 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 # Create new user
 @bp.route("/register", methods=["POST"])
 @bp.arguments(RegisterSchema, location="form")
-@validate_unique(request.form.get("username"), "username", UserModel, "A user with that username already exists!")
 def register(new_user):
-    #if UserModel.query.filter_by(
-    #        username=new_user["username"]).first() is not None:
-    #    abort(409, message="A user with that username already exists!")
+    validate_unique(new_user["username"], UserModel, UserModel.username, "A user with that username already exists!")
     u = UserModel(username=new_user["username"],
                   birthdate=new_user["birthdate"])
     u.set_password(new_user["password"])
