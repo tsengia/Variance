@@ -112,7 +112,11 @@ def test_new_unit(app_with_defaults, user_token, admin_token):
         r = client.delete("/api/units/" + test_unit_2_id)
         assert r.status_code == 401
 
-        # Delete while logged in
+        # Delete while logged in as user
+        r = client.delete("/api/units/" + test_unit_2_id, data={"token": user_token})
+        assert r.status_code == 401
+        
+        # Delete while logged in as admin
         r = client.delete("/api/units/" + test_unit_2_id, data={"token": admin_token})
         assert r.status_code == 200
 
