@@ -4,6 +4,7 @@ import click
 from flask.cli import AppGroup
 
 from variance.extensions import db
+from variance.models.unit import UnitModel
 
 export_cli = AppGroup("export")
 
@@ -11,12 +12,6 @@ export_cli = AppGroup("export")
 def cli_export_list():
     click.echo("Not implemented yet.")
     return
-    u_list = UnitModel.query.all()
-    if u_list is None:
-        click.echo("Unit list is empty!")
-        return -1
-    for u in u_list:
-        click.echo(str(u))
 
 @export_cli.command("units")
 def cli_export_list():
