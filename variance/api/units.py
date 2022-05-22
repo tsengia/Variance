@@ -4,7 +4,8 @@ from flask_smorest import Blueprint, abort
 from variance.extensions import db
 from variance.util import check_perms, validate_unique
 from variance.models.unit import UnitModel
-from variance.schemas.unit import UnitSchema
+from variance.schemas.util import StatusSchema
+from variance.schemas.unit import UnitSchema, UnitIDSchema
 from variance.schemas.search import SearchSchema
 from marshmallow import EXCLUDE
 
@@ -13,9 +14,8 @@ bp = Blueprint('units', __name__, url_prefix='/units')
 
 @bp.route("/")
 class UnitList(MethodView):
-    @bp.arguments(UnitSchema(only=("name", "dimension",
-                  "abbreviation")), location="form", unknown=EXCLUDE)
-    @bp.response(201, UnitSchema(only=("id",)))
+    @bp.arguments(UnitSchema(), location="form", unknown=EXCLUDE)
+    @bp.response(201, UnitIDSchema())
     def post(self, new_unit):  # Create a new unit
         check_perms("unit.new", False)
         if UnitModel.query.filter_by(
@@ -47,8 +47,7 @@ class UnitList(MethodView):
 @bp.route("/<int:unit_id>")
 class Unit(MethodView):
 
-    @bp.arguments(UnitSchema(partial=("name", "dimension", "abbreviation",
-                  "multiplier"), exclude=("id",)), location="form", unknown=EXCLUDE)
+    @bp.arguments(UnitSchema(partial=True), location="form", unknown=EXCLUDE)
     def post(self, update, unit_id):  # Update a unit
         u = UnitModel.query.get_or_404(unit_id)
         check_perms("unit.update", u)
