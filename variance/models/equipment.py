@@ -6,6 +6,9 @@ class EquipmentModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    # Name of this piece of equipment. Example: "example-equipment"
+    canonical_name = db.Column(db.String(40), unique=True, nullable=False)
+
     # Name of this piece of equipment. Example: "Dumbbells"
     name = db.Column(db.String(40), unique=True, nullable=False)
 

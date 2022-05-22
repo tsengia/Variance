@@ -33,7 +33,7 @@ def cli_fixture_load_equipment():
     from variance.models.equipment import EquipmentModel
 
     for e in DEFAULT_EQUIPMENT:
-        m = EquipmentModel(name=e[0], description=e[1])
+        m = EquipmentModel(name=e[0], canonical_name=e[0].lower().replace(" ","-"), description=e[1])
         db.session.add(m)
         db.session.commit()
     click.echo("Default equipment added.")
