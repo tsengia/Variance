@@ -6,4 +6,6 @@ from . import equipment
 from . import gym
 from . import muscle
 from . import exercise
+from . import nutrient
+from . import consumable
 from . import load_fixtures

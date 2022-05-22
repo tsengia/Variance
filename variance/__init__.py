@@ -45,6 +45,7 @@ def load_cli(app):
     app.cli.add_command(cli.exercise.exercise_cli)
     app.cli.add_command(cli.unit.unit_cli)
     app.cli.add_command(cli.nutrient.nutrient_cli)
+    app.cli.add_command(cli.consumable.consumable_cli)
     app.cli.add_command(cli.load_fixtures.lf_cli)
 
     logging.info("Variance CLI loaded.")
