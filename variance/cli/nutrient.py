@@ -13,7 +13,7 @@ nutrient_cli.add_command(nutrient_mod_cli)
 def cli_nutrient_list():
     n_list = NutrientInfoModel.query.all()
     if n_list is None:
-        click.echo("Unit list is empty!")
+        click.echo("NutrientInfo list is empty!")
         return -1
     for n in n_list:
         click.echo(str(n))
