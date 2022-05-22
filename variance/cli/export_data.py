@@ -10,6 +10,8 @@ from variance.schemas.unit import UnitSchema
 from variance.models.muscle import MuscleModel
 from variance.schemas.muscle import MuscleSchema
 
+from variance.models.nutrition import NutrientInfoModel, ConsumableModel, RecipeModel
+from variance.schemas.nutrition import NutrientInfoSchema, ConsumableSchema, RecipeSchema
 
 export_cli = AppGroup("export")
 
@@ -51,3 +53,19 @@ def cli_export_list():
         muscle_file = muscle_export_dir / (cname + ".json")
         muscle_file.write_text(str(muscle_dump_schema.dump(m)))
 
+
+@export_cli.command("nutrients")
+def cli_export_list():
+    n_list = NutrientInfoModel.query.all()
+    if n_list is None:
+        click.echo("NutrientInfo list is empty!")
+        return -1
+    export_dir = Path("exported")
+    export_dir.mkdir(exist_ok=True)
+    nutrient_export_dir = export_dir / "nutrients"
+    nutrient_export_dir.mkdir()
+    nutrient_dump_schema = NutrientInfoSchema(exclude=("id",))
+    for n in n_list:
+        cname = n.canonical_name
+        nutrient_file = nutrient_export_dir / (cname + ".json")
+        nutrient_file.write_text(str(nutrient_dump_schema.dump(n)))
