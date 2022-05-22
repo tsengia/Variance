@@ -5,6 +5,10 @@ class UnitModel(db.Model):
     __tablename__ = "UnitIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+
+    # canonical name, used for linking and export. Example: "meters"
+    canonical_name = db.Column(db.String(40), unique=True, nullable=False)
+
     # Long name, plural form of this unit. Example: "meters"
     name = db.Column(db.String(40), unique=True, nullable=False)
 
