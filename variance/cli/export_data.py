@@ -5,6 +5,7 @@ from flask.cli import AppGroup
 
 from variance.extensions import db
 from variance.models.unit import UnitModel
+from variance.schemas.unit import UnitSchema
 
 export_cli = AppGroup("export")
 
@@ -22,9 +23,11 @@ def cli_export_list():
     export_dir = Path("exported")
     unit_export_dir = export_dir / "units"
     unit_export_dir.mkdir(parents=True)
+    unit_dump_schema = UnitSchema(exclude=("id",))
     for u in u_list:
         cname = u.canonical_name
-        click.echo(str(cname))
+        unit_file = unit_export_dir / (cname + ".json")
+        unit_file.write_text(str(unit_dump_schema.dump(u)))
 
 #@export_cli.command("view")
 #@click.argument("id")
