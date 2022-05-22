@@ -121,6 +121,7 @@ def cli_fixture_load_nutrients():
     for e in DEFAULT_NUTRIENTS:
         n = NutrientInfoModel(
             name=e[0],
+            canonical_name=e[0].lower().replace(" ","-"),
             scientific_name=e[1],
             abbreviation=e[2],
             description=e[3],
