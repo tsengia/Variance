@@ -15,7 +15,7 @@ def fixture_load_units():
     # By default all fixture units are not removable. Aka they are not created
     # by a user
     for u in DEFAULT_UNITS:
-        m = UnitModel(multiplier=u[0], name=u[1][-1], canonical_name=u[1][-1].lower().replace(" ","-"),
+        m = UnitModel(multiplier=u[0], name=u[1][-1], canonical_name=u[1][-1].lower().replace("/"," per ").replace(" ","-"),
                       dimension=u[2], abbreviation=u[1][0], removable=False)
         db.session.add(m)
         db.session.commit()
