@@ -48,6 +48,7 @@ class UnitList(MethodView):
 class Unit(MethodView):
 
     @bp.arguments(UnitSchema(partial=True), location="form", unknown=EXCLUDE)
+    @bp.response(200, StatusSchema)
     def post(self, update, unit_id):  # Update a unit
         u = UnitModel.query.get_or_404(unit_id)
         check_perms("unit.update", u)
@@ -61,8 +62,9 @@ class Unit(MethodView):
 
         db.session.commit()
 
-        return {"status": "Unit updated."}, 200
+        return "Unit updated."
 
+    @bp.response(200, StatusSchema)
     def delete(self, unit_id):  # Delete a unit
         u = UnitModel.query.get_or_404(unit_id)
         check_perms("unit.delete", u)
@@ -70,7 +72,7 @@ class Unit(MethodView):
         db.session.delete(u)
         db.session.commit()
 
-        return {"status": "Unit deleted."}, 200
+        return "Unit deleted."
 
     @bp.response(200, UnitSchema)
     def get(self, unit_id):  # Display a unit
