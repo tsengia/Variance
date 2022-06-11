@@ -27,3 +27,10 @@ def cli_unit_view(id):
         click.echo("Could not find an unit with that ID!")
         return -1
     click.echo(str(u))
+
+def count_units():
+    return UnitModel.query.count()
+
+@unit_cli.command("count")
+def cli_unit_count():
+    click.echo("There are {i} units in the database.".format(i=count_units()))
