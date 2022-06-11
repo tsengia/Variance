@@ -1,9 +1,10 @@
+from pathlib import Path
 import click
 from flask.cli import AppGroup
 
 from variance.extensions import db
 from variance.models.equipment import EquipmentModel
-from variance.schemas.equipment import ExerciseSchema
+from variance.schemas.equipment import EquipmentSchema
 
 equipment_cli = AppGroup("equipment")
 equipment_mod_cli = AppGroup("mod")
