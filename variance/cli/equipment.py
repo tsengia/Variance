@@ -3,11 +3,11 @@ from flask.cli import AppGroup
 
 from variance.extensions import db
 from variance.models.equipment import EquipmentModel
+from variance.schemas.equipment import ExerciseSchema
 
 equipment_cli = AppGroup("equipment")
 equipment_mod_cli = AppGroup("mod")
 equipment_cli.add_command(equipment_mod_cli)
-
 
 @equipment_cli.command("get")
 @click.argument("name")
@@ -54,3 +54,20 @@ def cli_user_del(equipment_id):
     db.session.delete(u)
     db.session.commit()
     click.echo("Equipment %u (%s) deleted." % (equipment_id, name))
+
+
+@equipment_cli.command("export")
+def cli_equipment_export():
+    e_list = EquipmentModel.query.all()
+    if e_list is None:
+        click.echo("Equipment list is empty!")
+        return -1
+    export_dir = Path("exported")
+    export_dir.mkdir(exist_ok=True)
+    equipment_export_dir = export_dir / "equipment"
+    equipment_export_dir.mkdir()
+    equipment_dump_schema = EquipmentSchema(exclude=("id",))
+    for e in e_list:
+        cname = e.canonical_name
+        equipment_file = equipment_export_dir / (cname + ".json")
+        equipment_file.write_text(equipment_dump_schema.dumps(e))

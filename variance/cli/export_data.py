@@ -13,6 +13,12 @@ from variance.schemas.muscle import MuscleSchema
 from variance.models.nutrition import NutrientInfoModel, ConsumableModel, RecipeModel
 from variance.schemas.nutrition import NutrientInfoSchema, ConsumableSchema, RecipeSchema
 
+from variance.models.equipment import EquipmentModel
+from variance.schemas.equipment import EquipmentSchema
+
+from variance.models.exercise import ExerciseModel
+from variance.schemas.exercise import ExerciseSchema
+
 export_cli = AppGroup("export")
 
 @export_cli.command("all")
@@ -34,8 +40,7 @@ def cli_export_list():
     for u in u_list:
         cname = u.canonical_name
         unit_file = unit_export_dir / (cname + ".json")
-        unit_file.write_text(str(unit_dump_schema.dump(u)))
-
+        unit_file.write_text(unit_dump_schema.dumps(u))
 
 @export_cli.command("muscles")
 def cli_export_list():
@@ -51,8 +56,7 @@ def cli_export_list():
     for m in m_list:
         cname = m.canonical_name
         muscle_file = muscle_export_dir / (cname + ".json")
-        muscle_file.write_text(str(muscle_dump_schema.dump(m)))
-
+        muscle_file.write_text(muscle_dump_schema.dumps(m))
 
 @export_cli.command("nutrients")
 def cli_export_list():
@@ -68,4 +72,20 @@ def cli_export_list():
     for n in n_list:
         cname = n.canonical_name
         nutrient_file = nutrient_export_dir / (cname + ".json")
-        nutrient_file.write_text(str(nutrient_dump_schema.dump(n)))
+        nutrient_file.write_text(nutrient_dump_schema.dumps(n))
+
+@export_cli.command("exercises")
+def cli_export_list():
+    e_list = ExerciseModel.query.all()
+    if e_list is None:
+        click.echo("Exercise list is empty!")
+        return -1
+    export_dir = Path("exported")
+    export_dir.mkdir(exist_ok=True)
+    exercise_export_dir = export_dir / "exercises"
+    exercise_export_dir.mkdir()
+    exercise_dump_schema = ExerciseSchema(exclude=("id",))
+    for e in e_list:
+        cname = e.canonical_name
+        exercise_file = exercise_export_dir / (cname + ".json")
+        exercise_file.write_text(exercise_dump_schema.dumps(e))

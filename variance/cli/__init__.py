@@ -10,3 +10,4 @@ from . import nutrient
 from . import consumable
 from . import load_fixtures
 from . import export_data
+from . import import_data 
