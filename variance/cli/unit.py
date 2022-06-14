@@ -52,3 +52,22 @@ def cli_unit_export():
         cname = u.canonical_name
         unit_file = unit_export_dir / (cname + ".json")
         unit_file.write_text(unit_dump_schema.dumps(u))
+
+
+@unit_cli.command("import")
+def cli_unit_import():
+    click.echo("Importing units")
+    import_dir = Path("imported")
+    unit_import_dir = import_dir / "units"
+    unit_load_schema = UnitSchema(exclude=("id",))
+    i = 0
+    for j in unit_import_dir.glob("*.json"):
+        data, errors = unit_load_schema.loads(j.read_text())
+        if errors:
+            click.echo("ERROR")
+        u = UnitModel(data)
+        db.session.add(u)
+        i += 1
+    
+    db.session.commit()
+    click.echo("Imported {i} units.".format(i=count))
