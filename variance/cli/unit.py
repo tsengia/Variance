@@ -5,6 +5,7 @@ from flask.cli import AppGroup
 from variance.extensions import db
 from variance.models.unit import UnitModel
 from variance.schemas.unit import UnitSchema
+from variance.common.json_export import export_models
 
 unit_cli = AppGroup("unit")
 unit_mod_cli = AppGroup("mod")
@@ -39,20 +40,12 @@ def cli_unit_count():
 
 @unit_cli.command("export")
 def cli_unit_export():
-    u_list = UnitModel.query.all()
-    if u_list is None:
-        click.echo("Unit list is empty!")
-        return -1
     export_dir = Path("exported")
     export_dir.mkdir(exist_ok=True)
     unit_export_dir = export_dir / "units"
-    unit_export_dir.mkdir()
-    unit_dump_schema = UnitSchema(exclude=("id",))
-    for u in u_list:
-        cname = u.canonical_name
-        unit_file = unit_export_dir / (cname + ".json")
-        unit_file.write_text(unit_dump_schema.dumps(u))
-
+    unit_export_dir.mkdir(exist_ok=True)
+    count = export_models(UnitModel, UnitSchema, unit_export_dir)
+    click.echo("Exported {i} UnitModels.".format(i=count))
 
 @unit_cli.command("import")
 def cli_unit_import():
