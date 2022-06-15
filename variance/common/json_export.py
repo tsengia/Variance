@@ -8,11 +8,11 @@ def export_models(ModelType, ModelSchema, export_path, exclude=("id",)):
     
     Returns a integer representing the number of models exported.
     """
-    model_list = ModelTyle.query.all()
+    model_list = ModelType.query.all()
     dump_schema = ModelSchema(exclude=exclude)
     for m in model_list:
         cname = m.canonical_name
-        f = location / (cname + ".json")
+        f = export_path / (cname + ".json")
         f.write_text(dump_schema.dumps(m))
 
     return len(model_list)
