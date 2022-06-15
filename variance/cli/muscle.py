@@ -7,6 +7,7 @@ from variance.models.muscle import MuscleModel, MuscleGroupModel
 from variance.schemas.muscle import MuscleSchema
 
 from variance.common.json_export import export_models
+from variance.common.json_import import import_models
 
 muscle_cli = AppGroup("muscle")
 muscle_group_cli = AppGroup("group")
@@ -52,4 +53,13 @@ def cli_muscle_export():
     export_dir.mkdir(exist_ok=True)
     muscle_export_dir = export_dir / "muscles"
     muscle_export_dir.mkdir(exist_ok=True)
-    export_models(MuscleModel, MuscleSchema, muscle_export_dir)
+    count = export_models(MuscleModel, MuscleSchema, muscle_export_dir)
+    click.echo("Exported {i} MuscleModels.".format(i=count))
+
+@muscle_cli.command("import")
+def cli_muscle_import():
+    click.echo("Importing muscles...")
+    import_dir = Path("imported")
+    muscle_import_dir = import_dir / "muscles"
+    count = import_models(MuscleModel, MuscleSchema, muscle_import_dir, db.session)
+    click.echo("Imported {i} MuscleModels.".format(i=count))
