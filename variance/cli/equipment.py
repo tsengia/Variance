@@ -7,6 +7,7 @@ from variance.models.equipment import EquipmentModel
 from variance.schemas.equipment import EquipmentSchema
 
 from variance.common.json_export import export_models
+from variance.common.json_import import import_models
 
 equipment_cli = AppGroup("equipment")
 equipment_mod_cli = AppGroup("mod")
@@ -65,4 +66,14 @@ def cli_equipment_export():
     export_dir.mkdir(exist_ok=True)
     equipment_export_dir = export_dir / "equipment"
     equipment_export_dir.mkdir(exist_ok=True)
-    export_models(EquipmentModel, EquipmentSchema, equipment_export_dir)
+    count = export_models(EquipmentModel, EquipmentSchema,\
+        equipment_export_dir)
+    click.echo("Exported {i} EquipmentModels.".format(i=count))
+
+@equipment_cli.command("import")
+def cli_equipment_import():
+    import_dir = Path("imported")
+    equipment_import_dir = import_dir / "equipment"
+    count = import_models(EquipmentModel, EquipmentSchema,\
+        equipment_import_dir, db.session)
+    click.echo("Imported {i} EquipmentModels.".format(i=count))
