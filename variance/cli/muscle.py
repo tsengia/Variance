@@ -6,6 +6,8 @@ from variance.extensions import db
 from variance.models.muscle import MuscleModel, MuscleGroupModel
 from variance.schemas.muscle import MuscleSchema
 
+from variance.common.json_export import export_models
+
 muscle_cli = AppGroup("muscle")
 muscle_group_cli = AppGroup("group")
 muscle_mod_cli = AppGroup("mod")
@@ -46,16 +48,8 @@ def cli_muscle_group_view(id):
 
 @muscle_cli.command("export")
 def cli_muscle_export():
-    m_list = MuscleModel.query.all()
-    if m_list is None:
-        click.echo("Muscle list is empty!")
-        return -1
     export_dir = Path("exported")
     export_dir.mkdir(exist_ok=True)
     muscle_export_dir = export_dir / "muscles"
-    muscle_export_dir.mkdir()
-    muscle_dump_schema = MuscleSchema(exclude=("id",))
-    for m in m_list:
-        cname = m.canonical_name
-        muscle_file = muscle_export_dir / (cname + ".json")
-        muscle_file.write_text(muscle_dump_schema.dumps(m))
+    muscle_export_dir.mkdir(exist_ok=True)
+    export_models(MuscleModel, MuscleSchema, muscle_export_dir)
