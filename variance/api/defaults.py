@@ -1,8 +1,6 @@
 import json
 import pathlib
 
-from flask import current_app
-
 from variance.models.unit import UnitModel
 
 class DefaultSettingsManager:
