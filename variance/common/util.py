@@ -1,6 +1,6 @@
 from flask_smorest import abort
 
-def canonize(str: name):
+def canonize(name: str) -> str:
     """
     Helper function that transforms a display name into a canonical name.
     """

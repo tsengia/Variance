@@ -17,11 +17,11 @@ def fixture_load_units():
     # by a user
     for u in DEFAULT_UNITS:
         m = UnitModel(multiplier=u[0], name=u[1][-1],\
-                canonical_name=canonize(u[1][-1],\
+                canonical_name=canonize(u[1][-1]),\
                 dimension=u[2], abbreviation=u[1][0],\
                 removable=False)
         db.session.add(m)
-        db.session.commit()
+    db.session.commit()
 
 @lf_cli.command("units")
 def cli_fixture_load_units():
@@ -40,7 +40,7 @@ def cli_fixture_load_equipment():
             canonical_name=canonize(e[0]),\
             description=e[1])
         db.session.add(m)
-        db.session.commit()
+    db.session.commit()
     click.echo("Default equipment added.")
 
 
@@ -59,7 +59,7 @@ def cli_fixture_load_exercises():
                           use_distance=(e[2] == "distance"),
                           use_weight=(e[2] == "weight"))
         db.session.add(m)
-        db.session.commit()
+    db.session.commit()
     click.echo("Default exercises added.")
 
 
@@ -139,8 +139,8 @@ def cli_fixture_load_nutrients():
             fdc_nid=e[10],
             fndds=e[11])
         db.session.add(n)
-        db.session.commit()
         count += 1
+    db.session.commit()
     click.echo("Default " + str(count) + " nutrient info added.")
 
 def fixture_load_test_users():
@@ -184,8 +184,8 @@ def fixture_load_test_users():
                 u.is_kosher = True
         defaults_manager.populate_user_with_defaults(u)
         db.session.add(u)
-        db.session.commit()
         count += 1
+    db.session.commit()
     return count
 
 @lf_cli.command("test_users")
@@ -234,8 +234,8 @@ def cli_fixture_load_default_admin():
             if "kosher" in i[5]:
                 u.is_kosher = True
         db.session.add(u)
-        db.session.commit()
         count += 1
+    db.session.commit()
     click.echo("Added " + str(count) + " users.")
 
 
@@ -249,7 +249,7 @@ def cli_fixture_load_muscles():
         cname = canonize(e[0])
         m = MuscleGroupModel(canonical_name=cname, name=e[0], description=e[1])
         db.session.add(m)
-        db.session.commit()
+    db.session.commit()
 
     for e in DEFAULT_MUSCLES:
         short_name = e[1]
@@ -260,5 +260,5 @@ def cli_fixture_load_muscles():
         db.session.add(m)
         for g in e[2]:
             m.groups.append(MuscleGroupModel.query.get(g))
-        db.session.commit()
+    db.session.commit()
     click.echo("Default muscles and muscle groups added.")
