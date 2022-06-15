@@ -15,5 +15,5 @@ def validate_unique_or_abort(value, model, field, errmsg):
     Calls validate_unique() and aborts with a 409 message if there is an
     already existing model that has the given field set to the same value.
     """
-    if not validate_unique(value, model, field, errmsg)
+    if not validate_unique(value, model, field, errmsg):
         abort(409, message=errmsg)
