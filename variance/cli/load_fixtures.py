@@ -5,6 +5,7 @@ import click
 from flask.cli import AppGroup
 
 from variance.extensions import db
+from variance.common.util import canonize
 
 lf_cli = AppGroup("load-fixture")
 
@@ -15,8 +16,10 @@ def fixture_load_units():
     # By default all fixture units are not removable. Aka they are not created
     # by a user
     for u in DEFAULT_UNITS:
-        m = UnitModel(multiplier=u[0], name=u[1][-1], canonical_name=u[1][-1].lower().replace("/"," per ").replace(" ","-"),
-                      dimension=u[2], abbreviation=u[1][0], removable=False)
+        m = UnitModel(multiplier=u[0], name=u[1][-1],\
+                canonical_name=canonize(u[1][-1],\
+                dimension=u[2], abbreviation=u[1][0],\
+                removable=False)
         db.session.add(m)
         db.session.commit()
 
@@ -33,7 +36,9 @@ def cli_fixture_load_equipment():
     from variance.models.equipment import EquipmentModel
 
     for e in DEFAULT_EQUIPMENT:
-        m = EquipmentModel(name=e[0], canonical_name=e[0].lower().replace(" ","-"), description=e[1])
+        m = EquipmentModel(name=e[0],\
+            canonical_name=canonize(e[0]),\
+            description=e[1])
         db.session.add(m)
         db.session.commit()
     click.echo("Default equipment added.")
@@ -46,7 +51,7 @@ def cli_fixture_load_exercises():
     from variance.models.exercise import ExerciseModel
 
     for e in DEFAULT_EXERCISES:
-        cname = e[0].lower().replace(" ","-")
+        cname = canonize(e[0])
         m = ExerciseModel(canonical_name=cname,
                           name=e[0],
                           description=e[1],
@@ -121,7 +126,7 @@ def cli_fixture_load_nutrients():
     for e in DEFAULT_NUTRIENTS:
         n = NutrientInfoModel(
             name=e[0],
-            canonical_name=e[0].lower().replace(" ","-"),
+            canonical_name=canonize(e[0]),
             scientific_name=e[1],
             abbreviation=e[2],
             description=e[3],
@@ -241,7 +246,7 @@ def cli_fixture_load_muscles():
     from variance.models.muscle import MuscleModel, MuscleGroupModel
 
     for e in DEFAULT_MUSCLE_GROUPS:
-        cname = e[0].lower().replace(" ","-")
+        cname = canonize(e[0])
         m = MuscleGroupModel(canonical_name=cname, name=e[0], description=e[1])
         db.session.add(m)
         db.session.commit()
@@ -250,7 +255,7 @@ def cli_fixture_load_muscles():
         short_name = e[1]
         if len(short_name) == 0:
             short_name = e[0]
-        cname = e[0].lower().replace(" ","-")
+        cname = canonize(e[0])
         m = MuscleModel(canonical_name=cname, name=e[0], short_name=short_name, diagram_id=e[3])
         db.session.add(m)
         for g in e[2]:
