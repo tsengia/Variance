@@ -1,3 +1,4 @@
+from flask import g
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
@@ -18,7 +19,7 @@ class UnitList(MethodView):
     @bp.arguments(UnitSchema(), location="form", unknown=EXCLUDE)
     @bp.response(201, UnitIDSchema())
     def post(self, new_unit):  # Create a new unit
-        check_perms_or_abort("unit.new", False)
+        check_perms_or_abort(False, "unit.new", UnitModel)
         if UnitModel.query.filter_by(
                 name=new_unit["name"]).first() is not None:
             abort(409, message="A unit with that name already exists!")
@@ -32,7 +33,7 @@ class UnitList(MethodView):
                   location="query", required=False, unknown=EXCLUDE)
     @bp.response(200, UnitSchema(many=True))
     def get(self, search_args, unit_args):  # List all units
-        check_perms_or_abort("unit.view", False)
+        check_perms_or_abort(False, "unit.view", UnitModel)
         if "dimension" not in unit_args:
             result = UnitModel.query.limit(search_args["count"]).offset(
                 search_args["offset"]).all()
@@ -52,7 +53,7 @@ class Unit(MethodView):
     @bp.response(200, StatusSchema)
     def post(self, update, unit_id):  # Update a unit
         u = UnitModel.query.get_or_404(unit_id)
-        check_perms_or_abort("unit.update", u)
+        check_perms_or_abort(g.user, "unit.update", u)
         
         if "name" in update and update["name"] != u.name:
             if UnitModel.query.filter_by(name=update["name"]).count() != 0:
