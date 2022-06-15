@@ -53,7 +53,7 @@ class ExerciseModel(db.Model):
 
     def __str__(self):
         return "%u Exercise: %s dur(%s), dis(%s), wght(%s), equip(%s)" % (self.id, self.name, str(
-            self.use_duration), str(self.use_distance), str(self.use_weight), str(self.equipment.name))
+            self.use_duration), str(self.use_distance), str(self.use_weight))
 
     @staticmethod
     def has_owner():
