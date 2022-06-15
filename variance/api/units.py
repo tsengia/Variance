@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
 from variance.extensions import db
-from variance.common.util import validation_unique_or_abort
+from variance.common.util import validate_unique_or_abort
 from variance.common.authorize import check_perms_or_abort
 from variance.models.unit import UnitModel
 from variance.schemas.util import StatusSchema
