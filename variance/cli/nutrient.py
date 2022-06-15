@@ -7,6 +7,7 @@ from variance.models.nutrition import NutrientInfoModel
 from variance.schemas.nutrition import NutrientInfoSchema
 
 from variance.common.json_export import export_models
+from variance.common.json_import import import_models
 
 nutrient_cli = AppGroup("nutrient")
 nutrient_mod_cli = AppGroup("mod")
@@ -38,4 +39,15 @@ def cli_nutrient_export():
     export_dir.mkdir(exist_ok=True)
     nutrient_export_dir = export_dir / "nutrients"
     nutrient_export_dir.mkdir(exist_ok=True)
-    export_models(NutrientInfoModel, NutrientInfoSchema, nutrient_export_dir)
+    count = export_models(NutrientInfoModel, NutrientInfoSchema,\
+         nutrient_export_dir)
+    click.echo("Exported {i} NutrientInfoModels.".format(i=count))
+
+
+@nutrient_cli.command("import")
+def cli_nutrient_import():
+    import_dir = Path("imported")
+    nutrient_import_dir = import_dir / "nutrients"
+    count = import_models(NutrientInfoModel, NutrientInfoSchema,\
+         nutrient_import_dir, db.session)
+    click.echo("Imported {i} NutrientInfoModels.".format(i=count))
