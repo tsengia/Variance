@@ -2,9 +2,9 @@ from os import path
 from os import environ as e
 from dotenv import load_dotenv
 
-basedir = path.abspath(path.dirname(__file__))
-load_dotenv(path.join(basedir, '../.env'))
-
+def load_config_env():
+    basedir = path.abspath(path.dirname(__file__))
+    load_dotenv(path.join(basedir, '../.env'))
 
 class Config():
     SESSION_COOKIES_NAME = e.get("SESSION_COOKIE_NAME")
