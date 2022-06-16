@@ -1,12 +1,18 @@
+"""
+Classes and functions for loading runtime configuration
+"""
+
 from os import path
 from os import environ as e
 from dotenv import load_dotenv
 
 def load_config_env():
+    "Reads in the environmental variables from ../.env file"
     basedir = path.abspath(path.dirname(__file__))
     load_dotenv(path.join(basedir, '../.env'))
 
 class Config():
+    "Base Config class"
     SESSION_COOKIES_NAME = e.get("SESSION_COOKIE_NAME")
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
@@ -17,6 +23,7 @@ class Config():
     OPENAPI_JSON_PATH = "variance-openapi.json"
 
 class ProdConfig(Config):
+    "Configuration that uses the secret key from the .env file and production database URI"
     SECRET_KEY = e.get("SECRET_KEY")
     FLASK_ENV = "production"
     DEBUG = False
@@ -25,6 +32,7 @@ class ProdConfig(Config):
 
 
 class DevConfig(Config):
+    "Configuration for development, do NOT use in product, insecure secret key."
     SECRET_KEY = "DEVELOPMENT KEY"
     FLASK_ENV = "development"
     DEBUG = True
@@ -34,5 +42,6 @@ class DevConfig(Config):
 
 
 class UnitTestConfig(DevConfig):
+    "Configuration for Unit Testing, should have in-memory SQLite DB"
     SQLALCHEMY_DATABASE_URI = e.get("UNIT_TEST_DATABASE_URI")
     SQLALCHEMY_ECHO = False

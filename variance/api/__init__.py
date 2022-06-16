@@ -1,3 +1,6 @@
+"""
+Module containing API endpoints.
+"""
 from flask import Blueprint
 from . import auth
 from . import units
