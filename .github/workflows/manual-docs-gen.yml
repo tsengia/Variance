@@ -31,9 +31,8 @@ jobs:
       run: |
           echo "Generating docs for target type ${{ github.event.inputs.type }}"
           sphinx-build -b ${{ github.event.inputs.type }} docs/source/ docs/build/res/
-          tar -czf latest-docs.tar.gz docs/build/res/
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: latest-docs
-        path: latest-docs.tar.gz
+        path: docs/build/res/
