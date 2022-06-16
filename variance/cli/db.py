@@ -1,3 +1,6 @@
+"""
+Set of commands for manipulating DB tables.
+"""
 import click
 from flask.cli import AppGroup
 from variance.extensions import db
@@ -9,6 +12,7 @@ db_cli = AppGroup("db")
 
 @db_cli.command("drop-all")
 def cli_db_drop_all():
+    "Drops all tables from the DB."
     click.echo("Dropping all tables from database...")
     db.drop_all()
     click.echo("All tables dropped.")
@@ -16,12 +20,14 @@ def cli_db_drop_all():
 
 @db_cli.command("init")
 def cli_db_init():
+    "Creates all tables in the DB."
     click.echo("Initializing database...")
     db.create_all()
     click.echo("Database initialized.")
 
 @db_cli.command("prompt")
 def cli_db_prompt():
+    "Brings up an interactive SQL prompt for Selects"
     click.echo("Entering Database interactive prompt, be careful!")
     done = False
     with db.session() as s:

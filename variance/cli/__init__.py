@@ -1,3 +1,6 @@
+"""
+Module containing CLI commands for managing the Variance database and resources.
+"""
 from . import db
 from . import permissions
 from . import user
@@ -9,5 +12,3 @@ from . import exercise
 from . import nutrient
 from . import consumable
 from . import load_fixtures
-from . import export_data
-from . import import_data 
