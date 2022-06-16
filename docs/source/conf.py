@@ -36,7 +36,8 @@ extensions = [
 autodoc_default_options = {
     "members": True,
     "undoc-members": True,
-    "show-inheritance": True
+    "show-inheritance": True,
+    "member-order": "bysource"
 }
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
