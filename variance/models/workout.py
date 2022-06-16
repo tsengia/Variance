@@ -1,3 +1,6 @@
+"""
+Module for representing and tracking workout plans and entries.
+"""
 from datetime import datetime
 
 from variance.extensions import db
@@ -10,34 +13,35 @@ class SetEntryModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Time this set was done/entered
     time = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    "Time this set was done/entered"
 
-    # Exercise performed for this Set
     exercise_id = db.Column(db.Integer, db.ForeignKey(
         "ExerciseIndex.id"), nullable=False)
+    "ID of the Exercise performed for this Set"
     exercise = db.relationship(
         "ExerciseModel", foreign_keys="SetEntryModel.exercise_id")
+    "Exercise performed for this Set"
 
-    # Number of times this exercise was performed in this set
     reps = db.Column(db.Integer, nullable=False, default=1)
+    "Number of times this exercise was performed in this set"
 
-    # Duration that this exercise was done for (if it is measured in time)
     duration = db.Column(db.Float, nullable=True)
+    "Duration that this exercise was done for (if it is measured in time)"
     duration_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     duration_unit = db.relationship(
         "UnitModel", foreign_keys="SetEntryModel.duration_unit_id")
 
-    # Distance that this exercise was done for (if it is measured in distance)
     distance = db.Column(db.Float, nullable=True)
+    "Distance that this exercise was done for (if it is measured in distance)"
     distance_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     distance_unit = db.relationship(
         "UnitModel", foreign_keys="SetEntryModel.distance_unit_id")
 
-    # Weight that this exercise was done with (if this uses weight)
     weight = db.Column(db.Float, nullable=True)
+    "Weight that this exercise was done with (if this uses weight)"
     weight_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     weight_unit = db.relationship(
@@ -49,17 +53,18 @@ class SetEntryModel(db.Model):
         "UserModel",
         foreign_keys="SetEntryModel.owner_id",
         back_populates="set_entries")
+    "User that created this entry"
 
     @staticmethod
-    def has_owner(self):
+    def has_owner(self) -> bool:
         return True
 
     # Returns True is the given user id is considered the owner of this set
     # entry
-    def check_owner(self, id):
+    def check_owner(self, id) -> bool:
         return self.owner_id == id
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id,
                                                                 str(self.time),
                                                                 self.owner.id,
@@ -67,10 +72,8 @@ class SetEntryModel(db.Model):
                                                                 self.exercise_id,
                                                                 self.exercise.name, self.reps)
 
-# Theses are sets that are planned to be completed (in a workout plan)
-
-
 class SetPlanModel(db.Model):
+    "These are sets that are planned to be completed by the user in a Workout"
     __tablename__ = "SetPlanIndex"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -80,6 +83,7 @@ class SetPlanModel(db.Model):
         "ExerciseIndex.id"), nullable=False)
     exercise = db.relationship(
         "ExerciseModel", foreign_keys="SetPlanModel.exercise_id")
+    "The exercises that this set is performing"
 
     # What workout day does this belond to?
     workout_id = db.Column(db.Integer, db.ForeignKey(
@@ -88,29 +92,30 @@ class SetPlanModel(db.Model):
         "WorkoutModel",
         foreign_keys="SetPlanModel.workout_id",
         back_populates="sets")
+    "The day that this set belongs to in the workout plan"
 
-    # Field for specifying where this set falls.
     order = db.Column(db.Integer, nullable=True)
+    "Field for specifying where this set falls."
 
-    # Number of times this exercise was performed in this set
     reps = db.Column(db.Integer, nullable=False, default=1)
+    "Number of times this exercise should be performed in this set."
 
-    # Duration that this exercise was done for (if it is measured in time)
     duration = db.Column(db.Float, nullable=True)
+    "Duration that this exercise should be done with (if it is measured in time)"
     duration_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     duration_unit = db.relationship(
         "UnitModel", foreign_keys="SetPlanModel.duration_unit_id")
 
-    # Distance that this exercise was done for (if it is measured in distance)
     distance = db.Column(db.Float, nullable=True)
+    "Distance that this exercise should be done with (if it is measured in distance)"
     distance_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     distance_unit = db.relationship(
         "UnitModel", foreign_keys="SetPlanModel.distance_unit_id")
 
-    # Weight that this exercise was done with (if this uses weight)
     weight = db.Column(db.Float, nullable=True)
+    "Weight that this exercise should be done with (if this uses weight)"
     weight_unit_id = db.Column(
         db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
     weight_unit = db.relationship(
@@ -148,22 +153,25 @@ class SetPlanModel(db.Model):
     weight_lambda_tracker_param = db.relationship(
         "TrackerModel", foreign_keys="SetPlanModel.weight_lambda_tracker_id")
 
-    def get_weight(self):
-        return 0  # TODO: Implement this, should return the weight either from value or lambda
+    def get_weight(self) -> float:
+        "TODO: Implement this, should return the weight either from value or lambda"
+        return 0.0
 
-    def get_duration(self):
-        return 0  # TODO: Implement this, should return the weight either from value or lambda
+    def get_duration(self) -> float:
+        "TODO: Implement this, should return the duration either from value or lambda"
+        return 0.0
 
-    def get_distance(self):
-        return 0  # TODO: Implement this, should return the weight either from value or lambda
+    def get_distance(self) -> float:
+        "TODO: Implement this, should return the distance either from value or lambda" 
+        return 0.0
 
     @staticmethod
-    def has_owner(self):
+    def has_owner(self) -> bool:
         return True
 
     # Returns True is the given user id is considered the owner of this
     # tracker entry
-    def check_owner(self, id):
+    def check_owner(self, id) -> bool:
         return self.workout.check_owner(id)
 
     def __str__(self):
@@ -172,74 +180,82 @@ class SetPlanModel(db.Model):
 
 
 class WorkoutModel(db.Model):
+    """
+    A WorkoutModel (Workout) if a collection of WorkoutSets (sets) that a user plans to complete.
+    WorkoutModels can represent a day of the week/month, or can be completely free from being bound to a time/day.
+    """
     __tablename__ = "WorkoutIndex"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Name of the workout day
     name = db.Column(db.String(100), nullable=False)
+    "Name of the workout day"
 
-    # What day does this occur on? Freeform entry
     day = db.Column(db.String(20), nullable=True)
+    "What day does this occur on? Freeform entry"
 
-    # What week does this occur on? Freeform entry
     week = db.Column(db.String(20), nullable=True)
+    "What week does this occur on? Freeform entry"
 
-    # Sets of exercises that are performed on this day
     sets = db.relationship(
         "SetPlanModel", back_populates="workout", cascade="all, delete")
+    "Sets of exercises that are performed on this day"
 
-    # Workout Program this workout belongs to
     parent_program_id = db.Column(db.Integer, db.ForeignKey(
         "WorkoutProgramIndex.id"), nullable=False)
     program = db.relationship("WorkoutProgramModel", back_populates="workouts")
+    "Workout Program this workout belongs to"
 
     @staticmethod
-    def has_owner(self):
+    def has_owner(self) -> bool:
         return True
 
     # Returns True is the given user id is considered the owner of this
     # tracker entry
-    def check_owner(self, id):
+    def check_owner(self, id) -> bool:
         return self.program.check_owner(id)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%u WorkoutModel: %s on %s, %u" % (
             self.id, self.name, self.day, self.week_id)
 
 
 class WorkoutProgramModel(db.Model):
+    """
+    A WorkoutProgram is a collection of Workouts created by a user.
+    These Workouts can be sequential (ie. one for each day of the week/month), or they can be non-sequential.
+    """
     __tablename__ = "WorkoutProgramIndex"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Name of the workout program
     name = db.Column(db.String(100), nullable=False)
+    "Display name of the workout program"
 
-    # Description of the workout program
     description = db.Column(db.String(300), nullable=True)
+    "Description of the workout program"
 
-    # Can other users see this workout program?
     is_public = db.Column(db.Boolean, nullable=False, default=False)
+    "If set to true, then all users can see this WorkoutProgram"
 
-    # User who owns this program
     owner_id = db.Column(db.Integer, db.ForeignKey(
         "UserIndex.id"), nullable=False)
     owner = db.relationship("UserModel", back_populates="programs")
+    "User who owns this program"
 
-    # Workouts in this program
     workouts = db.relationship(
         "WorkoutModel", back_populates="program", cascade="all, delete")
+    "Workouts in this program"
 
     @staticmethod
-    def has_owner(self):
+    def has_owner(self) -> bool:
         return True
 
     # Returns True is the given user id is considered the owner of this
     # tracker entry
-    def check_owner(self, id):
+    def check_owner(self, id) -> bool:
         return self.owner_id == id
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%u ProgramModel: %s, %u(%s), public(%s)" % (
             self.id, self.name, self.owner_id, self.owner.username, str(self.is_public))

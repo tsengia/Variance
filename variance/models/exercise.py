@@ -1,7 +1,11 @@
+"""
+Module containing models for exercises.
+"""
 from variance.extensions import db
 
 
 class ExerciseEquipmentAssociation(db.Model):
+    "Model that associates EquipmentModel and ExerciseModel. Allows for the Many-to-Many relationship between exercises and equipment. ie. Allows for equipment to be used by many differe exercises, and exercises to use many differen pieces of equipment"
     __tablename__ = "ExerciseEquipmentList"
 
     equipment_id = db.Column(db.Integer, db.ForeignKey(
@@ -15,46 +19,48 @@ class ExerciseEquipmentAssociation(db.Model):
 
 
 class ExerciseModel(db.Model):
+    "Model for representing exercises that users can perform"
     __tablename__ = "ExerciseIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+    "Unique primary key for database."
     
-    # Internal name of the exercise for linking + id
     canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+    "Internal name of the exercise for linking, import, and export"
 
-    # Name of the exercise to display to the user
     name = db.Column(db.String(100), unique=True, nullable=False)
+    "Name of the exercise to display to the user."
     
     description = db.Column(db.Text, nullable=True)
+    "Description of this exercise."
 
-    # Is this exercise measured in time?
     use_duration = db.Column(db.Boolean, nullable=False, default=0)
+    "Set to True if this exercises is measured in time."
 
-    # Is this exercise measured in distance?
     use_distance = db.Column(db.Boolean, nullable=False, default=0)
+    "Set to True if this exercise is measured in distance."
 
-    # Is this exercise measured in weight?
     use_weight = db.Column(db.Boolean, nullable=False, default=0)
+    "Set to True if this exercise is measured in weight."
 
-    # What pieces of equipment does this exercise use?
     equipment = db.relationship(
         "EquipmentModel", 
         secondary="ExerciseEquipmentList", back_populates="exercises")
+    "Pieces of equipment does this exercise uses."
 
-    # Is this exercise a variation of another exercise, if so, which exercise?
-    # (Ex: Close grip bench is a variation of bench press)
     parent_exercise_id = db.Column(
         db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)
+    "Is this exercise a variation of another exercise, if so, which exercise?    (Ex: Close grip bench is a variation of bench press)"
     parent_exercise = db.relationship(
         "ExerciseModel",
         foreign_keys="ExerciseModel.parent_exercise_id",
         back_populates="variations")
     variations = db.relationship("ExerciseModel")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%u Exercise: %s dur(%s), dis(%s), wght(%s), equip(%s)" % (self.id, self.name, str(
             self.use_duration), str(self.use_distance), str(self.use_weight))
 
     @staticmethod
-    def has_owner():
+    def has_owner() -> bool:
         return False

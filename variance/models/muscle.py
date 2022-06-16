@@ -1,8 +1,9 @@
+"Modules containing models and associations for Musles and MuscleGroups"
+
 from variance.extensions import db
 
-
 class MuscleGroupAssociationTable(db.Model):
-    """Association table. Associates MuscleGroups with their Muscles and vice-versa"""    
+    "Association table. Associates MuscleGroups with their Muscles and vice-versa"
     __tablename__ = "MuscleGroupAssociation"
     group_id = db.Column(db.Integer, db.ForeignKey(
         "MuscleGroupIndex.id"), primary_key=True)
@@ -15,79 +16,85 @@ class MuscleGroupAssociationTable(db.Model):
 
 
 class MuscleGroupModel(db.Model):
+    "Representation of a named group of muscles. Ex: Legs"
     __tablename__ = "MuscleGroupIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+    
     canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+    "Canonical name used when exporting and importing/linking data."
 
-    # Display name of this muscle group
     name = db.Column(db.String(100), unique=True, nullable=False)
+    "Display name of this muscle group"
+    
     description = db.Column(db.Text, nullable=True)
 
-    # List of muscles in this muscle group
     muscles = db.relationship(
         "MuscleModel",
         secondary="MuscleGroupAssociation",
         back_populates="groups")
+    "List of muscles in this muscle group"
 
     @staticmethod
-    def has_owner():
+    def has_owner() -> bool:
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%u MuscleGroupModel: %s" % (self.id, self.name)
 
 
 class MuscleModel(db.Model):
+    "Representation of a muscle."
     __tablename__ = "MuscleIndex"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Optional: ID of this muscle used to locate on the anatomy chart
     diagram_id = db.Column(db.Integer, nullable=True)
+    "Optional: ID of this muscle used to locate on the anatomy chart"
 
-    # Canonical name used when exporting and importing/linking data.
     canonical_name = db.Column(db.String(100), unique=True, nullable=False)
+    "Canonical name used when exporting and importing/linking data."
     
-    # Long, anatomical name for this muscle
     name = db.Column(db.String(100), unique=True, nullable=False)
+    "Long, anatomical name for this muscle"
 
-    # Shortened name for this muscle. Used for display.
     short_name = db.Column(db.String(50), nullable=True)
+    "Shortened name for this muscle. Used for display."
 
-    # List of groups this muscle belongs to
     groups = db.relationship(
         "MuscleGroupModel",
         secondary="MuscleGroupAssociation",
         back_populates="muscles")
+    "List of groups this muscle belongs to"
 
     @staticmethod
-    def has_owner():
+    def has_owner() -> bool:
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%i MuscleModel: %s" % (self.id, self.name)
 
 
 class MuscleSectionModel(db.Model):
+    "Representation of a section of Muscle."
     __tablename__ = "MuscleSectionIndex"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Optional: ID of this muscle section sused to locate on the anatomy chart
     diagram_id = db.Column(db.Integer, nullable=True)
+    "Optional: ID of this muscle section sused to locate on the anatomy chart"
 
-    # Name of this muscle section. For example "Upper pec"
     name = db.Column(db.String(100), unique=True, nullable=False)
+    "Name of this muscle section. For example 'Upper pec'"
 
-    # What muscle is this muscle section of?
     parent_muscle_id = db.Column(
         db.Integer, db.ForeignKey("MuscleIndex.id"), nullable=False)
+    "The larger muscle that this section is a part of."
     parent_muscle = db.relationship("MuscleModel", backref="sections")
 
     @staticmethod
-    def has_owner():
+    def has_owner() -> bool:
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%i MuscleSectionModel: %s" % (self.id, self.name)

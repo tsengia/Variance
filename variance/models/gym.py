@@ -1,11 +1,16 @@
+"""
+Modules that contains the GymModel and the GymEquipmentAssociation table
+"""
 from variance.extensions import db
 
 
 class GymEquipmentAssociation(db.Model):
+    "Association table that provides the Many to Many relationship between Equipment and Gyms."
     __tablename__ = "GymEquipmentList"
 
     equipment_id = db.Column(db.Integer, db.ForeignKey(
         "EquipmentIndex.id"), nullable=False, primary_key=True)
+    "ID is the EquipmentModel that belongs to the associated GymModel"
 
     gym_id = db.Column(db.Integer, db.ForeignKey(
         "GymIndex.id"), nullable=False, primary_key=True)
@@ -15,43 +20,47 @@ class GymEquipmentAssociation(db.Model):
 
 
 class GymModel(db.Model):
-    __tablename__ = "GymIndex"
-
     """
     Every Gym can have multiple pieces of equipment associated with it.
     Gyms can be public or private (private by default).
     Gyms are really nothing more than a collection of equipment, making it easier to plan workouts
     """
+    __tablename__ = "GymIndex"
+
 
     id = db.Column(db.Integer, primary_key=True)
+    "Unique ID for the GymModel instance, used as primary key in DB."
 
-    # Name of the gym
     name = db.Column(db.String(100), unique=False, nullable=False)
+    "Name of the gym"
 
-    # Location of the gym
     location = db.Column(db.String(100), nullable=True)
+    "Location of the gym"
 
     description = db.Column(db.Text, nullable=True)
+    "Description of the gym"
 
     ### Ownership and visibility
-    # Is this gym visible to all users? If set to true, then all users can use
-    # this gym
     is_public = db.Column(db.Boolean, nullable=False, default=False)
+    "Is this gym visible to all users? If set to true, then all users can use this gym"
 
-    # The user who added this gym to the database
     owner_id = db.Column(db.Integer, db.ForeignKey(
         "UserIndex.id"), nullable=False)
+    " The user id who added this gym to the database "
     owner = db.relationship("UserModel", backref="gyms")
 
     equipment = db.relationship("EquipmentModel", secondary="GymEquipmentList")
+    "Many to many relationship that represents all types of equipment that can be found in this gym"
 
     @staticmethod
-    def has_owner():
+    def has_owner() -> bool:
+        "Static helper function for the authorization algorithm to know that this type of resource does have a well-defined owner and should check ownership before performing actions."
         return True
 
-    def check_owner(self, id):
+    def check_owner(self, id: int) -> bool:
+        "Returns true if the owner_id is equal to the provided ID"
         return self.owner.id == id
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%u Gym: %s public(%s), owned by %u (%s)" % (
             self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)

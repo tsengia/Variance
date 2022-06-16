@@ -1,38 +1,42 @@
+"""
+Module for representing permissions/authorization rules.
+"""
 import logging
 from variance.extensions import db
 
-
 class PermissionModel(db.Model):
+    "Model that represents one authorization rule."
     __tablename__ = "PermissionIndex"
 
     id = db.Column(db.Integer, primary_key=True)
+    "Unique ID for this PermissionModel, used as primary-key"
 
-    # Action that is permitted. (Ex: tracker.entry.new)
     action = db.Column(db.String(100), nullable=False)
+    "Action that is permitted. (Ex: tracker.entry.new)"
 
-    # Allow all users with this role to perform this action. (Ex: admin)
     allow_role = db.Column(db.String(20), nullable=True)
+    "Allow all users with this role to perform this action. (Ex: admin)"
 
-    # Allow the given user ID to perform this action.
     allow_user = db.Column(db.Integer, db.ForeignKey(
         "UserIndex.id"), nullable=True)
+    "Allow the given user ID to perform this action."
 
-    # If set to true, the perms will check to make sure that the action is being performed by the user that owns the given database row entry
-    # Ownership is tracked by the "owner" property
     allow_owner = db.Column(db.Boolean, nullable=True)
+    """If set to true, the perms will check to make sure that the action is being performed by the user that owns the given database row entry
+    Ownership is tracked by the "owner" property"""
 
-    # If set to true, the perms will check to make sure that the action being performed is on a row that has is_public set to True
-    # Example: Some Recipes can be public for everyone to view, others are
-    # private
     check_public = db.Column(db.Boolean, nullable=True)
+    """If set to true, the perms will check to make sure that the action being performed is on a row that has is_public set to True
+    Example: Some Recipes can be public for everyone to view, others are
+    private"""
 
-    # If set to true, this action can be performed by ANY client.
-    # Example: Viewing the list of units
-    # Usually just used for view actions
     force_public = db.Column(db.Boolean, nullable=True)
+    """If set to true, this action can be performed by ANY client.
+    Example: Viewing the list of units
+    Usually just used for view actions """
 
     # For debugging and CLI purposes
-    def __str__(self):
+    def __str__(self) -> str:
         return "Perm ID %5i: %25s - r(%s), u(%s), o(%s), cp(%s), fp(%s)" % (int(self.id),
                                                                             str(self.action),
                                                                             str(self.allow_role),
@@ -48,7 +52,8 @@ class PermissionModel(db.Model):
 
     # Parameters: user  - the UserModel of the user that is performing the action
     #             model - the SQLAlchemyModel of what is being modified
-    def check_user(self, user, model):
+    def check_user(self, user, model) -> bool:
+        "Returns true if the given user is allowed to perform this action on the given model"
         if self.force_public is not None:
             return self.force_public
 

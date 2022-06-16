@@ -1,3 +1,7 @@
+"""
+Module for representing and evaluating calculated values.
+"""
+
 from variance.extensions import db
 from variance.models.tracker import TrackerEntryModel
 from sqlalchemy import select
@@ -5,20 +9,23 @@ import logging as logger
 
 # This is for dynamically calculated measures.
 # For example: 90% of 1 rep max, or 1/2 the pace of the PR time, etc.
-
-
 class LambdaModel(db.Model):
+    """
+    A LambdaModel represents a value that can be calculated based off of
+    already existing database data and how to calculate it.
+    For example, 50% of 1 rep max would be represented as a LambdaModel
+    """
     __tablename__ = "LambdaIndex"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Name of this lambda function, for example: "Percentage of 1 Rep Max"
     name = db.Column(db.String(100), nullable=False)
+    "Display name of this lambda function, for example: 'Percentage of 1 Rep Max'"
 
-    # Callable/internal name of this lambda function, for example "percent_1rm"
     function_name = db.Column(db.String(40), nullable=False)
+    "Callable/internal name of this lambda function, for example 'percent_1rm'"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "LambdaModel (%i): %s - %s" % (self.id,
                                               self.name, self.function_name)
 
