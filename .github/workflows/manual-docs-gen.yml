@@ -30,7 +30,7 @@ jobs:
     - name: Generate docs
       run: |
           echo "Generating docs for target type ${{ github.event.inputs.type }}"
-          python -m sphinx-build -b ${{ github.event.inputs.type }} docs/source/ docs/build/res/
+          sphinx-build -b ${{ github.event.inputs.type }} docs/source/ docs/build/res/
           tar -czf latest-docs.tar.gz docs/build/res/
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
