@@ -15,7 +15,7 @@ bp = Blueprint('equipment', __name__, url_prefix='/equipment')
 class EquipmentList(MethodView):
     @bp.arguments(EquipmentSchema(only=("name", "description")),
                   location="form", unknown=EXCLUDE)
-    @bp.response(EquipmentSchema(only=("id",)), code=201)
+    @bp.response(201, EquipmentSchema(only=("id",)))
     def post(self, new_equipment):  # Create a new equipment
         check_perms_or_abort(g.user, "equipment.create", None)
         if EquipmentModel.query.filter_by(
@@ -25,7 +25,6 @@ class EquipmentList(MethodView):
         db.session.add(e)
         db.session.commit()
         return e
-
 
 @bp.route("/<int:e_id>")
 class Equipment(MethodView):
@@ -52,10 +51,9 @@ class Equipment(MethodView):
         check_perms_or_abort(g.user, "equipment.delete", e)
         db.session.delete(e)
         db.session.commit()
-
         return {"status": "Equipment deleted."}, 200
 
-    @bp.response(EquipmentSchema, code=200)
+    @bp.response(200, EquipmentSchema)
     def get(self, e_id):  # Display a unit
         e = EquipmentModel.query.get_or_404(e_id)
         check_perms_or_abort(g.user, "equipment.view", e)
