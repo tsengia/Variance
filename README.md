@@ -11,6 +11,9 @@ This is basically a side project for me to learn more about weightlifting while 
 
 TODO: Write instructions for setting up `.env` file, provide a sample `.env` file. Provide a script for starting the server.
 
+# Starting the server
+To start the flask webserver, set the `FLASK_APP` environmental variable to `variance.create_app` and then run `flask run`.
+
 ## Bootstrapping
 Bootstrapping Variance means initializing the database, filling it with default values, and loading any static assets.
 To initialize the database:
