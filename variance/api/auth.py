@@ -7,7 +7,8 @@ from variance.extensions import db
 from variance.models.user import UserModel
 from variance.models.permissions import PermissionModel
 from variance.schemas.auth import RegisterSchema, LoginSchema
-from variance.util import validate_unique
+from variance.common.util import validate_unique_or_abort
+from variance.common.authorize import check_perms_or_abort
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -15,7 +16,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route("/register", methods=["POST"])
 @bp.arguments(RegisterSchema, location="form")
 def register(new_user):
-    validate_unique(new_user["username"], UserModel, UserModel.username, "A user with that username already exists!")
+    validate_unique_or_abort(new_user["username"], UserModel, UserModel.username, "A user with that username already exists!")
     u = UserModel(username=new_user["username"],
                   birthdate=new_user["birthdate"])
     u.set_password(new_user["password"])
