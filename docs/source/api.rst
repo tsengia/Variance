@@ -2,6 +2,6 @@ API
 ===
 .. autosummary::
     :toctree: _autosummary
-    :recursive: 
-       
+    :recursive:        
+    
     variance
