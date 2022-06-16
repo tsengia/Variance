@@ -1,3 +1,7 @@
+"""
+Helper functions for importing JSON files into DB Models and adding them to the database.
+"""
+
 from pathlib import Path
 
 def import_models(ModelType: type, ModelSchema: type, import_path: object, session: object, exclude: tuple[str]=("id",)) -> int:

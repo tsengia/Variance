@@ -1,3 +1,7 @@
+"""
+Helper functions for exporting DB Models into JSON files.
+"""
+
 from pathlib import Path
 
 def export_models(ModelType, ModelSchema, export_path, exclude=("id",)):

@@ -1,3 +1,7 @@
+"""
+Collection of helper functions for authorization (permissions).
+"""
+
 from flask_smorest import abort
 from marshmallow import Schema, validates, ValidationError, fields
 
@@ -5,7 +9,7 @@ from variance.models.permissions import PermissionModel
 
 # Internal function that checks to see if there are any permission entries
 # that permit the user/client to perform the action
-def check_perms(user, action, model):
+def check_perms(user, action, model) -> bool:
     """
     Checks the permission tables to see if the given user is authorized
     to perform the given action.

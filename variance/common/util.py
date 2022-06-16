@@ -1,3 +1,6 @@
+"""
+Collection of helper functions.
+"""
 from flask_smorest import abort
 
 def canonize(name: str) -> str:
@@ -12,7 +15,7 @@ def canonize(name: str) -> str:
         .replace("_","-")
 
 
-def validate_unique(value, model, field, errmsg):
+def validate_unique(value, model, field, errmsg) -> bool:
     """
     Checks to see if there are any instances of `model` in the database that
     have `field_name` set to `value`.
