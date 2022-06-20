@@ -8,6 +8,7 @@ Welcome to Variance's documentation!
 
    api
    gym_equipment
+   muscles
    permissions
 
 Indices and tables
