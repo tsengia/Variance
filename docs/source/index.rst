@@ -7,6 +7,8 @@ Welcome to Variance's documentation!
    :caption: Contents:
 
    api
+   gym_equipment
+   permissions
 
 Indices and tables
 ==================
