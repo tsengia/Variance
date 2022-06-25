@@ -34,6 +34,18 @@ class ResourceCLI():
             for r in r_list:
                 click.echo(str(r))
 
+        @self.group.command("view")
+        @click.argument("resource_id", type=int, required=True)
+        def cli_view(resource_id):
+            "Dumps the JSON representation of the given resource."
+            m = self.model_.query.get(resource_id)
+            if m is None:
+                click.echo("Failed to find {r} with ID of {i}!".format(r=self.resource_name_, i=resource_id))
+                return
+            s = self.schema_()
+            click.echo("Viewing {r} with ID of {i}".format(r=self.resource_name_, i=resource_id))
+            click.echo(s.dumps(m))
+
         @self.group.command("export")
         @click.argument("export_root", type=click.Path(), required=True)
         def cli_export(export_root):
