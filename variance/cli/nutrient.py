@@ -1,53 +1,5 @@
-from pathlib import Path
-import click
-from flask.cli import AppGroup
-
-from variance.extensions import db
 from variance.models.nutrition import NutrientInfoModel
 from variance.schemas.nutrition import NutrientInfoSchema
+from variance.cli.resource import ResourceCLI
 
-from variance.common.json_export import export_models
-from variance.common.json_import import import_models
-
-nutrient_cli = AppGroup("nutrient")
-nutrient_mod_cli = AppGroup("mod")
-nutrient_cli.add_command(nutrient_mod_cli)
-
-
-@nutrient_cli.command("list")
-def cli_nutrient_list():
-    n_list = NutrientInfoModel.query.all()
-    if n_list is None:
-        click.echo("NutrientInfo list is empty!")
-        return -1
-    for n in n_list:
-        click.echo(str(n))
-
-
-@nutrient_cli.command("view")
-@click.argument("id")
-def cli_nutrient_view(id):
-    n = NutrientInfoModel.query.get(id)
-    if n is None:
-        click.echo("Could not find an nutrient with that ID!")
-        return -1
-    click.echo(str(n))
-
-@nutrient_cli.command("export")
-def cli_nutrient_export():
-    export_dir = Path("exported")
-    export_dir.mkdir(exist_ok=True)
-    nutrient_export_dir = export_dir / "nutrients"
-    nutrient_export_dir.mkdir(exist_ok=True)
-    count = export_models(NutrientInfoModel, NutrientInfoSchema,\
-         nutrient_export_dir)
-    click.echo("Exported {i} NutrientInfoModels.".format(i=count))
-
-
-@nutrient_cli.command("import")
-def cli_nutrient_import():
-    import_dir = Path("imported")
-    nutrient_import_dir = import_dir / "nutrients"
-    count = import_models(NutrientInfoModel, NutrientInfoSchema,\
-         nutrient_import_dir, db.session)
-    click.echo("Imported {i} NutrientInfoModels.".format(i=count))
+nutrient_cli = ResourceCLI(NutrientInfoModel, NutrientInfoSchema, "NutrientInfo", "nutrients")
