@@ -1,6 +1,7 @@
 """
 Contains ResourceCLI, a class that implements common cli commands for managing a resource.
 """
+from typing import Optional
 from pathlib import Path
 import click
 from flask.cli import AppGroup
@@ -18,11 +19,12 @@ class ResourceCLI():
         "Adds this collection of commands to the given group"
         parent_group.add_command(self.group)
 
-    def __init__(self, model: object, schema: object, resource_name: str, group_name: str):
+    def __init__(self, model: object, schema: object, resource_name: str, group_name: str, exclude: Optional[tuple[str]] = ("id",)):
         self.group = AppGroup(group_name)
         self.model_ = model
         self.schema_ = schema
         self.resource_name_ = resource_name 
+        self.exclude_ = exclude
 
         @self.group.command("list")
         def cli_list():
@@ -40,7 +42,8 @@ class ResourceCLI():
             "Dumps the JSON representation of the given resource."
             m = self.model_.query.get(resource_id)
             if m is None:
-                click.echo("Failed to find {r} with ID of {i}!".format(r=self.resource_name_, i=resource_id))
+                click.echo("Failed to find {r} with ID of {i}!".format(\
+                    r=self.resource_name_, i=resource_id))
                 return
             s = self.schema_()
             click.echo("Viewing {r} with ID of {i}".format(r=self.resource_name_, i=resource_id))
@@ -55,7 +58,7 @@ class ResourceCLI():
             export_dir.mkdir(exist_ok=True)
             resource_export_dir = export_dir / resource_name 
             resource_export_dir.mkdir(exist_ok=True)
-            count = export_models(self.model_, self.schema_, resource_export_dir)
+            count = export_models(self.model_, self.schema_, resource_export_dir, self.exclude_)
             click.echo("Exported {i} {r} models.".format(i=count, r=self.resource_name_))
 
         @self.group.command("import")
@@ -65,7 +68,8 @@ class ResourceCLI():
             click.echo("Importing " + self.resource_name_ + "...")
             import_dir = Path(import_root)
             resource_import_dir = import_dir / self.resource_name_
-            count = import_models(self.model_, self.schema_, resource_import_dir, db.session)
+            count = import_models(self.model_, self.schema_,\
+                resource_import_dir, db.session, self.exclude_)
             click.echo("Imported {i} {r}.".format(i=count, r=self.resource_name_))
 
         @self.group.command("drop")
