@@ -5,7 +5,7 @@ from variance.extensions import db
 "Association table. Associates MuscleGroups with their Muscles and vice-versa"
 MuscleGroupAssociationTable = db.Table(
     "MuscleGroupAssociation",
-    db.Model.metadata,
+    db.metadata,
     db.Column("group_id", db.ForeignKey(
         "MuscleGroupIndex.id")),
     db.Column("muscle_id", db.ForeignKey(

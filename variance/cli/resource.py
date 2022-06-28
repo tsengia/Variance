@@ -79,7 +79,8 @@ class ResourceCLI():
                 click.echo("Cancelled.")
                 return
             click.echo("Dropping all " + self.resource_name_)
-            db.session.query(self.model_).delete()
+            for a in db.session.query(self.model_).all():
+                db.session.delete(a)
             db.session.commit()
             click.echo("Deleted all " + self.resource_name_ + "!")
 
