@@ -2,18 +2,15 @@
 
 from variance.extensions import db
 
-class MuscleGroupAssociationTable(db.Model):
-    "Association table. Associates MuscleGroups with their Muscles and vice-versa"
-    __tablename__ = "MuscleGroupAssociation"
-    group_id = db.Column(db.Integer, db.ForeignKey(
-        "MuscleGroupIndex.id"), primary_key=True)
-    muscle_id = db.Column(db.Integer, db.ForeignKey(
-        "MuscleIndex.id"), primary_key=True)
-
-    def __str__(self):
-        return "MuscleGroupAssociation: group %u -> muscle %u" % (
-            self.group_id, self.muscle_id)
-
+"Association table. Associates MuscleGroups with their Muscles and vice-versa"
+MuscleGroupAssociationTable = db.Table(
+    "MuscleGroupAssociation",
+    db.Model.metadata,
+    db.Column("group_id", db.ForeignKey(
+        "MuscleGroupIndex.id")),
+    db.Column("muscle_id", db.ForeignKey(
+        "MuscleIndex.id"))
+)
 
 class MuscleGroupModel(db.Model):
     "Representation of a named group of muscles. Ex: Legs"
@@ -31,7 +28,7 @@ class MuscleGroupModel(db.Model):
 
     muscles = db.relationship(
         "MuscleModel",
-        secondary="MuscleGroupAssociation",
+        secondary=MuscleGroupAssociationTable,
         back_populates="groups")
     "List of muscles in this muscle group"
 
@@ -63,7 +60,7 @@ class MuscleModel(db.Model):
 
     groups = db.relationship(
         "MuscleGroupModel",
-        secondary="MuscleGroupAssociation",
+        secondary=MuscleGroupAssociationTable,
         back_populates="muscles")
     "List of groups this muscle belongs to"
 

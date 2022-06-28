@@ -4,7 +4,7 @@ from variance.models.muscle import MuscleModel, MuscleGroupModel
 
 
 class MuscleSchema(SQLAlchemyAutoSchema):
-    groups = fields.List(fields.Nested(lambda: MuscleGroupSchema(only=("id", "canonical_name"))))
+    groups = fields.Nested(lambda: MuscleGroupSchema(only=("id", "canonical_name"), many=True))
 
     class Meta:
         model = MuscleModel
@@ -12,7 +12,7 @@ class MuscleSchema(SQLAlchemyAutoSchema):
 
 
 class MuscleGroupSchema(SQLAlchemyAutoSchema):
-    muscles = fields.List(fields.Nested(lambda: MuscleSchema(only=("id", "canonical_name"))))
+    muscles = fields.Nested(lambda: MuscleSchema(only=("id", "canonical_name"), many=True))
 
     class Meta:
         model = MuscleGroupModel
