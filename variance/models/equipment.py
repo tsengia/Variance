@@ -31,3 +31,6 @@ class EquipmentModel(db.Model):
         secondary="ExerciseEquipmentList",
         back_populates="equipment")
     " List of exercises that use this piece of equipment. "
+
+    def __str__(self):
+        return "{i}: {cn} = {n}".format(i=self.id, cn=self.canonical_name, n=self.name)

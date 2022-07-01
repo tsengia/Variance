@@ -41,17 +41,18 @@ def load_models(app):
 def load_cli(app):
     "Helper function that imports all the CLI commands"
     from variance import cli
-    app.cli.add_command(cli.db.db_cli)
-    app.cli.add_command(cli.permissions.permissions_cli)
-    app.cli.add_command(cli.user.user_cli)
-    app.cli.add_command(cli.equipment.equipment_cli)
-    app.cli.add_command(cli.gym.gym_cli)
-    app.cli.add_command(cli.muscle.muscle_cli)
-    app.cli.add_command(cli.exercise.exercise_cli)
-    app.cli.add_command(cli.unit.unit_cli)
-    app.cli.add_command(cli.nutrient.nutrient_cli)
-    app.cli.add_command(cli.consumable.consumable_cli)
-    app.cli.add_command(cli.load_fixtures.lf_cli)
+    c = app.cli
+    c.add_command(cli.db.db_cli)
+    c.add_command(cli.permissions.permissions_cli)
+    c.add_command(cli.user.user_cli)
+    cli.equipment.equipment_cli.attach(c)
+    cli.muscle.muscle_cli.attach(c)
+    c.add_command(cli.gym.gym_cli)
+    c.add_command(cli.exercise.exercise_cli)
+    c.add_command(cli.unit.unit_cli)
+    cli.nutrient.nutrient_cli.attach(c)
+    c.add_command(cli.consumable.consumable_cli)
+    c.add_command(cli.load_fixtures.lf_cli)
 
     logging.info("Variance CLI loaded.")
 
