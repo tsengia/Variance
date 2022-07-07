@@ -12,4 +12,11 @@ variance/venv
 variance/instance
 instance
 .env
-
+variance.log
+docs/build/
+env/
+exported/
+imported/
+scripts/variance.log
+docs/source/_autosummary/
+.vimrc
