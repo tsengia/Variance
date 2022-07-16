@@ -4,6 +4,57 @@ Module for representing nutritional information
 from datetime import datetime
 from variance.extensions import db
 
+class ConsumedEntryModel(db.Model):
+    "Model for consumption entries (tracking what was ate and when)"
+    __tablename__ = "ConsumedEntryIndex"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(60), nullable=False)
+    "Name of the food that was consumed."
+
+    time = db.Column(db.DateTime(), nullable=False, default=datetime.now())
+    "Time when this entry was made"
+
+    owner_id = db.Column(db.Integer, db.ForeignKey(
+        "UserIndex.id"), nullable=False)
+    owner = db.relationship("UserModel", back_populates="consumption_entries")
+    "The user who added this mealplan to the database"
+
+    # Nutritional Info
+    calories = db.Column(db.Float, nullable=False, default=0)
+    "Amount of calories consumed (grams)"
+
+    protein = db.Column(db.Float, nullable=False, default=0)
+    "Amount of protein consumed (grams)"
+
+    carbohydrates = db.Column(db.Float, nullable=False, default=0)
+    "Amount of carbohydrates consumed (grams)"
+
+    fat = db.Column(db.Float, nullable=False, default=0)
+    "Amount of fats consumed (grams)"
+
+    # Linking to a Consumable
+    servings = db.Column(db.Float, nullable=False, default=1)
+    "Number of servings consumed"
+    consumable_id = db.Column(db.Integer, db.ForeignKey("ConsumableIndex.id"))
+    "ID of the ConsumableModel that was consumed/ate/drank"
+
+    consumable = db.relationship("ConsumableModel")
+    "ConsumableModel that the user consumed/ate/drank"
+
+    @staticmethod
+    def has_owner() -> bool:
+        return True
+
+    def check_owner(self, id) -> bool:
+        return self.owner_id == id
+
+    def __str__(self) -> str:
+        return "%u ConsumedEntryModel: %s @ %s, o(%u), c(%u)" % (
+            self.id, self.name, str(self.time), self.owner_id, self.consumable_id)
+
+
 class ConsumableNutrientsModel(db.Model):
     "Associates consumables with their nutritional information (other than macro-nutrients)"
     __tablename__ = "ConsumableNutrientsIndex"
