@@ -44,14 +44,16 @@ def load_cli(app):
     c = app.cli
     c.add_command(cli.db.db_cli)
     c.add_command(cli.permissions.permissions_cli)
-    c.add_command(cli.user.user_cli)
+    
+    cli.user.user_cli.attach(c)
     cli.equipment.equipment_cli.attach(c)
     cli.muscle.muscle_cli.attach(c)
-    c.add_command(cli.gym.gym_cli)
-    c.add_command(cli.exercise.exercise_cli)
-    c.add_command(cli.unit.unit_cli)
+    cli.gym.gym_cli.attach(c)
+    cli.exercise.exercise_cli.attach(c)
+    cli.unit.unit_cli.attach(c)
     cli.nutrient.nutrient_cli.attach(c)
-    c.add_command(cli.consumable.consumable_cli)
+    cli.consumable.consumable_cli.attach(c)
+    
     c.add_command(cli.load_fixtures.lf_cli)
 
     logging.info("Variance CLI loaded.")

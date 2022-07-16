@@ -1,4 +1,6 @@
 from marshmallow import fields, ValidationError, Schema
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from variance.models.user import UserModel
 
 import re
 
@@ -6,6 +8,15 @@ import re
 # Usernames can contain any lower or uppercase letters and numbers.
 # Usernames must be between 3 and 21 charecters long.
 username_regex = re.compile("^[a-zA-Z0-9_-]{3,21}$")
+
+class UserSchema(SQLAlchemyAutoSchema):
+    """
+    User schema that contains everything about a user.
+    Note: Bad idea to expose all of this on an API endpoint.
+    """
+    class Meta:
+        model = UserModel
+        load_instance = False
 
 class PublicProfileSchema(Schema):
     """
