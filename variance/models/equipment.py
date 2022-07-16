@@ -28,7 +28,7 @@ class EquipmentModel(db.Model):
 
     exercises = db.relationship(
         "ExerciseModel", 
-        secondary="ExerciseEquipmentList",
+        secondary="ExerciseEquipmentAssociation",
         back_populates="equipment")
     " List of exercises that use this piece of equipment. "
 

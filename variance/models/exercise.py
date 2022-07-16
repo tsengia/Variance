@@ -4,19 +4,13 @@ Module containing models for exercises.
 from variance.extensions import db
 
 
-class ExerciseEquipmentAssociation(db.Model):
-    "Model that associates EquipmentModel and ExerciseModel. Allows for the Many-to-Many relationship between exercises and equipment. ie. Allows for equipment to be used by many differe exercises, and exercises to use many differen pieces of equipment"
-    __tablename__ = "ExerciseEquipmentList"
-
-    equipment_id = db.Column(db.Integer, db.ForeignKey(
-        "EquipmentIndex.id"), nullable=False, primary_key=True)
-
-    exercise_id = db.Column(db.Integer, 
-        db.ForeignKey("ExerciseIndex.id"), nullable=False, primary_key=True)
-
-    def __str__(self):
-        return "GymEquipAssoc: %u  -> %u " % (self.exercise.id, self.equipment.id)
-
+"Table that associates EquipmentModel and ExerciseModel. Allows for the Many-to-Many relationship between exercises and equipment. ie. Allows for equipment to be used by many differe exercises, and exercises to use many differen pieces of equipment"
+ExerciseEquipmentAssociationTable = db.Table(
+    "ExerciseEquipmentAssociation",
+    db.metadata,
+    db.Column("equipment_id", db.ForeignKey("EquipmentIndex.id")),
+    db.Column("exercise_id", db.ForeignKey("ExerciseIndex.id"))
+)
 
 class ExerciseModel(db.Model):
     "Model for representing exercises that users can perform"
@@ -45,7 +39,8 @@ class ExerciseModel(db.Model):
 
     equipment = db.relationship(
         "EquipmentModel", 
-        secondary="ExerciseEquipmentList", back_populates="exercises")
+        secondary="ExerciseEquipmentAssociation", 
+        back_populates="exercises")
     "Pieces of equipment does this exercise uses."
 
     parent_exercise_id = db.Column(
@@ -55,6 +50,7 @@ class ExerciseModel(db.Model):
         "ExerciseModel",
         foreign_keys="ExerciseModel.parent_exercise_id",
         back_populates="variations")
+    
     variations = db.relationship("ExerciseModel")
 
     def __str__(self) -> str:
