@@ -7,7 +7,7 @@ from variance.common.util import canonize
 
 import click
 
-equipment_cli = ResourceCLI(EquipmentModel, EquipmentSchema, "Equipment", "equipment")
+equipment_cli = ResourceCLI(EquipmentModel, EquipmentSchema, "Equipment", "equipment", ("id",))
 
 @equipment_cli.group.command("add")
 @click.argument("name")
