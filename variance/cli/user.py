@@ -6,7 +6,7 @@ from flask.cli import AppGroup
 from variance.extensions import db
 from variance.models.user import UserModel
 
-user_cli = AppGroup("user")
+user_cli = AppGroup("users")
 user_mod_cli = AppGroup("mod")
 user_cli.add_command(user_mod_cli)
 
