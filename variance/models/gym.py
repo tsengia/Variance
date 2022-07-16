@@ -4,20 +4,13 @@ Modules that contains the GymModel and the GymEquipmentAssociation table
 from variance.extensions import db
 
 
-class GymEquipmentAssociation(db.Model):
-    "Association table that provides the Many to Many relationship between Equipment and Gyms."
-    __tablename__ = "GymEquipmentList"
-
-    equipment_id = db.Column(db.Integer, db.ForeignKey(
-        "EquipmentIndex.id"), nullable=False, primary_key=True)
-    "ID is the EquipmentModel that belongs to the associated GymModel"
-
-    gym_id = db.Column(db.Integer, db.ForeignKey(
-        "GymIndex.id"), nullable=False, primary_key=True)
-
-    def __str__(self):
-        return "GymEquipAssoc (GymID -> EquipID): %u -> %u " % (self.gym.id, self.equipment.id)
-
+"Association table that provides the Many to Many relationship between Equipment and Gyms."
+GymEquipmentAssociation = db.Table(
+    "GymEquipmentList",
+    db.metadata,
+    db.Column("equipment_id", db.ForeignKey("EquipmentIndex.id")),
+    db.Column("gym_id", db.ForeignKey("GymIndex.id"))
+)
 
 class GymModel(db.Model):
     """
