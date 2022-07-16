@@ -58,8 +58,7 @@ class ExerciseModel(db.Model):
     variations = db.relationship("ExerciseModel")
 
     def __str__(self) -> str:
-        return "%u Exercise: %s dur(%s), dis(%s), wght(%s), equip(%s)" % (self.id, self.name, str(
-            self.use_duration), str(self.use_distance), str(self.use_weight))
+        return "%u - %s Exercise: %s dur(%s), dis(%s), wght(%s)" % (self.id, self.canonical_name, self.name, str(self.use_duration), str(self.use_distance), str(self.use_weight))
 
     @staticmethod
     def has_owner() -> bool:
