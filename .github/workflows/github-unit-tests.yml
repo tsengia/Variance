@@ -21,7 +21,7 @@ jobs:
         python3.10 -m pip install -r requirements_dev.txt
     - name: Load Fixtures
       run: |
-        set FLASK_APP=variance.create_app
+        FLASK_APP=variance.create_app
         python3.10 -m flask db init
         python3.10 -m flask units import variance/fixtures
         python3.10 -m flask muscles import variance/fixtures
