@@ -22,7 +22,7 @@ jobs:
         pip install -r requirements_dev.txt
     - name: Setup Testing .env File
       run: mv testing.env .env
-    - name: Load Fixtures
+    - name: Import Fixtures
       run: |
         export FLASK_APP=variance.create_app
         python3.10 -m flask db init
@@ -31,6 +31,14 @@ jobs:
         python3.10 -m flask equipment import variance/fixtures
     - name: CLI Listings
       run : |
+        export FLASK_APP=variance.create_app
         python3.10 -m flask units list
         python3.10 -m flask muscles list
         python3.10 -m flask equipment list
+    - name: Export Fixtures
+      run: |
+        export FLASK_APP=variance.create_app
+        python3.10 -m flask db init
+        python3.10 -m flask units export TEST_EXPORT
+        python3.10 -m flask muscles export TEST_EXPORT
+        python3.10 -m flask equipment export TEST_EXPORT
