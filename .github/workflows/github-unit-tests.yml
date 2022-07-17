@@ -20,6 +20,8 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements_dev.txt
+    - name: Setup Testing .env File
+      run: mv testing.env .env
     - name: Load Fixtures
       run: |
         export FLASK_APP=variance.create_app
