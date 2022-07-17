@@ -17,14 +17,14 @@ jobs:
         python3.7 -m pip install -r requirements_dev.txt
     - name: Load Fixtures
       run: |
-      set FLASK_APP=variance.create_app
-      python3.7 -m flask run
-      python3.7 -m flask db init
-      python3.7 -m flask units import variance/fixtures
-      python3.7 -m flask muscles import variance/fixtures
-      python3.7 -m flask equipment import variance/fixtures
+        set FLASK_APP=variance.create_app
+        python3.7 -m flask run
+        python3.7 -m flask db init
+        python3.7 -m flask units import variance/fixtures
+        python3.7 -m flask muscles import variance/fixtures
+        python3.7 -m flask equipment import variance/fixtures
     - name: CLI Listings
       run : |
-      python3.7 -m flask units list
-      python3.7 -m flask muscles list
-      python3.7 -m flask equipment list
+        python3.7 -m flask units list
+        python3.7 -m flask muscles list
+        python3.7 -m flask equipment list
