@@ -43,8 +43,8 @@ def load_cli(app):
     from variance import cli
     c = app.cli
     c.add_command(cli.db.db_cli)
-    c.add_command(cli.permissions.permissions_cli)
     
+    cli.permissions.permissions_cli.attach(c)
     cli.user.user_cli.attach(c)
     cli.equipment.equipment_cli.attach(c)
     cli.muscle.muscle_cli.attach(c)

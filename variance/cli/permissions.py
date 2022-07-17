@@ -3,13 +3,14 @@ from flask.cli import AppGroup
 
 from variance.extensions import db
 from variance.models.permissions import PermissionModel
+from variance.schemas.permissions import PermissionSchema
+from variance.cli.resource import ResourceCLI
 
-permissions_cli = AppGroup("perm")
+permissions_cli = ResourceCLI(PermissionModel, PermissionSchema, "Permissions", "perms", ("id",))
 permissions_mod_cli = AppGroup("mod")
-permissions_cli.add_command(permissions_mod_cli)
+permissions_cli.group.add_command(permissions_mod_cli)
 
-
-@permissions_cli.command("get_action")
+@permissions_cli.group.command("get_action")
 @click.argument("action")
 def cli_permission_get_by_action(action):
     p = PermissionModel.query.filter_by(action=action)
@@ -19,28 +20,7 @@ def cli_permission_get_by_action(action):
     for i in p:
         click.echo(str(i))
 
-
-@permissions_cli.command("list")
-def cli_permission_list():
-    p = PermissionModel.query.all()
-    for i in p:
-        click.echo(str(i))
-
-
-@permissions_cli.command("del")
-@click.argument("perm_id")
-def cli_permission_del(perm_id):
-    p = PermissionModel.query.get(perm_id)
-    if p is None:
-        click.echo("No permission with that ID found!")
-        return -1
-    action = p.action
-    db.session.delete(p)
-    db.session.commit()
-    click.echo("Permission %u (%s) deleted." % (int(p.id), action))
-
-
-@permissions_cli.command("add")
+@permissions_cli.group.command("add")
 @click.argument("action")
 @click.option("-r", "--role", "r", type=str)
 @click.option("-u", "--allow-uid", "u", type=int)
