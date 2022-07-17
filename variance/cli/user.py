@@ -9,6 +9,8 @@ from variance.schemas.user import UserSchema
 from variance.cli.resource import ResourceCLI
 
 user_cli = ResourceCLI(UserModel, UserSchema, "Users", "users", ("id", ))
+user_set_cli = AppGroup("set")
+user_cli.group.add_command(user_set_cli)
 
 @user_cli.group.command("add")
 @click.argument("username")
@@ -31,7 +33,7 @@ def cli_user_add(username, password, birthdate):
     click.echo("User %s added." % (username))
 
 
-@user_mod_cli.group.command("role")
+@user_set_cli.command("role")
 @click.argument("user_id")
 @click.argument("new_role")
 def cli_user_mod_role(user_id, new_role):
