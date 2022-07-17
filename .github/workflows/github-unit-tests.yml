@@ -28,17 +28,27 @@ jobs:
         python3.10 -m flask db init
         python3.10 -m flask units import variance/fixtures
         python3.10 -m flask muscles import variance/fixtures
+        python3.10 -m flask muscles groups import variance/fixtures
         python3.10 -m flask equipment import variance/fixtures
+        python3.10 -m flask exercises import variance/fixtures
+        python3.10 -m flask nutrients import variance/fixtures
     - name: CLI Listings
       run : |
         export FLASK_APP=variance.create_app
         python3.10 -m flask units list
         python3.10 -m flask muscles list
+        python3.10 -m flask muscles groups list
         python3.10 -m flask equipment list
+        python3.10 -m flask exercises list
+        python3.10 -m flask nutrients list
+    - name: Export Fixtures
     - name: Export Fixtures
       run: |
         export FLASK_APP=variance.create_app
         python3.10 -m flask db init
         python3.10 -m flask units export TEST_EXPORT
         python3.10 -m flask muscles export TEST_EXPORT
+        python3.10 -m flask muscles groups export TEST_EXPORT
+        python3.10 -m flask exercises export TEST_EXPORT
         python3.10 -m flask equipment export TEST_EXPORT
+        python3.10 -m flask nutrients export TEST_EXPORT
