@@ -1,1 +1,1 @@
-{"canonical_name": "standing-overhead-press", "name": "Standing Overhead Press", "use_duration": false, "use_weight": true, "description": "Overhead press with a barbell while standing.", "use_distance": false}
+{"use_weight": true, "name": "Standing Overhead Press", "use_distance": false, "description": "Overhead press with a barbell while standing.", "canonical_name": "standing-overhead-press", "use_duration": false}

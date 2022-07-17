@@ -1,1 +1,1 @@
-{"canonical_name": "seated-db-overhead-press", "name": "Seated DB Overhead Press", "use_duration": false, "use_weight": true, "description": "Overhead press with dumbbells while sitting.", "use_distance": false}
+{"use_weight": true, "name": "Seated DB Overhead Press", "use_distance": false, "description": "Overhead press with dumbbells while sitting.", "canonical_name": "seated-db-overhead-press", "use_duration": false}

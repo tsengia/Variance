@@ -1,1 +1,1 @@
-{"canonical_name": "barbell-curl", "name": "Barbell Curl", "use_duration": false, "use_weight": true, "description": "Standing bicep curl using a barbell.", "use_distance": false}
+{"use_weight": true, "name": "Barbell Curl", "use_distance": false, "description": "Standing bicep curl using a barbell.", "canonical_name": "barbell-curl", "use_duration": false}

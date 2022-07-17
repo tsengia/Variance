@@ -1,1 +1,1 @@
-{"canonical_name": "db-curl", "name": "DB Curl", "use_duration": false, "use_weight": true, "description": "Standing bicep curl using dumbbells.", "use_distance": false}
+{"use_weight": true, "name": "DB Curl", "use_distance": false, "description": "Standing bicep curl using dumbbells.", "canonical_name": "db-curl", "use_duration": false}

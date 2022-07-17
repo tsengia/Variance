@@ -1,1 +1,1 @@
-{"canonical_name": "snatch", "name": "Snatch", "use_duration": false, "use_weight": true, "description": "Barbell snatch.", "use_distance": false}
+{"use_weight": true, "name": "Snatch", "use_distance": false, "description": "Barbell snatch.", "canonical_name": "snatch", "use_duration": false}

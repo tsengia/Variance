@@ -1,1 +1,1 @@
-{"canonical_name": "dips", "name": "Dips", "use_duration": false, "use_weight": false, "description": "Dips.", "use_distance": false}
+{"use_weight": false, "name": "Dips", "use_distance": false, "description": "Dips.", "canonical_name": "dips", "use_duration": false}

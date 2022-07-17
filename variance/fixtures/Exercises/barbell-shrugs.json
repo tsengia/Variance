@@ -1,1 +1,1 @@
-{"canonical_name": "barbell-shrugs", "name": "Barbell Shrugs", "use_duration": false, "use_weight": true, "description": "Standing barbell shrugs.", "use_distance": false}
+{"use_weight": true, "name": "Barbell Shrugs", "use_distance": false, "description": "Standing barbell shrugs.", "canonical_name": "barbell-shrugs", "use_duration": false}

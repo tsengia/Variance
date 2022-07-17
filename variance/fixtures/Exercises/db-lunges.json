@@ -1,1 +1,1 @@
-{"canonical_name": "db-lunges", "name": "DB Lunges", "use_duration": false, "use_weight": true, "description": "Weighted lunges.", "use_distance": false}
+{"use_weight": true, "name": "DB Lunges", "use_distance": false, "description": "Weighted lunges.", "canonical_name": "db-lunges", "use_duration": false}

@@ -1,1 +1,1 @@
-{"canonical_name": "toe-raises", "name": "Toe Raises", "use_duration": false, "use_weight": true, "description": "Weighted toe raises.", "use_distance": false}
+{"use_weight": true, "name": "Toe Raises", "use_distance": false, "description": "Weighted toe raises.", "canonical_name": "toe-raises", "use_duration": false}

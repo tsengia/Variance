@@ -1,1 +1,1 @@
-{"canonical_name": "weighted-dips", "name": "Weighted Dips", "use_duration": false, "use_weight": true, "description": "Dips with additional weight on top.", "use_distance": false}
+{"use_weight": true, "name": "Weighted Dips", "use_distance": false, "description": "Dips with additional weight on top.", "canonical_name": "weighted-dips", "use_duration": false}

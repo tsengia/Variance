@@ -1,1 +1,1 @@
-{"canonical_name": "pause-squat", "name": "Pause Squat", "use_duration": false, "use_weight": true, "description": "Back squat with a barbell, but a pause in movement at the bottom of the motion", "use_distance": false}
+{"use_weight": true, "name": "Pause Squat", "use_distance": false, "description": "Back squat with a barbell, but a pause in movement at the bottom of the motion", "canonical_name": "pause-squat", "use_duration": false}

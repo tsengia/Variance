@@ -1,1 +1,1 @@
-{"canonical_name": "standing-db-overhead-press", "name": "Standing DB Overhead Press", "use_duration": false, "use_weight": true, "description": "Overhead press with dumbbells while standing.", "use_distance": false}
+{"use_weight": true, "name": "Standing DB Overhead Press", "use_distance": false, "description": "Overhead press with dumbbells while standing.", "canonical_name": "standing-db-overhead-press", "use_duration": false}

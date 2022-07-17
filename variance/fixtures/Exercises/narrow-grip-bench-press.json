@@ -1,1 +1,1 @@
-{"canonical_name": "narrow-grip-bench-press", "name": "Narrow Grip Bench Press", "use_duration": false, "use_weight": true, "description": "Flat bench press using a barbell, hands placed shoulder width apart.", "use_distance": false}
+{"use_weight": true, "name": "Narrow Grip Bench Press", "use_distance": false, "description": "Flat bench press using a barbell, hands placed shoulder width apart.", "canonical_name": "narrow-grip-bench-press", "use_duration": false}

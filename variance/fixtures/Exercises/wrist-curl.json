@@ -1,1 +1,1 @@
-{"canonical_name": "wrist-curl", "name": "Wrist Curl", "use_duration": false, "use_weight": true, "description": "Single forearm curls using a dumbbell.", "use_distance": false}
+{"use_weight": true, "name": "Wrist Curl", "use_distance": false, "description": "Single forearm curls using a dumbbell.", "canonical_name": "wrist-curl", "use_duration": false}

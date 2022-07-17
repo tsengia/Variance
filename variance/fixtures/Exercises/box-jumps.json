@@ -1,1 +1,1 @@
-{"canonical_name": "box-jumps", "name": "Box Jumps", "use_duration": false, "use_weight": false, "description": "Box jumps", "use_distance": false}
+{"use_weight": false, "name": "Box Jumps", "use_distance": false, "description": "Box jumps", "canonical_name": "box-jumps", "use_duration": false}

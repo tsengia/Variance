@@ -1,1 +1,1 @@
-{"canonical_name": "bench-press", "name": "Bench Press", "use_duration": false, "use_weight": true, "description": "Flat bench press using a barbell.", "use_distance": false}
+{"use_weight": true, "name": "Bench Press", "use_distance": false, "description": "Flat bench press using a barbell.", "canonical_name": "bench-press", "use_duration": false}

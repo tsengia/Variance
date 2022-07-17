@@ -1,1 +1,1 @@
-{"canonical_name": "pull-ups", "name": "Pull Ups", "use_duration": false, "use_weight": false, "description": "Pull Up.", "use_distance": false}
+{"use_weight": false, "name": "Pull Ups", "use_distance": false, "description": "Pull Up.", "canonical_name": "pull-ups", "use_duration": false}

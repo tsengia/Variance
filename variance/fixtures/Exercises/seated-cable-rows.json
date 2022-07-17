@@ -1,1 +1,1 @@
-{"canonical_name": "seated-cable-rows", "name": "Seated Cable Rows", "use_duration": false, "use_weight": true, "description": "Seated rows using a rowing machine.", "use_distance": false}
+{"use_weight": true, "name": "Seated Cable Rows", "use_distance": false, "description": "Seated rows using a rowing machine.", "canonical_name": "seated-cable-rows", "use_duration": false}

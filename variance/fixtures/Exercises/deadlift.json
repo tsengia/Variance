@@ -1,1 +1,1 @@
-{"canonical_name": "deadlift", "name": "Deadlift", "use_duration": false, "use_weight": true, "description": "Barbell deadlift", "use_distance": false}
+{"use_weight": true, "name": "Deadlift", "use_distance": false, "description": "Barbell deadlift", "canonical_name": "deadlift", "use_duration": false}

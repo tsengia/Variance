@@ -1,1 +1,1 @@
-{"canonical_name": "cable-tricep-pushdowns", "name": "Cable Tricep Pushdowns", "use_duration": false, "use_weight": true, "description": "Tricep pushdown using a cable machine.", "use_distance": false}
+{"use_weight": true, "name": "Cable Tricep Pushdowns", "use_distance": false, "description": "Tricep pushdown using a cable machine.", "canonical_name": "cable-tricep-pushdowns", "use_duration": false}

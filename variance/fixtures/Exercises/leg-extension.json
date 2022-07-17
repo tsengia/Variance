@@ -1,1 +1,1 @@
-{"canonical_name": "leg-extension", "name": "Leg Extension", "use_duration": false, "use_weight": true, "description": "Seated leg extension using a leg extension machine.", "use_distance": false}
+{"use_weight": true, "name": "Leg Extension", "use_distance": false, "description": "Seated leg extension using a leg extension machine.", "canonical_name": "leg-extension", "use_duration": false}
