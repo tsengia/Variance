@@ -22,7 +22,6 @@ jobs:
     - name: Load Fixtures
       run: |
         set FLASK_APP=variance.create_app
-        python3.10 -m flask run
         python3.10 -m flask db init
         python3.10 -m flask units import variance/fixtures
         python3.10 -m flask muscles import variance/fixtures
