@@ -32,6 +32,7 @@ jobs:
         python3.10 -m flask equipment import variance/fixtures
         python3.10 -m flask exercises import variance/fixtures
         python3.10 -m flask nutrients import variance/fixtures
+        python3.10 -m flask perms import variance/fixtures
     - name: CLI Listings
       run : |
         export FLASK_APP=variance.create_app
@@ -41,6 +42,7 @@ jobs:
         python3.10 -m flask equipment list
         python3.10 -m flask exercises list
         python3.10 -m flask nutrients list
+        python3.10 -m flask perms list
     - name: Export Fixtures
       run: |
         export FLASK_APP=variance.create_app
@@ -51,3 +53,4 @@ jobs:
         python3.10 -m flask exercises export TEST_EXPORT
         python3.10 -m flask equipment export TEST_EXPORT
         python3.10 -m flask nutrients export TEST_EXPORT
+        python3.10 -m flask perms export TEST_EXPORT
