@@ -1,1 +1,1 @@
-{"name": "pints", "multiplier": 480.0, "abbreviation": "pt", "dimension": "volume"}
+{"canonical_name": "pints", "name": "pints", "dimension": "volume", "removable": false, "multiplier": 480.0, "abbreviation": "pt"}

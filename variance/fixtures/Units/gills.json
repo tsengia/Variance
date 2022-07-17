@@ -1,1 +1,1 @@
-{"name": "gills", "multiplier": 120.0, "abbreviation": "gill", "dimension": "volume"}
+{"canonical_name": "gills", "name": "gills", "dimension": "volume", "removable": false, "multiplier": 120.0, "abbreviation": "gill"}

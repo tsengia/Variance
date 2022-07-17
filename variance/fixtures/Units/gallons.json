@@ -1,1 +1,1 @@
-{"name": "gallons", "multiplier": 3840.0, "abbreviation": "gal", "dimension": "volume"}
+{"canonical_name": "gallons", "name": "gallons", "dimension": "volume", "removable": false, "multiplier": 3840.0, "abbreviation": "gal"}

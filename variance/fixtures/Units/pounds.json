@@ -1,1 +1,1 @@
-{"name": "pounds", "multiplier": 453.5924, "abbreviation": "lb", "dimension": "mass"}
+{"canonical_name": "pounds", "name": "pounds", "dimension": "mass", "removable": false, "multiplier": 453.5924, "abbreviation": "lb"}

@@ -1,1 +1,1 @@
-{"name": "milliliters", "multiplier": 1.0, "abbreviation": "mL", "dimension": "volume"}
+{"canonical_name": "milliliters", "name": "milliliters", "dimension": "volume", "removable": false, "multiplier": 1.0, "abbreviation": "mL"}

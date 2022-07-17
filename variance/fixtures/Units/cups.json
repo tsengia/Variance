@@ -1,1 +1,1 @@
-{"name": "cups", "multiplier": 240.0, "abbreviation": "cup", "dimension": "volume"}
+{"canonical_name": "cups", "name": "cups", "dimension": "volume", "removable": false, "multiplier": 240.0, "abbreviation": "cup"}

@@ -1,1 +1,1 @@
-{"name": "micrograms", "multiplier": 1e-06, "abbreviation": "ug", "dimension": "mass"}
+{"canonical_name": "micrograms", "name": "micrograms", "dimension": "mass", "removable": false, "multiplier": 1e-06, "abbreviation": "ug"}

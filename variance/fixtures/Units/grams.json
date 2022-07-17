@@ -1,1 +1,1 @@
-{"name": "grams", "multiplier": 1.0, "abbreviation": "g", "dimension": "mass"}
+{"canonical_name": "grams", "name": "grams", "dimension": "mass", "removable": false, "multiplier": 1.0, "abbreviation": "g"}

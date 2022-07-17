@@ -1,1 +1,1 @@
-{"name": "miles/hour", "multiplier": 0.44704, "abbreviation": "mph", "dimension": "speed"}
+{"canonical_name": "miles-per-hour", "name": "miles/hour", "dimension": "speed", "removable": false, "multiplier": 0.44704, "abbreviation": "mph"}

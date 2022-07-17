@@ -1,1 +1,1 @@
-{"name": "quarts", "multiplier": 960.0, "abbreviation": "qt", "dimension": "volume"}
+{"canonical_name": "quarts", "name": "quarts", "dimension": "volume", "removable": false, "multiplier": 960.0, "abbreviation": "qt"}

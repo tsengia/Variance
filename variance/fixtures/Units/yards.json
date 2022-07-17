@@ -1,1 +1,1 @@
-{"name": "yards", "multiplier": 0.9144, "abbreviation": "yd", "dimension": "length"}
+{"canonical_name": "yards", "name": "yards", "dimension": "length", "removable": false, "multiplier": 0.9144, "abbreviation": "yd"}

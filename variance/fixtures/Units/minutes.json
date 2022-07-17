@@ -1,1 +1,1 @@
-{"name": "minutes", "multiplier": 60.0, "abbreviation": "min", "dimension": "time"}
+{"canonical_name": "minutes", "name": "minutes", "dimension": "time", "removable": false, "multiplier": 60.0, "abbreviation": "min"}

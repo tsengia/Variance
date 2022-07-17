@@ -1,1 +1,1 @@
-{"name": "stone", "multiplier": 6350.293, "abbreviation": "st", "dimension": "mass"}
+{"canonical_name": "stone", "name": "stone", "dimension": "mass", "removable": false, "multiplier": 6350.293, "abbreviation": "st"}

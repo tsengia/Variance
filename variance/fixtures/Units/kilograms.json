@@ -1,1 +1,1 @@
-{"name": "kilograms", "multiplier": 1000.0, "abbreviation": "kg", "dimension": "mass"}
+{"canonical_name": "kilograms", "name": "kilograms", "dimension": "mass", "removable": false, "multiplier": 1000.0, "abbreviation": "kg"}
