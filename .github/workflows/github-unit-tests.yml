@@ -24,7 +24,7 @@ jobs:
       run: mv testing.env .env
     - name: Load Fixtures
       run: |
-        export FLASK_APP=variance.create_app
+        export FLASK_APP=variance.create_unit_test_app
         python3.10 -m flask db init
         python3.10 -m flask units import variance/fixtures
         python3.10 -m flask muscles import variance/fixtures
