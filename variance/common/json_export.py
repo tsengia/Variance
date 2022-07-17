@@ -15,8 +15,15 @@ def export_models(ModelType, ModelSchema, export_path, exclude=("id",)):
     model_list = ModelType.query.all()
     dump_schema = ModelSchema(exclude=exclude)
     for m in model_list:
-        cname = m.canonical_name
-        f = export_path / (cname + ".json")
+        if hasattr(m, "canonical_name"):
+            filename = m.canonical_name
+        elif hasattr(m, "name"):
+            # If model doesn't have a canonical_name, try a name
+            filename = m.name
+        else:
+            # If model doesn't have a canonical_name or a name, use id
+            filename = str(m.id)
+        f = export_path / (filename + ".json")
         f.write_text(dump_schema.dumps(m))
 
     return len(model_list)
