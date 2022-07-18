@@ -37,6 +37,8 @@ def load_models(app):
     "Helper function that imports all the models"
     from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, permissions, workout, nutrition, mealplan
     logging.info("Variance Models imported.")
+    from variance.associations import exercise_muscle
+    logging.info("Variance Model associations created")
 
 def load_cli(app):
     "Helper function that imports all the CLI commands"
