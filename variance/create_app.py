@@ -10,27 +10,14 @@ from flask_smorest import Api, Blueprint
 
 from variance.extensions import db
 
-def load_default_settings(app):
-    from variance.api.defaults import DefaultSettingsManager
-    instance_path = pathlib.Path(app.instance_path)
-    defaults_path = instance_path / "defaults"
-    app.defaults_manager = DefaultSettingsManager(defaults_path)
-    logging.info("Default settings loaded.")
-
 def setup_instance_path(instance_path):
     "Setup the instance directory structure"
     instance_path = pathlib.Path(instance_path)
-    defaults_path = instance_path / "defaults"
     if not instance_path.exists():
         instance_path.mkdir(exist_ok=True)
         if not instance_path.is_dir():
             print("Instance directory could not be created! Exiting.")
             exit()
-        defaults_path.mkdir(exist_ok=True)
-        if not defaults_path.is_dir():
-            print("Defaults settings directory could not be created! Exiting.")
-            exit()
-        shutil.copyfile(str(pathlib.Path("variance") / "defaults" / "user.json"), str(defaults_path / "user.json")) 
         logging.info("Created new instance directory")
 
 def load_models(app):
@@ -108,9 +95,5 @@ def create_app(test_config=None):
     db.init_app(app)
 
     logging.info("Variance AppDB init done.")
- 
-    @app.before_first_request
-    def load_def_settings():
-        load_default_settings(app)
 
     return app
