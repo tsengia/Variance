@@ -40,6 +40,7 @@ def load_cli(app):
     cli.gym.gym_cli.attach(c)
     cli.exercise.exercise_cli.attach(c)
     cli.unit.unit_cli.attach(c)
+    cli.tracker.tracker_cli.attach(c)
     cli.nutrient.nutrient_cli.attach(c)
     cli.consumable.consumable_cli.attach(c)
     
