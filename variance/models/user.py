@@ -46,50 +46,7 @@ class UserModel(db.Model):
         "ConsumedEntryModel", back_populates="owner", cascade="all, delete")
     programs = db.relationship(
         "WorkoutProgramModel", back_populates="owner", cascade="all, delete")
-
-    # Unit Display Preferences
-    # lb or kg
-    exercise_weight_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    exercise_weight_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.exercise_weight_unit_id")
-
-    # mile or km
-    exercise_distance_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    exercise_distance_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.exercise_distance_unit_id")
-
-    # oz/lb or grams
-    food_weight_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    food_weight_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.food_weight_unit_id")
-
-    # fl. oz or Liters
-    food_volume_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    food_volume_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.food_volume_unit_id")
-
-    # Pounds, stone, or kg?
-    body_weight_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    body_weight_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.body_weight_unit_id")
-
-    # Feet or meters?
-    body_distance_large_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    body_distance_large_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.body_distance_large_unit_id")
-
-    # Inches or cm?
-    body_distance_small_unit_id = db.Column(
-        db.Integer, db.ForeignKey("UnitIndex.id"), nullable=False)
-    body_distance_small_unit = db.relationship(
-        "UnitModel", foreign_keys="UserModel.body_distance_small_unit_id")
-
+    
     # Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies
     # containing peanuts will be suggested)
