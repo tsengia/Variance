@@ -25,6 +25,11 @@ def load_models(app):
     from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, permissions, workout, nutrition, mealplan
     logging.info("Variance Models imported.")
 
+def load_settings(app):
+    "Helper function that imports all user_defaults and global_defaults"
+    from variance.settings import global_defaults, user_defaults
+    logging.info("Variance settings models imported.")
+
 def load_cli(app):
     "Helper function that imports all the CLI commands"
     from variance import cli
@@ -86,6 +91,8 @@ def create_app(test_config=None):
     rest_api = Api(app)
 
     load_models(app)
+
+    load_settings(app)
 
     load_cli(app)
 
