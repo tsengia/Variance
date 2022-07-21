@@ -9,7 +9,7 @@ from variance.models.permissions import PermissionModel
 
 # Internal function that checks to see if there are any permission entries
 # that permit the user/client to perform the action
-def check_perms(user, action, model) -> bool:
+def authorize_user(user, action, model) -> bool:
     """
     Checks the permission tables to see if the given user is authorized
     to perform the given action.
@@ -31,9 +31,9 @@ def check_perms(user, action, model) -> bool:
     return False
 
 
-def check_perms_or_abort(user, action, model):
+def authorize_user_or_abort(user, action, model):
     """
-    Calls check_perms() and aborts with a 401 message if the user is not
+    Calls authorize_user() and aborts with a 401 message if the user is not
     authorized to perform the action on the given model.
     """
     allowed = check_perms(user, action, model)
