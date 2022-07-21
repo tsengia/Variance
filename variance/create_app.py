@@ -46,8 +46,6 @@ def load_cli(app):
     cli.tracker.tracker_cli.attach(c)
     cli.nutrient.nutrient_cli.attach(c)
     cli.consumable.consumable_cli.attach(c)
-    
-    c.add_command(cli.load_fixtures.lf_cli)
 
     logging.info("Variance CLI loaded.")
 
