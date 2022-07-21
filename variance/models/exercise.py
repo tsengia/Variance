@@ -12,6 +12,19 @@ ExerciseEquipmentAssociationTable = db.Table(
     db.Column("exercise_id", db.ForeignKey("ExerciseIndex.id"))
 )
 
+"""
+This association table maps exercises to the collection of muscles
+that the exercise targets. The "intensity" column is a relative measure
+of how much a muscle is worked by the exercise that should vary from 0 to 1
+"""
+ExerciseMuscleAssociation= db.Table(
+    "ExerciseMuscleAssociation",
+    db.metadata,
+    db.Column("exercise_id", db.ForeignKey("ExerciseIndex.id")),
+    db.Column("muscle_id", db.ForeignKey("MuscleIndex.id")),
+    db.Column("intensity", db.Float(), nullable=False)
+)
+
 class ExerciseModel(db.Model):
     "Model for representing exercises that users can perform"
     __tablename__ = "ExerciseIndex"
@@ -42,6 +55,12 @@ class ExerciseModel(db.Model):
         secondary="ExerciseEquipmentAssociation", 
         back_populates="exercises")
     "Pieces of equipment does this exercise uses."
+
+    muscles = db.relationship(
+        "MuscleModel",
+        secondary="ExerciseMuscleAssociation",
+        back_populates="exercises")
+    "Muscles that this exercise activates.."
 
     parent_exercise_id = db.Column(
         db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)

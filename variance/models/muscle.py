@@ -62,7 +62,13 @@ class MuscleModel(db.Model):
         "MuscleGroupModel",
         secondary=MuscleGroupAssociationTable,
         back_populates="muscles")
-    "List of groups this muscle belongs to"
+    "List of Muscle Groups this muscle belongs to."
+
+    exercises = db.relationship(
+        "ExerciseModel",
+        secondary="ExerciseMuscleAssociation",
+        back_populates="muscles")
+    "List of exercises that activate this muscle."
 
     @staticmethod
     def has_owner() -> bool:
