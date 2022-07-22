@@ -8,7 +8,6 @@ from . import gym
 from . import exercise
 from . import tracker
 from . import workout
-from . import permissions
 from . import nutrition
 from . import mealplan
 from . import lambda_measure

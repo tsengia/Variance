@@ -22,7 +22,7 @@ def setup_instance_path(instance_path):
 
 def load_models(app):
     "Helper function that imports all the models"
-    from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, permissions, workout, nutrition, mealplan
+    from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, workout, nutrition, mealplan
     logging.info("Variance Models imported.")
 
 def load_settings(app):
@@ -36,7 +36,6 @@ def load_cli(app):
     c = app.cli
     c.add_command(cli.db.db_cli)
     
-    cli.permissions.permissions_cli.attach(c)
     cli.user.user_cli.attach(c)
     cli.equipment.equipment_cli.attach(c)
     cli.muscle.muscle_cli.attach(c)
