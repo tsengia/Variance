@@ -47,14 +47,6 @@ class SetEntryModel(db.Model):
     weight_unit = db.relationship(
         "UnitModel", foreign_keys="SetEntryModel.weight_unit_id")
 
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    owner = db.relationship(
-        "UserModel",
-        foreign_keys="SetEntryModel.owner_id",
-        back_populates="set_entries")
-    "User that created this entry"
-
     def __str__(self) -> str:
         return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id,
                                                                 str(self.time),
@@ -207,14 +199,6 @@ class WorkoutProgramModel(db.Model):
 
     description = db.Column(db.String(300), nullable=True)
     "Description of the workout program"
-
-    is_public = db.Column(db.Boolean, nullable=False, default=False)
-    "If set to true, then all users can see this WorkoutProgram"
-
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    owner = db.relationship("UserModel", back_populates="programs")
-    "User who owns this program"
 
     workouts = db.relationship(
         "WorkoutModel", back_populates="program", cascade="all, delete")

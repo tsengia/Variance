@@ -5,10 +5,9 @@ from flask_smorest import Blueprint, abort
 
 from variance.extensions import db
 from variance.models.user import UserModel
-from variance.models.permissions import PermissionModel
 from variance.schemas.auth import RegisterSchema, LoginSchema
 from variance.common.util import validate_unique_or_abort
-from variance.common.authorize import authorize_or_abort
+from variance.common.authorize import authorize_user_or_abort
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 

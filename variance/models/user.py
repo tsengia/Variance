@@ -29,23 +29,23 @@ class UserModel(db.Model):
 
     # User Data
     # List of trackers this user has running
-    trackers = db.relationship(
-        "TrackerModel", back_populates="owner", cascade="all, delete")
+    #trackers = db.relationship(
+    #    "TrackerModel", back_populates="owner", cascade="all, delete")
 
     # List of nutritional items created by this user
-    consumables = db.relationship(
-        "ConsumableModel", back_populates="owner", cascade="all, delete")
-    recipies = db.relationship(
-        "RecipeModel", back_populates="owner", cascade="all, delete")
-    mealplans = db.relationship(
-        "MealPlanModel", back_populates="owner", cascade="all, delete")
+    #consumables = db.relationship(
+    #    "ConsumableModel", back_populates="owner", cascade="all, delete")
+    #recipies = db.relationship(
+    #    "RecipeModel", back_populates="owner", cascade="all, delete")
+    #mealplans = db.relationship(
+    #    "MealPlanModel", back_populates="owner", cascade="all, delete")
 
-    set_entries = db.relationship(
-        "SetEntryModel", back_populates="owner", cascade="all, delete")
-    consumption_entries = db.relationship(
-        "ConsumedEntryModel", back_populates="owner", cascade="all, delete")
-    programs = db.relationship(
-        "WorkoutProgramModel", back_populates="owner", cascade="all, delete")
+    #set_entries = db.relationship(
+    #    "SetEntryModel", back_populates="owner", cascade="all, delete")
+    #consumption_entries = db.relationship(
+    #    "ConsumedEntryModel", back_populates="owner", cascade="all, delete")
+    #programs = db.relationship(
+    #    "WorkoutProgramModel", back_populates="owner", cascade="all, delete")
     
     # Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies
