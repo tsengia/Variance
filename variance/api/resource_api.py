@@ -21,9 +21,27 @@ class VarianceResource(resource_schema, resource_model, file_name: str, endpoint
 
     @blueprint.route("/")
     class VarianceResourceCollectionEndpoint(MethodView):
-        def get(self):
-            # TODO: Implement this, include paging
-            pass
+
+        @blueprint.response(200, resource_schema(many=True))
+        @blueprint.paginate()
+        def get(self, pagination_parameters):
+            authorize_user_or_abort(g.user, endpoint_name + ".list", False)
+
+            # base query that we will then filter out            
+            base_query = resource_model.query.all()
+            
+            # TODO: Apply search filters
+            # TODO: Apply user-level visibility
+    
+            # flask-smorest needs us to set the item_count
+            total_count = base_query.count()
+            pagination_parameters.item_count = total_count
+            
+            paginate_query = base_query.paginate(
+                pagination_parameters.page,
+                pagination_parameters.page_size)
+
+            return paginate_query.items
 
         @blueprint.arguments(resource_schema(exclude=("id",))
         @blueprint.response(200, resource_schema)
@@ -33,7 +51,7 @@ class VarianceResource(resource_schema, resource_model, file_name: str, endpoint
             m = resource_model(**new_resource)
             db.session.add(m)
             db.session.commit()
-            pass
+            return m 
 
     @blueprint.route("/<int:resource_id>")
     class VarianceResourceEndpoint(MethodView):
