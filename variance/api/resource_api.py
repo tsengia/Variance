@@ -64,7 +64,7 @@ class VarianceResource(resource_schema, resource_model, file_name: str, endpoint
 
         @blueprint.arguments(resource_schema)
         @blueprint.response(200, resource_schema)
-        def post(self, resource_patch: object, resource_id: int) -> resource_omdel:
+        def put(self, resource_patch: object, resource_id: int) -> resource_omdel:
             m = resource_model.query.get_or_404(resource_id)
             authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
           
