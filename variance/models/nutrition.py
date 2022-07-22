@@ -16,11 +16,6 @@ class ConsumedEntryModel(db.Model):
     time = db.Column(db.DateTime(), nullable=False, default=datetime.now())
     "Time when this entry was made"
 
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    owner = db.relationship("UserModel", back_populates="consumption_entries")
-    "The user who added this mealplan to the database"
-
     # Nutritional Info
     calories = db.Column(db.Float, nullable=False, default=0)
     "Amount of calories consumed (grams)"
@@ -42,13 +37,6 @@ class ConsumedEntryModel(db.Model):
 
     consumable = db.relationship("ConsumableModel")
     "ConsumableModel that the user consumed/ate/drank"
-
-    @staticmethod
-    def has_owner() -> bool:
-        return True
-
-    def check_owner(self, id) -> bool:
-        return self.owner_id == id
 
     def __str__(self) -> str:
         return "%u ConsumedEntryModel: %s @ %s, o(%u), c(%u)" % (
@@ -171,10 +159,6 @@ class NutrientInfoModel(db.Model):
     fndds = db.Column(db.String(20), nullable=True)
     "FNDDS Nutrient Code"
 
-    @staticmethod
-    def has_owner() -> bool:
-        return False
-
     def get_tags(self) -> str:
         a = []
         if self.is_amino_acid:
@@ -212,14 +196,6 @@ class RecipeModel(db.Model):
     instructions = db.Column(db.Text, nullable=True)
     "Instructions on how to prepare this Recipe"
 
-    is_public = db.Column(db.Boolean, nullable=False, default=False)
-    "If set to true, all users can see this Recipe"
-
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    owner = db.relationship("UserModel", back_populates="recipies")
-    "The user who owns this recipe"
-
     ingredients = db.relationship(
         "ConsumableModel", secondary="RecipeIngredientList")
     "List of ingredients that this Recipe requires."
@@ -233,13 +209,6 @@ class RecipeModel(db.Model):
     author = db.Column(db.String(50), nullable=True)
     "Who (name of person) created this recipie? Or where was this recipe pulled from?"
     
-    @staticmethod
-    def has_owner() -> bool:
-        return True
-
-    def check_owner(self, id) -> bool:
-        return self.owner_id == id
-
     def __str__(self) -> str:
         return "%u RecipeModel: %s, public(%s), %u(%s)" % (
             self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
@@ -262,14 +231,6 @@ class ConsumableModel(db.Model):
 
     description = db.Column(db.Text, nullable=True)
     "Description about what this consumable is"
-
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    owner = db.relationship("UserModel", back_populates="consumables")
-    "The user who added this consumable to the database"
-
-    is_public = db.Column(db.Boolean, nullable=False, default=False)
-    "If set to true, all users can see this consumable"
 
     # Nutritional Info
     serving_size_unit_id = db.Column(db.Integer, db.ForeignKey(
@@ -350,13 +311,6 @@ class ConsumableModel(db.Model):
     upc_e = db.Column(db.Integer, nullable=True)
     ean_8 = db.Column(db.Integer, nullable=True)
     ean_13 = db.Column(db.Integer, nullable=True)
-
-    @staticmethod
-    def has_owner() -> bool:
-        return True
-
-    def check_owner(self, id) -> bool:
-        return self.owner_id == id
 
     def __str__(self) -> str:
         return "%u ConsumableModel: %s, o(%u, %s), public(%s)" % (

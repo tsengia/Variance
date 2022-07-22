@@ -74,7 +74,3 @@ class ExerciseModel(db.Model):
 
     def __str__(self) -> str:
         return "%u - %s Exercise: %s dur(%s), dis(%s), wght(%s)" % (self.id, self.canonical_name, self.name, str(self.use_duration), str(self.use_distance), str(self.use_weight))
-
-    @staticmethod
-    def has_owner() -> bool:
-        return False

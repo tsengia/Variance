@@ -33,26 +33,8 @@ class GymModel(db.Model):
     description = db.Column(db.Text, nullable=True)
     "Description of the gym"
 
-    ### Ownership and visibility
-    is_public = db.Column(db.Boolean, nullable=False, default=False)
-    "Is this gym visible to all users? If set to true, then all users can use this gym"
-
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    " The user id who added this gym to the database "
-    owner = db.relationship("UserModel", backref="gyms")
-
     equipment = db.relationship("EquipmentModel", secondary="GymEquipmentList")
     "Many to many relationship that represents all types of equipment that can be found in this gym"
-
-    @staticmethod
-    def has_owner() -> bool:
-        "Static helper function for the authorization algorithm to know that this type of resource does have a well-defined owner and should check ownership before performing actions."
-        return True
-
-    def check_owner(self, id: int) -> bool:
-        "Returns true if the owner_id is equal to the provided ID"
-        return self.owner.id == id
 
     def __str__(self) -> str:
         return "%u Gym: %s public(%s), owned by %u (%s)" % (

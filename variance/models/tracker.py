@@ -15,12 +15,6 @@ class TrackerModel(db.Model):
     dimension = db.Column(db.String(20), nullable=False)
     "The base dimension/unit that this tracker tracks. For example, the sleep tracker would have a dimension of 'duration'"
 
-    owner_id = db.Column(db.Integer, db.ForeignKey(
-        "UserIndex.id"), nullable=False)
-    "ID of the user that created this tracker."
-    owner = db.relationship("UserModel", back_populates="trackers")
-    "UserModel of the user that created this tracker."
-
     entries = db.relationship("TrackerEntryModel", back_populates="tracker")
     "List of entries this user has entered into this tracker"
 
@@ -28,13 +22,6 @@ class TrackerModel(db.Model):
         return "%u Tracker: %s (%s), user %s (%u)" % (int(self.id),\
             str(self.name), str(self.dimension),\
             str(self.owner.username), int(self.owner_id))
-
-    @staticmethod
-    def has_owner(self) -> bool:
-        return True
-
-    def check_owner(self, id) -> bool:
-        return self.owner_id == id
 
 
 class TrackerEntryModel(db.Model):
@@ -64,12 +51,3 @@ class TrackerEntryModel(db.Model):
         return "%u Tracker Entry: %s %s, tracker (%u) @ %s" % \
             (int(self.id), str(self.value), str(self.unit.abbreviation),\
             int(self.parent_tracker_id), str(self.time))
-
-    @staticmethod
-    def has_owner(self) -> bool:
-        return True
-
-    # Returns True is the given user id is considered the owner of this
-    # tracker entry
-    def check_owner(self, id) -> bool:
-        return self.tracker.check_owner(id)

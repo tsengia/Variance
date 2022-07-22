@@ -55,15 +55,6 @@ class SetEntryModel(db.Model):
         back_populates="set_entries")
     "User that created this entry"
 
-    @staticmethod
-    def has_owner(self) -> bool:
-        return True
-
-    # Returns True is the given user id is considered the owner of this set
-    # entry
-    def check_owner(self, id) -> bool:
-        return self.owner_id == id
-
     def __str__(self) -> str:
         return "%u SetEntryModel: @%s o%u(%s) e%u(%s) r(%u)" % (self.id,
                                                                 str(self.time),
@@ -165,15 +156,6 @@ class SetPlanModel(db.Model):
         "TODO: Implement this, should return the distance either from value or lambda" 
         return 0.0
 
-    @staticmethod
-    def has_owner(self) -> bool:
-        return True
-
-    # Returns True is the given user id is considered the owner of this
-    # tracker entry
-    def check_owner(self, id) -> bool:
-        return self.workout.check_owner(id)
-
     def __str__(self):
         return "%u SetPlanModel: w%u, %u reps, %u(%s)" % (
             self.id, self.workout_id, self.reps, self.exercise_id, self.exercise.name)
@@ -206,15 +188,6 @@ class WorkoutModel(db.Model):
     program = db.relationship("WorkoutProgramModel", back_populates="workouts")
     "Workout Program this workout belongs to"
 
-    @staticmethod
-    def has_owner(self) -> bool:
-        return True
-
-    # Returns True is the given user id is considered the owner of this
-    # tracker entry
-    def check_owner(self, id) -> bool:
-        return self.program.check_owner(id)
-
     def __str__(self) -> str:
         return "%u WorkoutModel: %s on %s, %u" % (
             self.id, self.name, self.day, self.week_id)
@@ -246,15 +219,6 @@ class WorkoutProgramModel(db.Model):
     workouts = db.relationship(
         "WorkoutModel", back_populates="program", cascade="all, delete")
     "Workouts in this program"
-
-    @staticmethod
-    def has_owner(self) -> bool:
-        return True
-
-    # Returns True is the given user id is considered the owner of this
-    # tracker entry
-    def check_owner(self, id) -> bool:
-        return self.owner_id == id
 
     def __str__(self) -> str:
         return "%u ProgramModel: %s, %u(%s), public(%s)" % (

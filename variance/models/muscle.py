@@ -32,10 +32,6 @@ class MuscleGroupModel(db.Model):
         back_populates="groups")
     "List of muscles in this muscle group"
 
-    @staticmethod
-    def has_owner() -> bool:
-        return False
-
     def __str__(self) -> str:
         return "%u MuscleGroupModel: %s" % (self.id, self.name)
 
@@ -70,10 +66,6 @@ class MuscleModel(db.Model):
         back_populates="muscles")
     "List of exercises that activate this muscle."
 
-    @staticmethod
-    def has_owner() -> bool:
-        return False
-
     def __str__(self) -> str:
         return "%i MuscleModel: %s" % (self.id, self.name)
 
@@ -94,10 +86,6 @@ class MuscleSectionModel(db.Model):
         db.Integer, db.ForeignKey("MuscleIndex.id"), nullable=False)
     "The larger muscle that this section is a part of."
     parent_muscle = db.relationship("MuscleModel", backref="sections")
-
-    @staticmethod
-    def has_owner() -> bool:
-        return False
 
     def __str__(self) -> str:
         return "%i MuscleSectionModel: %s" % (self.id, self.name)

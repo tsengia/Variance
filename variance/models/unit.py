@@ -1,6 +1,5 @@
 from variance.extensions import db
 
-
 class UnitModel(db.Model):
     __tablename__ = "UnitIndex"
 
@@ -28,10 +27,6 @@ class UnitModel(db.Model):
     # Example: Because the meters unit comes as a default unit in Variance,
     # this would be set to False.
     removable = db.Column(db.Boolean, default=True)
-
-    @staticmethod
-    def has_owner():
-        return False
 
     @staticmethod
     def get_id_by_name(text):
