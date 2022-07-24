@@ -1,8 +1,10 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from variance.schemas.resource import ResourceBaseSchema
 from variance.models.exercise import ExerciseModel
 
+from marshmallow_sqlalchemy import auto_field
 
-class ExerciseSchema(SQLAlchemyAutoSchema):
+class ExerciseSchema(ResourceBaseSchema):
     class Meta:
         model = ExerciseModel
-        load_instance = False
+
+    uuid = auto_field(dump_only=True)

@@ -1,20 +1,20 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy import auto_field
 from variance.models.nutrition import NutrientInfoModel, RecipeModel, ConsumableModel
+from variance.schemas.resource import ResourceBaseSchema
 
-
-class NutrientInfoSchema(SQLAlchemyAutoSchema):
+class NutrientInfoSchema(ResourceBaseSchema):
+    uuid = auto_field(dump_only=True)
     class Meta:
         model = NutrientInfoModel
-        load_instance = False
 
 
-class RecipeSchema(SQLAlchemyAutoSchema):
+class RecipeSchema(ResourceBaseSchema):
+    uuid = auto_field(dump_only=True)
     class Meta:
         model = RecipeModel
-        load_instance = False
 
 
-class ConsumableSchema(SQLAlchemyAutoSchema):
+class ConsumableSchema(ResourceBaseSchema):
+    uuid = auto_field(dump_only=True)
     class Meta:
         model = ConsumableModel
-        load_instance = False

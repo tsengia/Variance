@@ -1,14 +1,14 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy import auto_field
 from variance.models.tracker import TrackerModel, TrackerEntryModel
+from variance.schemas.resource import ResourceBaseSchema
 
-
-class TrackerSchema(SQLAlchemyAutoSchema):
+class TrackerSchema(ResourceBaseSchema):
+    uuid = auto_field(dump_only=True)
     class Meta:
         model = TrackerModel
-        load_instance = False
 
 
-class TrackerEntrySchema(SQLAlchemyAutoSchema):
+class TrackerEntrySchema(ResourceBaseSchema):
+    uuid = auto_field(dump_only=True)
     class Meta:
         model = TrackerEntryModel
-        load_instance = False

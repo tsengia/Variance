@@ -1,8 +1,10 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy import auto_field
 from variance.models.equipment import EquipmentModel
+from variance.schemas.resource import ResourceBaseSchema
 
+class EquipmentSchema(ResourceBaseSchema):
 
-class EquipmentSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = EquipmentModel
-        load_instance = False
+    
+    uuid = auto_field(dump_only=True)

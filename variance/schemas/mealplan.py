@@ -1,20 +1,24 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy import auto_field
 from variance.models.mealplan import MealPlanModel, MealPlanDayModel, MealModel
+from variance.schemas.resource import ResourceBaseSchema
 
 
-class MealPlanSchema(SQLAlchemyAutoSchema):
+class MealPlanSchema(ResourceBaseSchema):
     class Meta:
         model = MealPlanModel
-        load_instance = False
+
+    uuid = auto_field(dump_only=True)
 
 
-class MealPlanDaySchema(SQLAlchemyAutoSchema):
+class MealPlanDaySchema(ResourceBaseSchema):
     class Meta:
         model = MealPlanDayModel
-        load_instance = False
+
+    uuid = auto_field(dump_only=True)
 
 
-class MealSchema(SQLAlchemyAutoSchema):
+class MealSchema(ResourceBaseSchema):
     class Meta:
         model = MealModel
-        load_instance = False
+
+    uuid = auto_field(dump_only=True)

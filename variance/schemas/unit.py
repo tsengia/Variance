@@ -1,15 +1,9 @@
-from marshmallow import Schema, fields, ValidationError, validates
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy import auto_field
 from variance.models.unit import UnitModel
+from variance.schemas.resource import ResourceBaseSchema
 
-import re
+class UnitSchema(ResourceBaseSchema):
+    uuid = auto_field(dump_only=True)
 
-unit_name_schema = re.compile("^[a-zA-Z0-9_-]{1,21}$")
-
-class UnitIDSchema(Schema):
-    id = fields.Integer(required=True)
-
-class UnitSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = UnitModel
-        load_instance = False
