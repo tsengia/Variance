@@ -64,6 +64,7 @@ def load_api(rest_api):
     rest_api.register_blueprint(version_bp, url_prefix="/")
     rest_api.register_blueprint(api.auth.bp, url_prefix="/api/auth")
     rest_api.register_blueprint(api.units.bp, url_prefix="/api/units")
+    rest_api.register_blueprint(api.exercise.exercise_endpoint.blueprint, url_prefix="/api/exercises")
 
     logging.info("Variance API blueprints loaded.")
 
