@@ -10,7 +10,7 @@ test/htmlcov/*
 variance/__pycache__
 variance/venv
 variance/instance
-instance
+instance/
 .env
 variance.log
 docs/build/
