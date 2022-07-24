@@ -19,7 +19,7 @@ class ResourceCLI():
         "Adds this collection of commands to the given group"
         parent_group.add_command(self.group)
 
-    def __init__(self, model: object, schema: object, resource_name: str, group_name: str, exclude: Optional[tuple[str]] = ("id",)):
+    def __init__(self, model: object, schema: object, resource_name: str, group_name: str, exclude: Optional[tuple[str]] = ("uuid",)):
         self.group = AppGroup(group_name)
         self.model_ = model
         self.schema_ = schema
