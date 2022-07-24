@@ -4,7 +4,7 @@ from variance.models.muscle import MuscleModel, MuscleGroupModel
 from variance.schemas.resource import ResourceBaseSchema
 
 class MuscleSchema(ResourceBaseSchema):
-    groups = fields.Nested(lambda: MuscleGroupSchema(only=("id", "canonical_name"), many=True))
+    groups = fields.Nested(lambda: MuscleGroupSchema(only=("uuid",), many=True))
 
     uuid = auto_field(dump_only = True)
     class Meta:
@@ -12,7 +12,7 @@ class MuscleSchema(ResourceBaseSchema):
 
 
 class MuscleGroupSchema(ResourceBaseSchema):
-    muscles = fields.Nested(lambda: MuscleSchema(only=("id", "canonical_name"), many=True))
+    muscles = fields.Nested(lambda: MuscleSchema(only=("uuid",), many=True))
 
     uuid = auto_field(dump_only = True)
     class Meta:
