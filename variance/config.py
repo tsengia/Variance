@@ -39,7 +39,9 @@ class DevConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = e.get("DEV_DATABASE_URI")
     SQLALCHEMY_ECHO = True
-
+    OPENAPI_URL_PREFIX = "/"
+    OPENAPI_RAPIDOC_PATH = "/rapidoc"
+    OPENAPI_RAPIDOC_URL = "https://unpkg.com/rapidoc/dist/rapidoc-min.js"
 
 class UnitTestConfig(DevConfig):
     "Configuration for Unit Testing, should have in-memory SQLite DB"
