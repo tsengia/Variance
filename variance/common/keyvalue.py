@@ -9,8 +9,8 @@ def define_user_key_value_model(value_type: object, table_name: str):
 
         __tablename__ = table_name
 
-        user = db.Column(db.Integer, 
-                db.ForeignKey("UserIndex.id", ondelete="CASCADE"), 
+        user = db.Column(db.String(36),
+                db.ForeignKey("UserIndex.uuid", ondelete="CASCADE"), 
                 nullable=False, primary_key=True)
         "User that this key-value entry is for."
 
