@@ -27,4 +27,4 @@ class EquipmentModel(ResourceBase):
     " List of exercises that use this piece of equipment. "
 
     def __str__(self):
-        return "{i}: {cn} = {n}".format(i=self.uuid, cn=self.canonical_name, n=self.name)
+        return "{0}: {1}".format(self.uuid, self.name)
