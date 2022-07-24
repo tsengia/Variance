@@ -1,28 +1,24 @@
 """
 Modules that contains the GymModel and the GymEquipmentAssociation table
 """
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
 
 
 "Association table that provides the Many to Many relationship between Equipment and Gyms."
 GymEquipmentAssociation = db.Table(
     "GymEquipmentList",
     db.metadata,
-    db.Column("equipment_id", db.ForeignKey("EquipmentIndex.id")),
-    db.Column("gym_id", db.ForeignKey("GymIndex.id"))
+    db.Column("equipment_uuid", db.ForeignKey("EquipmentIndex.uuid")),
+    db.Column("gym_uuid", db.ForeignKey("GymIndex.uuid"))
 )
 
-class GymModel(db.Model):
+class GymModel(ResourceBase):
     """
     Every Gym can have multiple pieces of equipment associated with it.
     Gyms can be public or private (private by default).
     Gyms are really nothing more than a collection of equipment, making it easier to plan workouts
     """
     __tablename__ = "GymIndex"
-
-
-    id = db.Column(db.Integer, primary_key=True)
-    "Unique ID for the GymModel instance, used as primary key in DB."
 
     name = db.Column(db.String(100), unique=False, nullable=False)
     "Name of the gym"
@@ -37,5 +33,5 @@ class GymModel(db.Model):
     "Many to many relationship that represents all types of equipment that can be found in this gym"
 
     def __str__(self) -> str:
-        return "%u Gym: %s public(%s), owned by %u (%s)" % (
-            self.id, self.name, str(self.is_public), self.owner.id, self.owner.username)
+        return "%s Gym: %s public(%s), owned by %u (%s)" % (
+            self.uuid, self.name, str(self.is_public), self.owner.uuid, self.owner.username)

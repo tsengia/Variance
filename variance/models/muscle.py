@@ -1,27 +1,22 @@
 "Modules containing models and associations for Musles and MuscleGroups"
 
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
 
 "Association table. Associates MuscleGroups with their Muscles and vice-versa"
 MuscleGroupAssociationTable = db.Table(
     "MuscleGroupAssociation",
     db.metadata,
-    db.Column("group_id", db.ForeignKey(
-        "MuscleGroupIndex.id")),
-    db.Column("muscle_id", db.ForeignKey(
-        "MuscleIndex.id"))
+    db.Column("group_uuid", db.ForeignKey(
+        "MuscleGroupIndex.uuid")),
+    db.Column("muscle_uuid", db.ForeignKey(
+        "MuscleIndex.uuid"))
 )
 
-class MuscleGroupModel(db.Model):
+class MuscleGroupModel(ResourceBase):
     "Representation of a named group of muscles. Ex: Legs"
     __tablename__ = "MuscleGroupIndex"
 
-    id = db.Column(db.Integer, primary_key=True)
-    
-    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
-    "Canonical name used when exporting and importing/linking data."
-
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     "Display name of this muscle group"
     
     description = db.Column(db.Text, nullable=True)
@@ -33,22 +28,17 @@ class MuscleGroupModel(db.Model):
     "List of muscles in this muscle group"
 
     def __str__(self) -> str:
-        return "%u MuscleGroupModel: %s" % (self.id, self.name)
+        return "%s MuscleGroupModel: %s" % (self.uuid, self.name)
 
 
-class MuscleModel(db.Model):
+class MuscleModel(ResourceBase):
     "Representation of a muscle."
     __tablename__ = "MuscleIndex"
-
-    id = db.Column(db.Integer, primary_key=True)
 
     diagram_id = db.Column(db.Integer, nullable=True)
     "Optional: ID of this muscle used to locate on the anatomy chart"
 
-    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
-    "Canonical name used when exporting and importing/linking data."
-    
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     "Long, anatomical name for this muscle"
 
     short_name = db.Column(db.String(50), nullable=True)
@@ -67,25 +57,23 @@ class MuscleModel(db.Model):
     "List of exercises that activate this muscle."
 
     def __str__(self) -> str:
-        return "%i MuscleModel: %s" % (self.id, self.name)
+        return "%s MuscleModel: %s" % (self.uuid, self.name)
 
 
-class MuscleSectionModel(db.Model):
+class MuscleSectionModel(ResourceBase):
     "Representation of a section of Muscle."
     __tablename__ = "MuscleSectionIndex"
 
-    id = db.Column(db.Integer, primary_key=True)
-
     diagram_id = db.Column(db.Integer, nullable=True)
-    "Optional: ID of this muscle section sused to locate on the anatomy chart"
+    "Optional: ID of this muscle section used to locate on the anatomy chart"
 
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     "Name of this muscle section. For example 'Upper pec'"
 
-    parent_muscle_id = db.Column(
-        db.Integer, db.ForeignKey("MuscleIndex.id"), nullable=False)
+    parent_muscle_uuid = db.Column(
+        db.String(36), db.ForeignKey("MuscleIndex.uuid"), nullable=False)
     "The larger muscle that this section is a part of."
     parent_muscle = db.relationship("MuscleModel", backref="sections")
 
     def __str__(self) -> str:
-        return "%i MuscleSectionModel: %s" % (self.id, self.name)
+        return "%s MuscleSectionModel: %s" % (self.uuid, self.name)

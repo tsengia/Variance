@@ -1,13 +1,12 @@
 from datetime import datetime, date
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
 
 
-class UserModel(db.Model):
+class UserModel(ResourceBase):
     __tablename__ = "UserIndex"
 
-    id = db.Column(db.Integer, primary_key=True)
     # Management Info
     username = db.Column(db.String(30), unique=True, nullable=False)
 
@@ -27,25 +26,6 @@ class UserModel(db.Model):
     # User role. Current values: "user", "admin"
     role = db.Column(db.String(10), nullable=False, default="user")
 
-    # User Data
-    # List of trackers this user has running
-    #trackers = db.relationship(
-    #    "TrackerModel", back_populates="owner", cascade="all, delete")
-
-    # List of nutritional items created by this user
-    #consumables = db.relationship(
-    #    "ConsumableModel", back_populates="owner", cascade="all, delete")
-    #recipies = db.relationship(
-    #    "RecipeModel", back_populates="owner", cascade="all, delete")
-    #mealplans = db.relationship(
-    #    "MealPlanModel", back_populates="owner", cascade="all, delete")
-
-    #set_entries = db.relationship(
-    #    "SetEntryModel", back_populates="owner", cascade="all, delete")
-    #consumption_entries = db.relationship(
-    #    "ConsumedEntryModel", back_populates="owner", cascade="all, delete")
-    #programs = db.relationship(
-    #    "WorkoutProgramModel", back_populates="owner", cascade="all, delete")
     
     # Diet Settings
     # Can this user not eat peanuts? (setting to True means that no recipies

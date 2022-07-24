@@ -1,15 +1,15 @@
 """
 Module containing models for exercises.
 """
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
 
 
 "Table that associates EquipmentModel and ExerciseModel. Allows for the Many-to-Many relationship between exercises and equipment. ie. Allows for equipment to be used by many differe exercises, and exercises to use many differen pieces of equipment"
 ExerciseEquipmentAssociationTable = db.Table(
     "ExerciseEquipmentAssociation",
     db.metadata,
-    db.Column("equipment_id", db.ForeignKey("EquipmentIndex.id")),
-    db.Column("exercise_id", db.ForeignKey("ExerciseIndex.id"))
+    db.Column("equipment_uuid", db.ForeignKey("EquipmentIndex.uuid")),
+    db.Column("exercise_uuid", db.ForeignKey("ExerciseIndex.uuid"))
 )
 
 """
@@ -20,22 +20,16 @@ of how much a muscle is worked by the exercise that should vary from 0 to 1
 ExerciseMuscleAssociation= db.Table(
     "ExerciseMuscleAssociation",
     db.metadata,
-    db.Column("exercise_id", db.ForeignKey("ExerciseIndex.id")),
-    db.Column("muscle_id", db.ForeignKey("MuscleIndex.id")),
+    db.Column("exercise_uuid", db.ForeignKey("ExerciseIndex.uuid")),
+    db.Column("muscle_uuid", db.ForeignKey("MuscleIndex.uuid")),
     db.Column("intensity", db.Float(), nullable=False)
 )
 
-class ExerciseModel(db.Model):
+class ExerciseModel(ResourceBase):
     "Model for representing exercises that users can perform"
     __tablename__ = "ExerciseIndex"
 
-    id = db.Column(db.Integer, primary_key=True)
-    "Unique primary key for database."
-    
-    canonical_name = db.Column(db.String(100), unique=True, nullable=False)
-    "Internal name of the exercise for linking, import, and export"
-
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     "Name of the exercise to display to the user."
     
     description = db.Column(db.Text, nullable=True)
@@ -62,15 +56,16 @@ class ExerciseModel(db.Model):
         back_populates="exercises")
     "Muscles that this exercise activates.."
 
-    parent_exercise_id = db.Column(
-        db.Integer, db.ForeignKey("ExerciseIndex.id"), nullable=True)
+    parent_exercise_uuid = db.Column(
+        db.String(36), db.ForeignKey("ExerciseIndex.uuid"), 
+        nullable=True)
     "Is this exercise a variation of another exercise, if so, which exercise?    (Ex: Close grip bench is a variation of bench press)"
     parent_exercise = db.relationship(
         "ExerciseModel",
-        foreign_keys="ExerciseModel.parent_exercise_id",
+        foreign_keys="ExerciseModel.parent_exercise_uuid",
         back_populates="variations")
     
     variations = db.relationship("ExerciseModel")
 
     def __str__(self) -> str:
-        return "%u - %s Exercise: %s dur(%s), dis(%s), wght(%s)" % (self.id, self.canonical_name, self.name, str(self.use_duration), str(self.use_distance), str(self.use_weight))
+        return "%s - Exercise: %s dur(%s), dis(%s), wght(%s)" % (self.uuid, self.name, str(self.use_duration), str(self.use_distance), str(self.use_weight))

@@ -1,15 +1,10 @@
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
 
-class UnitModel(db.Model):
+class UnitModel(ResourceBase):
     __tablename__ = "UnitIndex"
 
-    id = db.Column(db.Integer, primary_key=True)
-
-    # canonical name, used for linking and export. Example: "meters"
-    canonical_name = db.Column(db.String(40), unique=True, nullable=False)
-
     # Long name, plural form of this unit. Example: "meters"
-    name = db.Column(db.String(40), unique=True, nullable=False)
+    name = db.Column(db.String(40), nullable=False)
 
     # Short form of this unit. Example: "m"
     abbreviation = db.Column(db.String(20), nullable=False)
@@ -29,21 +24,21 @@ class UnitModel(db.Model):
     removable = db.Column(db.Boolean, default=True)
 
     @staticmethod
-    def get_id_by_name(text):
+    def get_uuid_by_name(text):
         name_match = UnitModel.query.filter_by(name=text).first()
         if name_match:
-            return name_match.id
+            return name_match.uuid
 
     @staticmethod
-    def get_id_by_abbreviation(text):
+    def get_uuid_by_abbreviation(text):
         abbreviation_match = UnitModel.query.filter_by(
             abbreviation=text).first()
         if abbreviation_match:
-            return abbreviation_match.id
+            return abbreviation_match.uuid
 
     def __str__(self):
-        return "UnitModel (%i): %s (%s) %s, removable(%s), mult(%s) " % (int(
-            self.id), self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
+        return "UnitModel (%s): %s (%s) %s, removable(%s), mult(%s) " % (int(
+            self.uuid), self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
 
     def __int__(self):
         return int(self.multiplier)

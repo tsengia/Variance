@@ -1,10 +1,10 @@
 """
 Module containing the EquipmentModel
 """
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
+import uuid
 
-
-class EquipmentModel(db.Model):
+class EquipmentModel(ResourceBase):
     """
     Model for a piece of exercise equipment.
     Examples: Dumbbells, Barbell, Treadmill, Bench.
@@ -14,13 +14,7 @@ class EquipmentModel(db.Model):
 
     __tablename__ = "EquipmentIndex"
 
-    id = db.Column(db.Integer, primary_key=True)
-    " Unique ID for the EquipmentModel instance, is the primary key."
-
-    canonical_name = db.Column(db.String(40), unique=True, nullable=False)
-    " Name of this piece of equipment. Example: 'example-equipment' "
-
-    name = db.Column(db.String(40), unique=True, nullable=False)
+    name = db.Column(db.String(40), nullable=False)
     " Name of this piece of equipment. Example: 'Dumbbells'"
 
     description = db.Column(db.String(200), nullable=True)
@@ -33,4 +27,4 @@ class EquipmentModel(db.Model):
     " List of exercises that use this piece of equipment. "
 
     def __str__(self):
-        return "{i}: {cn} = {n}".format(i=self.id, cn=self.canonical_name, n=self.name)
+        return "{i}: {cn} = {n}".format(i=self.uuid, cn=self.canonical_name, n=self.name)
