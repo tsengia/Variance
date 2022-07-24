@@ -6,5 +6,5 @@ from variance.cli.resource import ResourceCLI
 
 import click
 
-tracker_cli = ResourceCLI(TrackerModel, TrackerSchema, "Tracker", "trackers", ("id",))
+tracker_cli = ResourceCLI(TrackerModel, TrackerSchema, "Tracker", "trackers")
 

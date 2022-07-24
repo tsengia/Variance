@@ -7,7 +7,7 @@ from variance.common.util import canonize
 
 import click
 
-equipment_cli = ResourceCLI(EquipmentModel, EquipmentSchema, "Equipment", "equipment", ("id",))
+equipment_cli = ResourceCLI(EquipmentModel, EquipmentSchema, "Equipment", "equipment")
 
 @equipment_cli.group.command("add")
 @click.argument("name")
@@ -21,3 +21,4 @@ def cli_equipment_add(name, description):
     db.session.add(new_equipment)
     db.session.commit()
     click.echo("Equipment (%s) added." % (name))
+    click.echo("UUID: %s" % (new_equipment.uuid))

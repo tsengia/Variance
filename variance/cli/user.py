@@ -8,7 +8,7 @@ from variance.models.user import UserModel
 from variance.schemas.user import UserSchema
 from variance.cli.resource import ResourceCLI
 
-user_cli = ResourceCLI(UserModel, UserSchema, "Users", "users", ("id", ))
+user_cli = ResourceCLI(UserModel, UserSchema, "Users", "users")
 user_set_cli = AppGroup("set")
 user_cli.group.add_command(user_set_cli)
 
@@ -34,14 +34,14 @@ def cli_user_add(username, password, birthdate):
 
 
 @user_set_cli.command("role")
-@click.argument("user_id")
+@click.argument("user_uuid")
 @click.argument("new_role")
-def cli_user_mod_role(user_id, new_role):
-    u = UserModel.query.get(user_id)
+def cli_user_mod_role(user_uuid, new_role):
+    u = UserModel.query.get(user_uuid)
     if u is None:
-        click.echo("No user with that ID found!")
+        click.echo("No user with that UUID found!")
         return -1
     u.role = new_role
     db.session.commit()
-    click.echo("User %u (%s) role update to %s." %
-               (int(user_id), str(u.username), new_role))
+    click.echo("User %s (%s) role update to %s." %
+               (user_uuid, str(u.username), new_role))
