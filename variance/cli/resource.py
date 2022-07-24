@@ -36,10 +36,12 @@ class ResourceCLI():
             for r in r_list:
                 click.echo(str(r))
 
+        self.list_command = cli_list
+            
         @self.group.command("find")
         @click.argument("field", type=str, required=True)
         @click.argument("value", type=str, required=True)
-        def cli_search(field, value):
+        def cli_find(field, value):
             "Searches for instances that have _field_ set to _value_"
             filter_dict = {}
             filter_dict[field] = value
@@ -54,6 +56,7 @@ class ResourceCLI():
                 click.echo(str(m))
             click.echo("")
     
+        self.find_command = cli_find
 
         @self.group.command("view")
         @click.argument("resource_id", type=int, required=True)
@@ -68,6 +71,8 @@ class ResourceCLI():
             click.echo("Viewing {r} with ID of {i}".format(r=self.resource_name_, i=resource_id))
             click.echo(s.dumps(m))
 
+        self.view_command = cli_view
+
         @self.group.command("export")
         @click.argument("export_root", type=click.Path(), required=True)
         def cli_export(export_root):
@@ -80,6 +85,8 @@ class ResourceCLI():
             count = export_models(self.model_, self.schema_, resource_export_dir, self.exclude_)
             click.echo("Exported {i} {r} models.".format(i=count, r=self.resource_name_))
 
+        self.export_command = cli_export
+
         @self.group.command("import")
         @click.argument("import_root", type=click.Path(exists=True, file_okay=False), required=True)
         def cli_import(import_root):
@@ -90,6 +97,8 @@ class ResourceCLI():
             count = import_models(self.model_, self.schema_,\
                 resource_import_dir, db.session, self.exclude_)
             click.echo("Imported {i} {r}.".format(i=count, r=self.resource_name_))
+
+        self.import_command = cli_import
 
         @self.group.command("drop")
         def cli_drop():
@@ -103,9 +112,11 @@ class ResourceCLI():
             db.session.commit()
             click.echo("Deleted all " + self.resource_name_ + "!")
 
+        self.drop_command = cli_drop
+
         @self.group.command("delete")
         @click.argument("resource_id", type=int, required=True)
-        def cli_del(resource_id):
+        def cli_delete(resource_id):
             "Deletes the resource with the given ID"
             m = self.model_.query.get(resource_id)
             if m is None:
@@ -114,3 +125,5 @@ class ResourceCLI():
             db.session.delete(m)
             db.session.commit()
             click.echo("Deleted {r} with ID={i}".format(r=self.resource_name_, i=resource_id))
+
+        self.delete_command = cli_delete
