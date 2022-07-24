@@ -5,4 +5,6 @@ from flask import Blueprint
 from . import auth
 from . import units
 from . import equipment
-from . import exercise
+from . import exercises
+from . import trackers
+from . import nutrients

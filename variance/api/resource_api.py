@@ -4,7 +4,7 @@ from flask import g
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
-from variance.extensions import db
+from variance.extensions import db, ResourceBase
 
 from variance.common.util import validate_unique_or_abort
 from variance.common.authorize import authorize_user_or_abort
@@ -13,11 +13,19 @@ import marshmallow
 from marshmallow import EXCLUDE
 
 class VarianceResource():
-    
-    def __init__(self, resource_model: Type[db.Model], 
-                resource_schema: Type[marshmallow.Schema], 
-                file_name: str, endpoint_name: str):
+    "Implements a standard CRUD endpoint for the given DB Model."    
 
+    def attach(self, api):
+        "Attaches the endpoint to the provided smoREST API object"
+        api.register_blueprint(self.blueprint, url_prefix="/api/" + self._endpoint_name)
+    
+    def __init__(self, resource_model: Type[ResourceBase], 
+                resource_schema: Type[marshmallow.Schema], 
+                file_name: str, endpoint_name: str,
+                ):
+        """
+        Create a new VarianceResource endpoint.
+        """
         self._resource_schema = resource_schema
         self._resource_model = resource_model
         self._endpoint_name = endpoint_name
@@ -27,11 +35,11 @@ class VarianceResource():
 
 
         @self.blueprint.route("/", methods=["GET"])
+        @self.blueprint.etag
         @self.blueprint.response(200, resource_schema(many=True))
         @self.blueprint.paginate()
         def resource_list_get(pagination_parameters):
             authorize_user_or_abort(g.user, endpoint_name + ".list", False)
-
             # base query that we will then filter out            
             base_query = db.session.query(resource_model)
             
@@ -48,8 +56,10 @@ class VarianceResource():
 
             return paginate_query.items
 
+        self.resource_list_get = resource_list_get
+
         @self.blueprint.route("/", methods=["POST"])
-        @self.blueprint.arguments(resource_schema(exclude=("id",)))
+        @self.blueprint.arguments(resource_schema)
         @self.blueprint.response(200, resource_schema)
         def resource_list_post(new_resource: resource_schema) -> resource_model:
             authorize_user_or_abort(g.user, endpoint_name + ".new", False)
@@ -73,24 +83,26 @@ class VarianceResource():
             db.session.commit()
             return m 
 
-        @self.blueprint.route("/<int:resource_id>", methods=["GET"])
+        self.resource_list_post = resource_list_post
+
+        @self.blueprint.route("/<uuid:resource_id>", methods=["GET"])
+        @self.blueprint.etag
         @self.blueprint.response(200, resource_schema)
-        def resource_get(resource_id: int) -> resource_model:
+        def resource_get(resource_id: str) -> resource_model:
             m = resource_model.query.get_or_404(resource_id)
             authorize_user_or_abort(g.user, endpoint_name + ".view", m)
             return m
 
-        @self.blueprint.route("/<int:resource_id>", methods=["PUT"])
+        self.resource_get = resource_get
+
+        @self.blueprint.route("/<uuid:resource_id>", methods=["PUT"])
+        @self.blueprint.etag
         @self.blueprint.arguments(resource_schema)
         @self.blueprint.response(200, resource_schema)
-        def resource_put(resource_patch: object, resource_id: int) -> resource_model:
+        def resource_put(resource_patch: object, resource_id: str) -> resource_model:
             m = resource_model.query.get_or_404(resource_id)
             authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
           
-            # Check to make sure the user is not modifying the ID value
-            if resource_id != resource_patch.id:
-                abort(409, "You are not permitted to change the ID of a resource!")
-
             # Apply the update
             for key, value in resource_patch.items():
                 setattr(m, key, value)
@@ -98,12 +110,17 @@ class VarianceResource():
             # Commit the changes
             db.session.commit()
             return m 
-        
-        @self.blueprint.route("/<int:resource_id>", methods=["DELETE"])
+       
+        self.resource_put = resource_put
+ 
+        @self.blueprint.route("/<uuid:resource_id>", methods=["DELETE"])
+        @self.blueprint.etag
         @self.blueprint.response(204)
-        def resource_delete(resource_id: int):
+        def resource_delete(resource_id: str):
             m = resource_model.query.get_or_404(resource_id)
             authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
             db.session.delete(m)
             db.session.commit()
             return
+
+        self.resource_delete = resource_delete
