@@ -11,6 +11,7 @@ from variance.common.authorize import authorize_user_or_abort
 
 import marshmallow
 from marshmallow import EXCLUDE
+from uuid import UUID
 
 class VarianceResource():
     "Implements a standard CRUD endpoint for the given DB Model."    
@@ -64,20 +65,6 @@ class VarianceResource():
         def resource_list_post(new_resource: resource_schema) -> resource_model:
             authorize_user_or_abort(g.user, endpoint_name + ".new", False)
 
-            # Use metaprogramming to figure out which fields 
-            #   have unique constraints
-            attributes = dir(resource_model)
-            fields = filter(lambda f: 
-                not f.startswith('__') and not callable(getattr(obj, f)))
-            for field in fields:
-                if field.unique:
-                    validate_unique_or_abort(
-                        new_resource[field], 
-                        resource_model, 
-                        getattr(resource_model, field), 
-                        "Unique constraint failed for " + field + "!"
-                    )
-
             m = resource_model(**new_resource)
             db.session.add(m)
             db.session.commit()
@@ -85,22 +72,24 @@ class VarianceResource():
 
         self.resource_list_post = resource_list_post
 
-        @self.blueprint.route("/<uuid:resource_id>", methods=["GET"])
+        @self.blueprint.route("/<uuid:resource_uuid>", methods=["GET"])
         @self.blueprint.etag
         @self.blueprint.response(200, resource_schema)
-        def resource_get(resource_id: str) -> resource_model:
-            m = resource_model.query.get_or_404(resource_id)
+        def resource_get(resource_uuid: UUID) -> resource_model:
+            resource_uuid = str(resource_uuid)
+            m = resource_model.query.get_or_404(resource_uuid)
             authorize_user_or_abort(g.user, endpoint_name + ".view", m)
             return m
 
         self.resource_get = resource_get
 
-        @self.blueprint.route("/<uuid:resource_id>", methods=["PUT"])
+        @self.blueprint.route("/<uuid:resource_uuid>", methods=["PUT"])
         @self.blueprint.etag
         @self.blueprint.arguments(resource_schema)
         @self.blueprint.response(200, resource_schema)
-        def resource_put(resource_patch: object, resource_id: str) -> resource_model:
-            m = resource_model.query.get_or_404(resource_id)
+        def resource_put(resource_patch: object, resource_uuid: UUID) -> resource_model:
+            resource_uuid = str(resource_uuid)
+            m = resource_model.query.get_or_404(resource_uuid)
             authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
           
             # Apply the update
@@ -113,11 +102,12 @@ class VarianceResource():
        
         self.resource_put = resource_put
  
-        @self.blueprint.route("/<uuid:resource_id>", methods=["DELETE"])
+        @self.blueprint.route("/<uuid:resource_uuid>", methods=["DELETE"])
         @self.blueprint.etag
         @self.blueprint.response(204)
-        def resource_delete(resource_id: str):
-            m = resource_model.query.get_or_404(resource_id)
+        def resource_delete(resource_uuid: UUID):
+            resource_uuid = str(resource_uuid)
+            m = resource_model.query.get_or_404(resource_uuid)
             authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
             db.session.delete(m)
             db.session.commit()
