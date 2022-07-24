@@ -19,7 +19,7 @@ class ResourceCLI():
         "Adds this collection of commands to the given group"
         parent_group.add_command(self.group)
 
-    def __init__(self, model: object, schema: object, resource_name: str, group_name: str, exclude: Optional[tuple[str]] = ("uuid",)):
+    def __init__(self, model: object, schema: object, resource_name: str, group_name: str, exclude: Optional[tuple[str]] = ()):
         self.group = AppGroup(group_name)
         self.model_ = model
         self.schema_ = schema
@@ -35,6 +35,25 @@ class ResourceCLI():
                 return
             for r in r_list:
                 click.echo(str(r))
+
+        @self.group.command("find")
+        @click.argument("field", type=str, required=True)
+        @click.argument("value", type=str, required=True)
+        def cli_search(field, value):
+            "Searches for instances that have _field_ set to _value_"
+            filter_dict = {}
+            filter_dict[field] = value
+            m_list = db.session.query(self.model_).filter_by(**filter_dict)
+            if m_list is None:
+                click.echo("No results.")
+                return
+
+            click.echo("")
+            click.echo("Find Results:")
+            for m in m_list:
+                click.echo(str(m))
+            click.echo("")
+    
 
         @self.group.command("view")
         @click.argument("resource_id", type=int, required=True)
