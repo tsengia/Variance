@@ -7,5 +7,5 @@ from variance.models.unit import UnitModel
 
 user_unit_defaults = \
     define_user_key_value_model(\
-        db.ForeignKey("UnitIndex.id", ondelete="CASCADE"),\
+        db.ForeignKey("UnitIndex.uuid", ondelete="CASCADE"),\
         "user_unit_defaults")

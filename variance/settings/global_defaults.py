@@ -6,7 +6,7 @@ from variance.models.unit import UnitModel
 
 global_unit_defaults = \
     define_key_value_model(\
-        db.ForeignKey("UnitIndex.id", ondelete="CASCADE"),\
+        db.ForeignKey("UnitIndex.uuid", ondelete="CASCADE"),\
         "global_unit_defaults")
 
 global_number_defaults = \
