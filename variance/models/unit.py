@@ -37,8 +37,8 @@ class UnitModel(ResourceBase):
             return abbreviation_match.uuid
 
     def __str__(self):
-        return "UnitModel (%s): %s (%s) %s, removable(%s), mult(%s) " % (int(
-            self.uuid), self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
+        return "UnitModel (%s): %s (%s) %s, removable(%s), mult(%s) " % (
+            self.uuid, self.name, self.abbreviation, self.dimension, str(self.removable), str(self.multiplier))
 
     def __int__(self):
         return int(self.multiplier)
