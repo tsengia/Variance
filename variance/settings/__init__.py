@@ -1,2 +1,2 @@
-from . import global_defaults
-from . import user_defaults
+from . import global_settings
+from . import user_settings
