@@ -1,22 +1,32 @@
-from variance.extensions import db
-from variance.common.keyvalue import define_key_value_model
+import variance.settings.settings_model
 
-from variance.models.user import UserModel
-from variance.models.unit import UnitModel
+global_settings_keys = [
+"default_distance_unit":"unit",
+"default_weight_unit":"unit",
+"default_duration_unit":"unit",
+"allow_registration":"boolean",
+"string_test":"string",
+"number_test":"number"
+]
 
-global_unit_defaults = \
-    define_key_value_model(\
-        db.ForeignKey("UnitIndex.uuid", ondelete="CASCADE"),\
-        "global_unit_defaults")
+global_settings_types = {
+    "unit": global_unit_settings,
+    "boolean":global_boolean_settings,
+    "number":global_number_settings,
+    "string":global_string_settings
+}
 
-global_number_defaults = \
-    define_key_value_model(\
-        db.Float(), "global_number_defaults")
+def get_global_value(key: str):
+    "Returns the value of a global setting"
+    if not key in global_settings_keys:
+        return None
+    model = global_settings_types[global_settings_keys[key]].get(key)
+    return str(model.value)
 
-global_string_defaults = \
-    define_key_value_model(\
-        db.String(length=40), "global_string_defaults")
-
-global_boolean_defaults = \
-    define_key_value_model(\
-        db.Boolean(), "global_boolean_defaults")
+def set_global_value(key: str, value):
+    "Sets a global settings value, returns True on success"
+    if not key in global_settings_keys:
+        return False
+    model = global_settings_types[global_settings_keys[key]].get(key)
+    model.value = value
+    return True

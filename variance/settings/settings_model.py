@@ -6,7 +6,7 @@ def define_user_key_value_model(value_type: object, table_name: str):
 
     class UserKeyValueModel(db.Model):
         "Template model for generating key-value tables for user preferences"
-
+        # TODO: Proper authorization
         __tablename__ = table_name
 
         user = db.Column(db.String(36),
@@ -20,13 +20,6 @@ def define_user_key_value_model(value_type: object, table_name: str):
         
         value = db.Column(value_type, nullable=False)
         "Value of this key."
-
-        @staticmethod
-        def has_owner(self) -> bool:
-            return True
-
-        def check_owner(self, id) -> bool:
-            return self.user == id
 
 def define_key_value_model(value_type: object, table_name: str):
 
@@ -44,3 +37,39 @@ def define_key_value_model(value_type: object, table_name: str):
 
 # TODO: Test that check_owner works
 # TODO: Test to make sure entries are deleted when users are deleted
+
+# Define key-value tables for settings
+
+global_unit_settings = \
+    define_key_value_model(\
+        db.ForeignKey("UnitIndex.uuid", ondelete="CASCADE"),\
+        "global_unit_settings")
+
+global_number_settings = \
+    define_key_value_model(\
+        db.Float(), "global_number_settings")
+
+global_string_settings = \
+    define_key_value_model(\
+        db.String(length=40), "global_string_settings")
+
+global_boolean_settings = \
+    define_key_value_model(\
+        db.Boolean(), "global_boolean_settings")
+
+user_unit_settings = \
+    define_user_key_value_model(\
+        db.ForeignKey("UnitIndex.uuid", ondelete="CASCADE"),\
+        "user_unit_settings")
+
+user_number_settings = \
+    define_key_value_model(\
+        db.Float(), "user_number_settings")
+
+user_string_settings = \
+    define_key_value_model(\
+        db.String(length=40), "user_string_settings")
+
+user_boolean_settings = \
+    define_key_value_model(\
+        db.Boolean(), "user_boolean_settings")
