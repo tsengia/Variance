@@ -28,6 +28,15 @@ global_settings_keys = {
     "number_test":              "number"
 }
 
+global_settings_defaults = {
+    "default_distance_unit":    "mi",
+    "default_weight_unit":      "lb",
+    "default_duration_unit":    "s",
+    "allow_registration":       "true",
+    "string_test":              "test",
+    "number_test":              "1234"
+}
+
 global_settings_types = {
     "unit":     global_unit_settings,
     "boolean":  global_boolean_settings,
@@ -48,4 +57,5 @@ def set_global_setting(key: str, value):
         return False
     model = global_settings_types[global_settings_keys[key]].get(key)
     model.value = value
+    
     return True

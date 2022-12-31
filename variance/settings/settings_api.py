@@ -15,7 +15,7 @@ from variance.settings.global_settings import get_global_setting, set_global_set
 import marshmallow
 from marshmallow import EXCLUDE, Schema, fields
 
-bp = Blueprint("settings", __name__, url_prefix="/settings")
+bp = Blueprint("settings", __name__, url_prefix="/api/settings")
 
 class SettingsSchema(Schema):
     key = fields.Str()
@@ -25,7 +25,7 @@ class SettingsSchema(Schema):
 class GlobalSettingsAPI(MethodView):
     "API Endpoint for getting and setting key-values for global settings"
 
-    @bp.route("/global/", methods=["GET"])
+    @bp.route("/global", methods=["GET"])
     @bp.etag
     @bp.response(200, SettingsSchema(many=True))
     def get(self, key):
@@ -38,7 +38,7 @@ class GlobalSettingsAPI(MethodView):
                 value=get_global_setting(s))
         return settings
 
-    @bp.route("/global/<str:key>", methods=["GET"])
+    @bp.route("/global/<string:key>", methods=["GET"])
     @bp.etag
     @bp.response(200, SettingsSchema)
     def get(self, key):
@@ -47,8 +47,9 @@ class GlobalSettingsAPI(MethodView):
             value=get_global_setting(key),\
             type_hint=global_settings_keys[key])
 
-    @bp.route("/global/<str:key>", methods=["POST", "PUT"])
+    @bp.route("/global/<string:key>", methods=["POST", "PUT"])
     @bp.etag
+    @bp.arguments(str)
     @bp.response(200, SettingsSchema)
     def update(self, key: str, value: str):
         authorize_user_or_abort(g.user, "global_settings.update", False)
