@@ -90,7 +90,7 @@ class VarianceResource():
         def resource_put(resource_patch: object, resource_uuid: UUID) -> resource_model:
             resource_uuid = str(resource_uuid)
             m = resource_model.query.get_or_404(resource_uuid)
-            authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
+            authorize_user_or_abort(g.user, endpoint_name + ".update", m)
           
             # Apply the update
             for key, value in resource_patch.items():
