@@ -27,7 +27,7 @@ def load_models(app):
 
 def load_settings(app):
     "Helper function that imports all user_defaults and global_defaults"
-    from variance.settings import global_defaults, user_defaults
+    from variance.settings import global_settings, user_settings
     logging.info("Variance settings models imported.")
 
 def load_cli(app):
