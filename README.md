@@ -8,13 +8,12 @@ This is basically a side project for me to learn more about weightlifting while 
 # Installation
 `pip install -r requirements.txt`
 
-
 # Starting the server
 To start the flask webserver, set the `FLASK_APP` environmental variable to `variance.create_app` and then run `flask run`.
 
 You will then be able to access the API by going to `http://localhost:5000/api`.
 
-
+You can also access the Rapid API Doc by visiting: `http://localhost:5000/rapidoc`
 
 ## Bootstrapping
 Bootstrapping Variance means initializing the database, filling it with default values, and loading any static assets.
