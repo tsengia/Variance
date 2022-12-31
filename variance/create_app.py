@@ -66,7 +66,6 @@ def load_api(rest_api):
     rest_api.register_blueprint(version_bp, url_prefix="/")
     rest_api.register_blueprint(api.auth.bp, url_prefix="/api/auth")
 
-    rest_api.register_blueprint(settings_api.bp, url_prefix="/api/settings")
     api.units.units_endpoint.attach(rest_api)
     api.exercises.exercises_endpoint.attach(rest_api)
     api.equipment.equipment_endpoint.attach(rest_api)
