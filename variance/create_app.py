@@ -36,6 +36,7 @@ def load_cli(app):
     c = app.cli
     c.add_command(cli.db.db_cli)
     
+    c.add_command(cli.all_cli)
     cli.user.user_cli.attach(c)
     cli.equipment.equipment_cli.attach(c)
     cli.muscle.muscle_cli.attach(c)
