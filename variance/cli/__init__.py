@@ -27,7 +27,8 @@ resource_command_list = [\
     tracker.tracker_cli,
     consumable.consumable_cli,
     gym.gym_cli,
-    setting.setting_cli
+    setting.global_setting_cli,
+    setting.user_setting_cli
 ]
 
 all_cli = AppGroup("all")

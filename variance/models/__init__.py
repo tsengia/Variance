@@ -12,3 +12,5 @@ from . import nutrition
 from . import mealplan
 from . import lambda_measure
 from . import user
+from . import global_setting
+from . import user_setting

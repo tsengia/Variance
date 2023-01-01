@@ -38,24 +38,25 @@ class VarianceResource():
         @self.blueprint.route("/", methods=["GET"])
         @self.blueprint.etag
         @self.blueprint.response(200, resource_schema(many=True))
-        @self.blueprint.paginate()
-        def resource_list_get(pagination_parameters):
+        def resource_list_get():
             authorize_user_or_abort(g.user, endpoint_name + ".list", False)
             # base query that we will then filter out            
             base_query = db.session.query(resource_model)
             
             # TODO: Apply search filters
             # TODO: Apply user-level visibility
+            # TODO: Pagination?
 
             # flask-smorest needs us to set the item_count
-            total_count = base_query.count()
-            pagination_parameters.item_count = total_count
+            #total_count = base_query.count()
+            #pagination_parameters.item_count = total_count
             
-            paginate_query = base_query.paginate(
-                pagination_parameters.page,
-                pagination_parameters.page_size)
+            #paginate_query = base_query.paginate(
+            #    pagination_parameters.page,
+            #    pagination_parameters.page_size)
 
-            return paginate_query.items
+            #return paginate_query.items
+            return base_query
 
         self.resource_list_get = resource_list_get
 

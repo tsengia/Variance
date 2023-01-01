@@ -8,3 +8,4 @@ from . import equipment
 from . import exercises
 from . import trackers
 from . import nutrients
+from . import settings
