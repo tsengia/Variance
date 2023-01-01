@@ -11,6 +11,7 @@ from . import exercise
 from . import nutrient
 from . import consumable
 from . import tracker
+from . import setting
 
 import click
 from flask.cli import AppGroup
@@ -25,7 +26,8 @@ resource_command_list = [\
     nutrient.nutrient_cli,
     tracker.tracker_cli,
     consumable.consumable_cli,
-    gym.gym_cli
+    gym.gym_cli,
+    setting.setting_cli
 ]
 
 all_cli = AppGroup("all")

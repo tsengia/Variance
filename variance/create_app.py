@@ -2,7 +2,6 @@
 Main entry point for Variance when running as a webserver
 """
 import pathlib
-import shutil
 import logging
 from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
@@ -25,11 +24,6 @@ def load_models(app):
     from variance.models import unit, muscle, equipment, exercise, gym, tracker, user, lambda_measure, workout, nutrition, mealplan
     logging.info("Variance Models imported.")
 
-def load_settings(app):
-    "Helper function that imports all user_defaults and global_defaults"
-    from variance.settings import global_settings, user_settings
-    logging.info("Variance settings models imported.")
-
 def load_cli(app):
     "Helper function that imports all the CLI commands"
     from variance import cli
@@ -37,6 +31,7 @@ def load_cli(app):
     c.add_command(cli.db.db_cli)
     
     c.add_command(cli.all_cli)
+    c.add_command(cli.setting.setting_cli)
     cli.user.user_cli.attach(c)
     cli.equipment.equipment_cli.attach(c)
     cli.muscle.muscle_cli.attach(c)
@@ -62,7 +57,6 @@ def load_api(rest_api):
         return {"version": "0.0.1 alpha"}
     
     from variance import api
-    from variance.settings import settings_api
     rest_api.register_blueprint(version_bp, url_prefix="/")
     rest_api.register_blueprint(api.auth.bp, url_prefix="/api/auth")
 
@@ -71,6 +65,8 @@ def load_api(rest_api):
     api.equipment.equipment_endpoint.attach(rest_api)
     api.trackers.trackers_endpoint.attach(rest_api)
     api.nutrients.nutrient_info_endpoint.attach(rest_api)
+    api.settings.global_settings_endpoint.attach(rest_api)
+    api.settings.user_settings_endpoint.attach(rest_api)
 
     logging.info("Variance API blueprints loaded.")
 
@@ -94,11 +90,9 @@ def create_app(test_config=None):
 
     rest_api = Api(app)
 
-    load_models(app)
-
-    load_settings(app)
-
     load_cli(app)
+
+    load_models(app)
 
     load_api(rest_api)
 
