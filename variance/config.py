@@ -45,5 +45,5 @@ class DevConfig(Config):
 
 class UnitTestConfig(DevConfig):
     "Configuration for Unit Testing, should have in-memory SQLite DB"
-    SQLALCHEMY_DATABASE_URI = e.get("UNIT_TEST_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI = "sqlite+pysqlite:///:memory:"
     SQLALCHEMY_ECHO = False
