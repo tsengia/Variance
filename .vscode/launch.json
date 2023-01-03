@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Development",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "justMyCode": true,
+            "args": ["run"],
+            "env": {
+                "FLASK_APP": "variance.create_app",
+                "FLASK_ENV": "development"
+            }
+        },
+        {
+            "name": "Run Production",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "justMyCode": true,
+            "args": ["run"],
+            "env": {
+                "FLASK_APP": "variance.create_app",
+                "FLASK_ENV": "production"
+            }
+        }
+    ]
+}
