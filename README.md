@@ -53,6 +53,7 @@ Variance contains the following resources/models:
 |Consumables    |`consumables`    |Food, recipies, drinks and their nutritional content|
 |Mealplans      |`mealplans`      |WIP|
 |Workouts       |`workouts`       |WIP|
+|Settings       |`settings`       |View and modify global and user settings|
 
 # Exporting Data
 To export your data for backup or sharing, run the following command:
