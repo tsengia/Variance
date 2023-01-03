@@ -37,13 +37,13 @@ class GlobalSettingSchema(ResourceBaseSchema):
         v = data["value"]
         if t == "boolean":
             if (not v == "True") and (not v == "False"):
-                raise ValidationError("value is not a boolean! type_hint is set to 'boolean'.", field_name="value")
+                raise ValidationError("value is not a boolean! type_hint is set to 'boolean' and value is '%s'." % v, field_name="value")
         if t == "float":
             if not NUMBER_REGEX.match(v):
-                raise ValidationError("value is not a number! type_hint is set to 'float'.", field_name="value")
+                raise ValidationError("value is not a number! type_hint is set to 'float' and value is '%s'." % v, field_name="value")
         if t == "Unit":
             if not UnitModel.get_uuid_by_abbreviation(v):
-                raise ValidationError("value is not a unit abbreviation! type_hint is set to 'Unit'. Are you sure the unit %s exists?" % v, field_name="value")
+                raise ValidationError("value is not a unit abbreviation! type_hint is set to 'Unit' and value is '%s'. Are you sure the unit exists?" % v, field_name="value")
 
     class Meta:
         model = GlobalSettingModel
