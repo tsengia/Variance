@@ -3,12 +3,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from variance.extensions import db, ResourceBase
 
-
 class UserModel(ResourceBase):
     __tablename__ = "UserIndex"
 
     # Management Info
-    username = db.Column(db.String(30), unique=True, nullable=False)
+    username = db.Column(db.String(40), unique=True, nullable=False)
 
     # Email address of the user. NOTE: Can be NULL!
     email = db.Column(db.String(80), nullable=True)
