@@ -16,8 +16,12 @@ from uuid import UUID
 class VarianceResource():
     "Implements a standard CRUD endpoint for the given DB Model."    
 
+    def set_parent(self, parent):
+        "Adds the endpoint to the given parent VarianceResource"
+        parent.blueprint.register_blueprint(self.blueprint, url_prefix=self._endpoint_name)
+
     def attach(self, api):
-        "Attaches the endpoint to the provided smoREST API object"
+        "Registers the endpoint with the provided smoREST API object"
         api.register_blueprint(self.blueprint, url_prefix="/api/" + self._endpoint_name)
     
     def __init__(self, resource_model: Type[ResourceBase], 
