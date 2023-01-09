@@ -63,6 +63,7 @@ def load_api(rest_api):
     api.units.units_endpoint.attach(rest_api)
     api.exercises.exercises_endpoint.attach(rest_api)
     api.muscles.muscle_endpoint.attach(rest_api)
+    api.muscles.muscle_groups_endpoint.attach(rest_api)
     api.equipment.equipment_endpoint.attach(rest_api)
     api.trackers.trackers_endpoint.attach(rest_api)
     api.nutrients.nutrient_info_endpoint.attach(rest_api)
@@ -75,7 +76,7 @@ def load_api(rest_api):
 
 def create_app(test_config=None):
     "Main entry point, creates the app and launches it"
-    app = Flask(__name__, instance_relative_config=False)
+    app = Flask(__name__, instance_relative_config=False, static_url_path="/app")
 
     logging.basicConfig(
         filename='variance.log',
