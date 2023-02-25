@@ -60,13 +60,13 @@ def load_api(rest_api):
     rest_api.register_blueprint(version_bp, url_prefix="/")
     rest_api.register_blueprint(api.auth.bp, url_prefix="/api/auth")
 
-    api.units.units_endpoint.attach(rest_api)
-    api.exercises.exercises_endpoint.attach(rest_api)
-    api.equipment.equipment_endpoint.attach(rest_api)
-    api.trackers.trackers_endpoint.attach(rest_api)
-    api.nutrients.nutrient_info_endpoint.attach(rest_api)
-    api.settings.global_settings_endpoint.attach(rest_api)
-    api.settings.user_settings_endpoint.attach(rest_api)
+    api.units.units_endpoint.attach(rest_api, url_prefix="/api/")
+    api.exercises.exercises_endpoint.attach(rest_api, url_prefix="/api/")
+    api.equipment.equipment_endpoint.attach(rest_api, url_prefix="/api/")
+    api.trackers.trackers_endpoint.attach(rest_api, url_prefix="/api/")
+    api.nutrients.nutrient_info_endpoint.attach(rest_api, url_prefix="/api/")
+    api.settings.global_settings_endpoint.attach(rest_api, url_prefix="/api/")
+    api.settings.user_settings_endpoint.attach(rest_api, url_prefix="/api/")
 
     logging.info("Variance API blueprints loaded.")
 

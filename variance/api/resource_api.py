@@ -16,9 +16,9 @@ from uuid import UUID
 class VarianceResource():
     "Implements a standard CRUD endpoint for the given DB Model."    
 
-    def attach(self, api):
+    def attach(self, api, url_prefix: str):
         "Attaches the endpoint to the provided smoREST API object"
-        api.register_blueprint(self.blueprint, url_prefix="/api/" + self._endpoint_name)
+        api.register_blueprint(self.blueprint, url_prefix=url_prefix + self._endpoint_name)
     
     def __init__(self, resource_model: Type[ResourceBase], 
                 resource_schema: Type[marshmallow.Schema], 
@@ -40,7 +40,7 @@ class VarianceResource():
         @self.blueprint.response(200, resource_schema(many=True))
         def resource_list_get():
             authorize_user_or_abort(g.user, endpoint_name + ".list", False)
-            # base query that we will then filter out            
+            # base query that we will then filter out
             base_query = db.session.query(resource_model)
             
             # TODO: Apply search filters
