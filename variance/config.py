@@ -18,8 +18,8 @@ class Config():
     TEMPLATES_FOLDER = "templates"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     API_TITLE = "VarianceAPI"
-    API_VERSION = "v1"
-    OPENAPI_VERSION = "3.0"
+    API_VERSION = "1.0.0"
+    OPENAPI_VERSION = "3.0.1"
     OPENAPI_JSON_PATH = "variance-openapi.json"
 
 class ProdConfig(Config):

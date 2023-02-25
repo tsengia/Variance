@@ -62,7 +62,7 @@ class ResourceCLI():
         self.find_command = cli_find
 
         @self.group.command("view")
-        @click.argument("resource_id", type=int, required=True)
+        @click.argument("resource_id", type=str, required=True)
         def cli_view(resource_id):
             "Dumps the JSON representation of the given resource."
             m = self.model_.query.get(resource_id)

@@ -37,8 +37,8 @@ class ConsumedEntryModel(ResourceBase):
     "ConsumableModel that the user consumed/ate/drank"
 
     def __str__(self) -> str:
-        return "%s ConsumedEntryModel: %s @ %s, o(%u), c(%u)" % (
-            self.uuid, self.name, str(self.time), self.owner_uuid, self.consumable_uuid)
+        return "%s ConsumedEntryModel: %s @ %s, c(%u)" % (
+            self.uuid, self.name, str(self.time), self.consumable_uuid)
 
 
 class ConsumableNutrientsModel(ResourceBase):
@@ -201,8 +201,8 @@ class RecipeModel(ResourceBase):
     "Who (name of person) created this recipie? Or where was this recipe pulled from?"
     
     def __str__(self) -> str:
-        return "%s RecipeModel: %s, public(%s), %u(%s)" % (
-            self.uuid, self.name, str(self.is_public), self.owner.uuid, self.owner.username)
+        return "%s RecipeModel: %s" % (
+            self.uuid, self.name)
 
 class ConsumableModel(ResourceBase):
     "Representation of an ingredient, food item, or result of a recipe that a user can consume/eat/drink"
@@ -299,5 +299,5 @@ class ConsumableModel(ResourceBase):
     ean_13 = db.Column(db.Integer, nullable=True)
 
     def __str__(self) -> str:
-        return "%s ConsumableModel: %s, o(%s, %s), public(%s)" % (
-            self.uuid, self.name, self.owner.uuid, self.owner.username, str(self.is_public))
+        return "%s ConsumableModel: %s" % (
+            self.uuid, self.name)

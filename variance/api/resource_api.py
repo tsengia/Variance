@@ -2,7 +2,7 @@ from typing import Type
 
 from flask import g
 from flask.views import MethodView
-from flask_smorest import Blueprint, abort
+import flask_smorest
 
 from variance.extensions import db, ResourceBase
 
@@ -31,7 +31,7 @@ class VarianceResource():
         self._resource_model = resource_model
         self._endpoint_name = endpoint_name
         
-        self.blueprint = Blueprint(endpoint_name, file_name, 
+        self.blueprint = flask_smorest.Blueprint(endpoint_name, file_name, 
                                     url_prefix="/" + endpoint_name)
 
 
