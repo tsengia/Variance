@@ -13,17 +13,13 @@ import marshmallow
 from marshmallow import EXCLUDE
 from uuid import UUID
 
-class VarianceResource():
+class VarianceCollection():
     "Implements a standard CRUD endpoint for the given DB Model."    
 
     def attach(self, api, url_prefix: str):
         "Attaches the endpoint to the provided smoREST API object"
         api.register_blueprint(self.blueprint, url_prefix=url_prefix + self._endpoint_name)
 
-    def set_parent(self, parent):
-        "Adds the endpoint to the given parent VarianceResource"
-        parent.blueprint.register_blueprint(self.blueprint, url_prefix="/"+self._endpoint_name)
-    
     def __init__(self, resource_model: Type[ResourceBase], 
                 resource_schema: Type[marshmallow.Schema], 
                 file_name: str, endpoint_name: str,
@@ -96,7 +92,7 @@ class VarianceResource():
             resource_uuid = str(resource_uuid)
             m = resource_model.query.get_or_404(resource_uuid)
             authorize_user_or_abort(g.user, endpoint_name + ".update", m)
-          
+
             # Apply the update
             for key, value in resource_patch.items():
                 setattr(m, key, value)
@@ -104,7 +100,7 @@ class VarianceResource():
             # Commit the changes
             db.session.commit()
             return m 
-       
+
         self.resource_put = resource_put
  
         @self.blueprint.route("/<uuid:resource_uuid>", methods=["DELETE"])
@@ -119,3 +115,87 @@ class VarianceResource():
             return
 
         self.resource_delete = resource_delete
+
+class VarianceChildResource():
+    "Implements a standard CRUD endpoint for the given DB Model that has a parent model."    
+
+    def attach(self, api, url_prefix: str):
+        "Attaches the endpoint to the provided smoREST API object"
+        api.register_blueprint(self.blueprint, url_prefix=url_prefix + self._endpoint_name)
+
+    def __init__(self, 
+                resource_model: Type[ResourceBase], 
+                resource_schema: Type[marshmallow.Schema], 
+                file_name: str, endpoint_name: str,
+                parent: VarianceCollection,
+                ):
+        """
+        Create a new VarianceResource endpoint.
+        """
+        self._resource_schema = resource_schema
+        self._resource_model = resource_model
+        
+        parent_model = parent._resource_model
+        parent_endpoint = parent._endpoint_name
+        self._endpoint_name = f"/{parent_endpoint}/"
+        
+        self.blueprint = flask_smorest.Blueprint(endpoint_name, file_name, 
+                                    url_prefix="/" + self._endpoint_name)
+
+        @self.blueprint.route(f"/<uuid:parent_uuid>/{endpoint_name}/", methods=["GET"])
+        @self.blueprint.etag
+        @self.blueprint.response(200, resource_schema(many=True))
+        def resource_get(resource_uuid: UUID) -> resource_model:
+            resource_uuid = str(resource_uuid)
+            parent_uuid = str(parent_uuid)
+            p = parent_model.query.get_or_404()
+            m = p[endpoint_name]
+            authorize_user_or_abort(g.user, f"{parent_endpoint}.{endpoint_name}.view", m)
+            return m
+
+        self.resource_list_get = resource_get
+
+        @self.blueprint.route(f"/<uuid:parent_uuid>/{endpoint_name}/", methods=["POST"])
+        @self.blueprint.arguments(resource_schema)
+        @self.blueprint.response(200, resource_schema)
+        def resource_list_post(new_resource: resource_schema) -> resource_model:
+            authorize_user_or_abort(g.user, endpoint_name + ".new", False)
+
+            m = resource_model(**new_resource)
+            db.session.add(m)
+            db.session.commit()
+            return m 
+
+        self.resource_list_post = resource_list_post
+
+        # @self.blueprint.route(f"/<uuid:parent_uuid>/{endpoint_name}/<uuid:child_uuid>", methods=["PUT"])
+        # @self.blueprint.etag
+        # @self.blueprint.arguments(resource_schema)
+        # @self.blueprint.response(200, resource_schema)
+        # def resource_put(resource_patch: object, resource_uuid: UUID) -> resource_model:
+        #     resource_uuid = str(resource_uuid)
+        #     m = resource_model.query.get_or_404(resource_uuid)
+        #     authorize_user_or_abort(g.user, endpoint_name + ".update", m)
+
+        #     # Apply the update
+        #     for key, value in resource_patch.items():
+        #         setattr(m, key, value)
+
+        #     # Commit the changes
+        #     db.session.commit()
+        #     return m 
+
+        # self.resource_put = resource_put
+ 
+        # @self.blueprint.route("/<uuid:resource_uuid>", methods=["DELETE"])
+        # @self.blueprint.etag
+        # @self.blueprint.response(204)
+        # def resource_delete(resource_uuid: UUID):
+        #     resource_uuid = str(resource_uuid)
+        #     m = resource_model.query.get_or_404(resource_uuid)
+        #     authorize_user_or_abort(g.user, endpoint_name + ".delete", m)
+        #     db.session.delete(m)
+        #     db.session.commit()
+        #     return
+
+        # self.resource_delete = resource_delete

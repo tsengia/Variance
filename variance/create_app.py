@@ -69,6 +69,8 @@ def load_api(rest_api):
     api.nutrients.nutrient_info_endpoint.attach(rest_api, url_prefix="/api/")
     api.consumables.consumable_endpoint.attach(rest_api, url_prefix="/api/")
     api.recipes.recipe_endpoint.attach(rest_api, url_prefix="/api/")
+    api.recipes.recipe_ingredients_endpoint.attach(rest_api, url_prefix="/api/")
+    api.recipes.recipe_products_endpoint.attach(rest_api, url_prefix="/api/")
     api.settings.global_settings_endpoint.attach(rest_api, url_prefix="/api/")
     api.settings.user_settings_endpoint.attach(rest_api, url_prefix="/api/")
 
