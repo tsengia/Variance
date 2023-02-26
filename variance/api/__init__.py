@@ -6,6 +6,7 @@ from . import auth
 from . import units
 from . import equipment
 from . import exercises
+from . import workouts
 from . import muscles
 from . import trackers
 from . import nutrients

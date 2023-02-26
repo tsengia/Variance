@@ -1,4 +1,3 @@
-
 from marshmallow_sqlalchemy import auto_field
 from variance.models.workout import SetEntryModel, SetPlanModel, WorkoutModel, WorkoutProgramModel
 from variance.schemas.resource import ResourceBaseSchema

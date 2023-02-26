@@ -68,6 +68,7 @@ def load_api(rest_api):
     api.trackers.trackers_endpoint.attach(rest_api, url_prefix="/api/")
     api.trackers.tracker_entries_endpoint.attach(rest_api, url_prefix="/api/")
     api.nutrients.nutrient_info_endpoint.attach(rest_api, url_prefix="/api/")
+    api.workouts.workout_programs_endpoint.attach(rest_api, url_prefix="/api/")
     api.consumables.consumable_endpoint.attach(rest_api, url_prefix="/api/")
     api.recipes.recipe_endpoint.attach(rest_api, url_prefix="/api/")
     api.recipes.recipe_ingredients_endpoint.attach(rest_api, url_prefix="/api/")
