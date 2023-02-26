@@ -7,8 +7,8 @@ class TrackerSchema(ResourceBaseSchema):
     class Meta:
         model = TrackerModel
 
-
 class TrackerEntrySchema(ResourceBaseSchema):
     uuid = auto_field(dump_only=True)
+
     class Meta:
         model = TrackerEntryModel

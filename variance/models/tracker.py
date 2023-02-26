@@ -31,12 +31,6 @@ class TrackerEntryModel(ResourceBase):
     value = db.Column(db.Float, nullable=False)
     "Value entered in this tracker entry."
 
-    unit_uuid = db.Column(db.String(36), db.ForeignKey(
-        "UnitIndex.uuid"), nullable=False)
-    unit = db.relationship("UnitModel",\
-        foreign_keys="TrackerEntryModel.unit_uuid")
-    "UnitModel that his entry is using for its value"
-
     parent_tracker_uuid = db.Column(
         db.String(36), db.ForeignKey("TrackerIndex.uuid"), nullable=False)
     "ID of the TrackerModel that this entry is in"
@@ -46,6 +40,6 @@ class TrackerEntryModel(ResourceBase):
     "TrackerModel that this entry is in"
 
     def __str__(self) -> str:
-        return "%s Tracker Entry: %s %s, tracker (%s) @ %s" % \
-            (int(self.uuid), str(self.value), str(self.unit.abbreviation),\
+        return "%s Tracker Entry: %s, tracker (%s) @ %s" % \
+            (int(self.uuid), str(self.value),\
             int(self.parent_tracker_uuid), str(self.time))
